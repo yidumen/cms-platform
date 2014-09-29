@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:body id="root">
+        <ui:composition template="/framework.xhtml">
+            <ui:define name="import">
+                <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap-datetimepicker.min.css" />
+                <link rel="stylesheet" type="text/css" href="/resources/css/video-info.css" />
+            </ui:define>
+            <ui:define name="content">
+                <h:form styleClass="table-counter" prependId="false">
+                    <label for="count" class="text-primary control-label">每页显示</label>
+                    <h:inputText id="count" styleClass="input-table-counter" value="#{video.count}" onblur="setCookie('video.count', this.value)" immediate="true">
+                        <f:ajax event="blur" render=":form" />
+                    </h:inputText>
+                    <h:outputText styleClass="text-primary" value="行" />
+                    <h:link styleClass="btn btn-primary btn-sm pull-right" outcome="video-query"><i class="icon-filter" />过滤</h:link>
+                </h:form>
+
+                <h:form id="form">
+                    <h:dataTable id="videos" styleClass="table table-striped table-hover table-responsive"
+                                 columnClasses="table-col-file,table-col-title,table-col-index,table-col-duration,table-col-date,table-col-date,table-col-column,table-col-id,table-col-status,table-col-opera"
+                                 value="#{video.videos}" var="item" first="#{(video.curPage-1) * video.count}" rows="#{video.count}" frame="below">
+                        <h:column>
+                            <f:facet name="header">编号</f:facet>
+                            <h:outputText value="#{item.file}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">标题</f:facet>
+                            <h:outputText value="#{item.title}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">序号</f:facet>
+                            <h:outputText value="#{item.sort==0?'-':item.sort}" />
+
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">时长</f:facet>
+                            <h:outputText value="#{item.duration}"  converter="duration"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">拍摄日期</f:facet>
+                            <h:outputText value="#{item.shootTime}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">发布日期</f:facet>
+                            <h:outputText value="#{item.pubDate}">
+                                <f:convertDateTime type="date" pattern="yyyy-MM-dd" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">栏目</f:facet>
+                            <h:outputText value="#{item.chatroomVideo?'聊天室':'其它'}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">荐</f:facet>
+                            <h:outputText styleClass="#{item.recommend gt 0?'icon-check':'icon-check-empty'}"  />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">状态</f:facet>
+                            <h:outputText value="#{item.status.descript}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">操作</f:facet>
+                            <h:panelGroup class="operation">
+                                <h:commandLink styleClass="icon-zoom-in pull-left"
+                                               title="完整资料" immediate="true"
+                                               p:data-toggle="modal" p:data-target="#amodal">
+                                    <f:setPropertyActionListener value="#{item}" target="#{video.video}" />
+                                    <f:setPropertyActionListener value="false" target="#{video.editable}" />
+                                    <f:ajax render=":detail" />
+                                </h:commandLink>
+                                <h:commandLink styleClass="icon-edit pull-left"
+                                               title="编辑" immediate="true"
+                                               p:data-toggle="modal" p:data-target="#amodal">
+                                    <f:setPropertyActionListener value="#{item}" target="#{video.video}" />
+                                    <f:setPropertyActionListener value="true" target="#{video.editable}" />
+                                    <f:ajax render=":detail" />
+                                </h:commandLink>
+                                <h:outputLink target="_blank" value="http://yidumen.aliapp.com/%E8%81%8A%E5%A4%A9%E5%AE%A4%E8%A7%86%E9%A2%91/#{item.file}" styleClass="icon-external-link pull-right" />
+                            </h:panelGroup>
+                        </h:column>
+                    </h:dataTable>
+                    <ul class="pagination">
+                        <li>
+                            <h:commandLink styleClass="icon-double-angle-left" immediate="true">
+                                <f:setPropertyActionListener value="1" target="#{video.curPage}" />
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                        <li>
+                            <h:commandLink styleClass="icon-angle-left" immediate="true">
+                                <f:setPropertyActionListener value="#{video.curPage - 1}" target="#{video.curPage}" />
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                        <ui:repeat id="pager" value="#{video.pages}"
+                                   size="#{video.curPage == 1?10:((video.curPage + 6)>=video.pageCount?video.pageCount:(video.curPage + 6))}"
+                                   offset="#{video.curPage-4}" var="page">
+                            <li class="#{page==video.curPage?'active':''}">
+                                <h:commandLink value="#{page}" immediate="true">
+                                    <f:setPropertyActionListener value="#{page}" target="#{video.curPage}" />
+                                    <f:ajax render="@form" />
+                                </h:commandLink>
+                            </li>
+                        </ui:repeat>
+                        <li>
+                            <h:commandLink styleClass="icon-angle-right" immediate="true">
+                                <f:setPropertyActionListener
+                                    value="#{video.curPage + 1}"
+                                    target="#{video.curPage}" />
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                        <li>
+                            <h:commandLink styleClass="icon-double-angle-right" immediate="true">
+                                <f:setPropertyActionListener value="#{video.pageCount}" target="#{video.curPage}" />
+                                <f:ajax render="@form" />
+                            </h:commandLink>
+                        </li>
+                    </ul>
+                    <div class="table-counter pull-right">
+                        <h:outputText styleClass="text-primary" value="共#{video.pageCount}页，跳转到第" />
+                        <h:inputText styleClass="input-table-counter" value="#{video.curPage}" immediate="true">
+                            <f:ajax event="blur" render="@form" />
+                        </h:inputText>
+                        <h:outputText styleClass="text-primary" value="页" />
+                    </div>
+                </h:form>
+                <div id="amodal" class="modal">
+                    <div class="modal-dialog">
+                        <h:form styleClass="form-horizontal" prependId="false" role="form">
+                            <h:panelGroup id="detail" styleClass="modal-content" layout="block">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h:outputText styleClass="modal-title h4" value="#{video.video.title}" />
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="ID：" />
+                                        <div class="col-sm-5">
+                                            <p id="itemId" class="text-muted form-control-static">#{video.video.id}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="文件编号：" />
+                                        <div class="col-sm-5">
+                                            <p id="file" class="text-muted form-control-static"> #{video.video.file}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="播放时长：" />
+                                        <div class="col-sm-5">
+                                            <p id="dur" class="text-muted form-control-static">
+                                                <h:outputText value="#{video.video.duration}">
+                                                    <f:converter converterId="duration" />
+                                                </h:outputText>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="当前状态：" />
+                                        <div class="col-sm-5">
+                                            <p class="text-muted form-control-static">#{video.video.status.descript}</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="排序编号：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted form-control-static"
+                                                          value="#{video.video.sort==0?'-':video.video.sort}" rendered="#{not video.editable}" />
+                                            <h:inputText styleClass="form-control" value="#{video.video.sort}" rendered="#{video.editable}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="所属栏目：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted form-control-static"
+                                                          value="#{video.video.chatroomVideo?'聊天室':'其它'}" rendered="#{not video.editable}" />
+                                            <h:selectOneMenu  styleClass="form-control input-sm"
+                                                              value="#{video.video.chatroomVideo}" rendered="#{video.editable}">
+                                                <f:selectItem itemLabel="聊天室" itemValue="true" />
+                                                <f:selectItem itemLabel="其它栏目" itemValue="false" />
+                                            </h:selectOneMenu>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="拍摄日期：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted" value="#{video.video.shootTime}" rendered="#{not video.editable}" />
+                                            <h:inputText styleClass="form-control date date_shoot" p:data-font-awesome="true" value="#{video.video.shootTime}" rendered="#{video.editable}">
+                                                <f:converter converterId="sqlDate" />
+                                            </h:inputText>
+                                            <h:outputScript  rendered="#{video.editable}">
+                                                $(".date_shoot").datetimepicker({
+                                                language: "zh-CN",
+                                                format: "yyyy-mm-dd",
+                                                weekStart: 1,
+                                                autoclose: true,
+                                                startView: 2,
+                                                minView: 2,
+                                                todayBtn: "linked",
+                                                todayHighlight: true,
+                                                forceParse: false
+                                                });
+                                            </h:outputScript>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="推荐度：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted" value="#{video.video.recommend gt 0?video.video.recommend:'不推荐'}" rendered="#{not video.editable}" />
+                                            <h:inputText styleClass="checkbox input-sm" value="#{video.video.recommend}" rendered="#{video.editable}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="发布时间：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted" value="#{video.video.pubDate}" rendered="#{not video.editable}">
+                                                <f:convertDateTime type="both" pattern="yyyy-MM-dd hh:mm:ss" />
+                                            </h:outputText>
+                                            <h:inputText styleClass="form-control date date_pub" value="#{video.video.pubDate}" p:data-font-awesome="true" rendered="#{video.editable}">
+                                                <f:convertDateTime type="both" pattern="yyyy-MM-dd hh:mm:ss" />
+                                            </h:inputText>
+                                            <h:outputScript  rendered="#{video.editable}">
+                                                $(".date_pub").datetimepicker({
+                                                language: "zh-CN",
+                                                format: "yyyy-mm-dd hh:ii:ss",
+                                                weekStart: 1,
+                                                autoclose: true,
+                                                startView: 2,
+                                                minView: 0,
+                                                todayHighlight: true,
+                                                forceParse: false
+                                                });
+                                            </h:outputScript>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="视频描述：" />
+                                        <div class="col-sm-5">
+                                            <h:outputText styleClass="text-muted" value="#{video.video.descrpition}" rendered="#{not video.editable}" />
+                                            <h:inputTextarea styleClass="col-sm-5 form-control" rows="2" value="#{video.video.descrpition}" rendered="#{video.editable}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h:outputLabel styleClass="col-sm-3 control-label" value="文件大小：" />
+                                        <div class="col-sm-5 text-muted">
+                                            <ui:repeat value="#{video.video.extInfo}" var="info">
+                                                <p class="form-control-static">#{info.resolution.descript} #{info.fileSize}MB</p>
+                                            </ui:repeat>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <h:commandButton styleClass="btn btn-primary" value="保存更改" actionListener="#{video.updateVideo()}" rendered="#{video.editable}" />
+                                </div>
+                            </h:panelGroup><!-- /.modal-content -->
+                        </h:form>
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </ui:define>
+            <ui:define name="js">
+                <script type="text/javascript" src="/resources/js/bootstrap-datetimepicker.min.js"></script>
+                <script type="text/javascript" src="/resources/js/bootstrap-datetimepicker.zh-CN.js"></script>
+                <script type="text/javascript" src="/resources/js/cms.js"></script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
