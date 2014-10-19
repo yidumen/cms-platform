@@ -1,37 +1,30 @@
 package com.yidumen.cms.view.controller;
 
-import com.yidumen.dao.entity.CmsUser;
+import com.yidumen.dao.entity.Account;
 import java.io.Serializable;
-import javax.inject.Named;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.WebApplicationContext;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Named("login")
-@Scope(WebApplicationContext.SCOPE_REQUEST)
+@Controller
+@RequestMapping("/")
 public class Login implements Serializable {
 
-    private CmsUser user;
-    public Login() {
-        user = new CmsUser();
+    @RequestMapping(method = RequestMethod.GET)
+    public String welcome(Model model) {
+        model.addAttribute("user", new Account());
+        return "login";
     }
 
-    public String login() {
-        if (user.getUsername().equals("admin") && user.getPassword().equals("admin")) {
-            return "framework?faces-redirect=true";
-        } else {
-            return null;
-        }
-    }
-
-    public CmsUser getUser() {
-        return user;
-    }
-
-    public void setUser(CmsUser user) {
-        this.user = user;
+    @RequestMapping(method = RequestMethod.POST)
+    public String login(@ModelAttribute Account user, HttpSession session) {
+        return "main";
     }
 }

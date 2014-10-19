@@ -1,6 +1,5 @@
 package com.yidumen.cms.test;
 
-import javax.inject.Inject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -9,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ContextConfiguration("/test-servlet-context.xml")
 public class TestWebService {
 
-    @Inject
+    @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
     private final Logger log = LoggerFactory.getLogger(TestWebService.class);

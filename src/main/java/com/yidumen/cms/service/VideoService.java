@@ -22,4 +22,5 @@ public interface VideoService {
     
     List<Video> find(VideoQueryModel model);
     
+    List<Video> nextPage(int currentPage, int size);
 }
