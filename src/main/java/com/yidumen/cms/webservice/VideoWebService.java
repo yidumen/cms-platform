@@ -30,7 +30,7 @@ public class VideoWebService {
     }
     
     public void updateVideo(Video video) {
-        service.updateVideo(video);
+//        service.updateVideo(video);
     }
 
 }

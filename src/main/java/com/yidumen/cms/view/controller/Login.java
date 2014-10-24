@@ -1,7 +1,6 @@
 package com.yidumen.cms.view.controller;
 
 import com.yidumen.dao.entity.Account;
-import java.io.Serializable;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/")
-public class Login implements Serializable {
+public class Login {
 
     @RequestMapping(method = RequestMethod.GET)
     public String welcome(Model model) {
@@ -25,6 +24,6 @@ public class Login implements Serializable {
 
     @RequestMapping(method = RequestMethod.POST)
     public String login(@ModelAttribute Account user, HttpSession session) {
-        return "main";
+        return "redirect:platform";
     }
 }

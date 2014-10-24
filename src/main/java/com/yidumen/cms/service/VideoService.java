@@ -1,5 +1,6 @@
 package com.yidumen.cms.service;
 
+import com.yidumen.cms.service.exception.SortInUseException;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
 import java.util.List;
@@ -18,9 +19,11 @@ public interface VideoService {
 
     void removeVideo(Video video);
 
-    void updateVideo(Video video);
-    
+    void updateVideo(Video video) throws SortInUseException;
+
     List<Video> find(VideoQueryModel model);
-    
-    List<Video> nextPage(int currentPage, int size);
+
+    long getVideoCount();
+
+    Long getVideoCount(VideoQueryModel model);
 }

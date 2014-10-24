@@ -18,6 +18,9 @@
 .table .table-col-date {
     width: 90px;
 }
+.table .table-col-time {
+    width: 148px;
+}
 .table .table-col-column {
     width: 60px;
 }
@@ -32,6 +35,9 @@
 }
 .text-video {
     padding-top: 17px;
+}
+.pagination {
+    margin-top: 0px;
 }
 .operation>a {
     padding-top: 3px;

@@ -15,3 +15,13 @@
     right:0;
     margin:auto;
 }
+.alert {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 480px;
+    right: 0px;
+}
+.block {
+    top: 280px;
+}
