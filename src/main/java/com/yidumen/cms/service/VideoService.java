@@ -1,8 +1,10 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.service.exception.SortInUseException;
+import com.yidumen.cms.service.exception.IllDataException;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -19,11 +21,15 @@ public interface VideoService {
 
     void removeVideo(Video video);
 
-    void updateVideo(Video video) throws SortInUseException;
+    void updateVideo(Video video) throws IllDataException;
 
     List<Video> find(VideoQueryModel model);
 
     long getVideoCount();
 
     Long getVideoCount(VideoQueryModel model);
+
+    void addVideo(Video video);
+
+    void publish(String file) throws IOException, IllDataException, ParseException;
 }

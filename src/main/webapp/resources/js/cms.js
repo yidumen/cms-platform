@@ -40,13 +40,16 @@ function showError(detail) {
     jQuery("body").append("<div class='alert alert-danger alert-dismissible center-block'><button type=’button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span></button>" + detail + "</div>")
             .slideDown();
 }
-function startBlock() {
+$(document).ajaxStart(function () {
     $("#block").modal({
-        backdrop: "static",
+        backdrop: false,
         keyboard: false
     });
-}
-function endBlock() {
+});
+$(document).ajaxError(function (event, XMLHttpRequest, ajaxOptions) {
+    showError("<strong>操作失败！</strong>" + XMLHttpRequest.responseText);
+});
+$(document).ajaxComplete(function () {
     $("#block").modal("hide");
-}
+});
 

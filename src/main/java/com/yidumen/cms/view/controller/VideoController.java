@@ -1,14 +1,20 @@
 package com.yidumen.cms.view.controller;
 
 import com.yidumen.cms.service.VideoService;
-import com.yidumen.cms.service.exception.SortInUseException;
+import com.yidumen.cms.service.exception.IllDataException;
+import com.yidumen.dao.constant.VideoStatus;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -37,7 +43,7 @@ public final class VideoController {
     public String manager(Model model) {
         model.addAttribute("count", service.getVideoCount());
         model.addAttribute("query", new VideoQueryModel());
-        return "video-manager";
+        return "/video/video-manager";
     }
 
     @RequestMapping(value = "/pagination/{index}", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
@@ -61,7 +67,7 @@ public final class VideoController {
     public String submitVideo(@RequestBody Video video) {
         try {
             service.updateVideo(video);
-        } catch (SortInUseException ex) {
+        } catch (IllDataException ex) {
             return ex.getMessage();
         }
         return "0";
@@ -70,7 +76,7 @@ public final class VideoController {
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public String queryVideo(Model model) {
         model.addAttribute("query", new VideoQueryModel());
-        return "video-query";
+        return "/video/video-query";
     }
 
     @RequestMapping(value = "/query/process", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -79,16 +85,40 @@ public final class VideoController {
         model.addAttribute("count", service.getVideoCount(query));
         return "/video/video-manager";
     }
-    
+
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String publishVideo(Model model) {
         model.addAttribute("video", new Video());
-        return "/video/video-pub";
+        return "/video/video-create";
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public String createVideo(@ModelAttribute("video") Video video) {
+        service.addVideo(video);
+        return "0";
+    }
+
+    @RequestMapping(value = "/publish", method = RequestMethod.GET)
+    public String verify() {
+        return "/video/video-publish";
+    }
+    @RequestMapping(value = "/verify",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Video> verifyAjax(Model model) {
+        final VideoQueryModel queryModel = new VideoQueryModel();
+        queryModel.addStatus(VideoStatus.VERIFY);
+        return service.find(queryModel);
     }
     
-    @RequestMapping(value = "/add")
-    public String createVideo(@ModelAttribute("video") Video video) {
-        
-        return null;
+    @RequestMapping(value = "/publish/{file}", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> pulishConfim(@PathVariable("file") String file) {
+        try {
+            service.publish(file);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IOException | IllDataException|ParseException ex) {
+            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

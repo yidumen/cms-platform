@@ -25,7 +25,6 @@
                     <th class="table-col-duration">时长</th>
                     <th class="table-col-date">拍摄日期</th>
                     <th class="table-col-time">发布/更新 时间</th>
-                    <th class="table-col-column">栏目</th>
                     <th class="table-col-id">荐</th>
                     <th class="table-col-status">状态</th>
                     <th class="table-col-opera">操作</th>
@@ -67,7 +66,7 @@
                         <div class="col-sm-2">
                             <p id="sort"></p>
                         </div>
-                        <label for="type" class="col-sm-2 control-label">所属栏目：</label>
+                        <label for="type" class="col-sm-2 control-label">是否显示：</label>
                         <div class="col-sm-2">
                             <p id="type"></p>
                         </div>
@@ -134,7 +133,7 @@
                             <div class="col-sm-4">
                                 <p class="form-control-static text-warning">推荐度为0即为不推荐，推荐度高的视频排列会更靠前。</p>
                                 <p class="form-control-static text-warning">同理，发布序号为0即为不排序。</p>
-                                <p class="form-control-static text-info">您只能任意修改一部分信息。其它不能修改的必须通过特定的工作流程才会被更新。如：状态、更新时间等。</p>
+                                <p class="form-control-static text-info">您并不能任意修改所有信息。某些信息必须通过特定的工作流程才会被更新。如：状态、更新时间等。</p>
                             </div>
                         </div>
                     </div>

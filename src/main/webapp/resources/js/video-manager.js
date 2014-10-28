@@ -30,7 +30,6 @@ $("#table-content").on("click", ".icon-zoom-in", function (event) {
     $("#amodal #dur").html(item.duration);
     $("#amodal #status").html(item.status);
     $("#amodal #sort").replaceWith("<p id='sort' class='text-muted form-control-static'>" + item.sort + "</p>");
-    $("#amodal #type").replaceWith("<p id='type' class='text-muted form-control-static'>" + (item.chatroomVideo ? "聊天室" : "其它") + "</p>");
     $("#amodal #shoot").replaceWith("<p id='shoot' class='text-muted form-control-static'>" + item.shootTime + "</p>");
     $("#amodal #recommend").replaceWith("<p id='recommend' class='text-muted form-control-static'>" + (item.recommend > 0 ? item.recommend : "不推荐") + "</p>");
     $("#amodal #pub").html(item.pubDate);
@@ -77,7 +76,7 @@ $("#table-content").on("click", ".icon-zoom-in", function (event) {
         for (var i = 0, max = infos.length; i < max; i++) {
             content = content.concat("<tr>",
                     "<td>", infos[i].resolution, "</td>",
-                    "<td>", infos[i].fileSize, "MB</td>",
+                    "<td>", infos[i].fileSize, "</td>",
                     "</tr>");
         }
         return content;
@@ -98,9 +97,6 @@ $("#table-content").on("click", ".icon-edit", function (event) {
     $("#amodal #dur").html(item.duration);
     $("#amodal #status").html(item.status);
     $("#amodal #sort").replaceWith("<input id='sort' class='form-control' value='" + item.sort + "'>");
-    $("#amodal #type").replaceWith(new String().concat("<select id='type' class='form-control'><option value='true' ",
-            item.chatroomVideo ? "selected" : "", ">聊天室</option><option value='false' ",
-            item.chatroomVideo ? "" : "selected", ">其它栏目</option></select>"));
     $("#amodal #shoot").replaceWith("<input id='shoot' class='form-control' data-font-awesome='true' value='" + item.shootTime + "'>");
     $("#amodal #recommend").replaceWith("<input id='recommend' class='form-control' value='" + item.recommend + "'>");
     $("#amodal #pub").html(item.pubDate);
@@ -129,7 +125,7 @@ $("#table-content").on("click", ".icon-edit", function (event) {
         for (var i = 0, max = infos.length; i < max; i++) {
             content = content.concat("<tr>",
                     "<td>", infos[i].resolution, "</td>",
-                    "<td>", infos[i].fileSize, "MB</td>",
+                    "<td>", infos[i].fileSize, "</td>",
                     "</tr>");
         }
         return content;
@@ -156,13 +152,11 @@ $("#amodal").on("click", "#submit", function (event) {
     var item = videos[index];
     item.title = $("#amodal #title").val();
     item.sort = $("#amodal #sort").val();
-    item.chatroomVideo = $("#amodal #type").val();
     item.shootTime = $("#amodal #shoot").val();
     item.recommend = $("#amodal #recommend").val();
     item.grade = $("#amodal #grade").val();
     item.descrpition = $("#amodal #desc").val();
     item.note = $("#amodal #note").val();
-    console.log(JSON.stringify(item));
     jQuery.ajax({
         url: "/video/submit",
         dataType: 'text',
@@ -173,10 +167,10 @@ $("#amodal").on("click", "#submit", function (event) {
         success: function (data) {
             jQuery("#amodal").modal("hide");
             refreshTable();
-            if (data === "0") {
-                showMessage("提交成功！", "</strong> 视频 <strong>" + item.title + "</strong> 更新完毕。");
+            if (data === '"0"') {
+                showMessage("成功！", "视频 <strong>" + item.title + "</strong> 信息已保存。");
             } else {
-                showError(data);
+                showError(data.substring(1, data.length - 1));
             }
         }
     });
@@ -195,12 +189,6 @@ function refreshTable() {
         url: "/video/pagination/" + currentPage,
         dataType: 'json',
         cache: false,
-        beforeSend: function (xhr) {
-            jQuery("#block").modal({
-                backdrop: false,
-                keyboard: false
-            })
-        },
         success: function (data) {
             videos = data;
             var tbody = new String();
@@ -212,7 +200,6 @@ function refreshTable() {
                         "<td>", item.duration, "</td>",
                         "<td>", item.shootTime, "</td>",
                         "<td>", item.pubDate, "</td>",
-                        "<td>", item.chatroomVideo ? "聊天室" : "其它", "</td>",
                         "<td>", item.recommend > 0 ? "<i class='icon-check'></i>" : "<i class='icon-check-empty'></i>", "</td>",
                         "<td>", item.status, "</td>",
                         "<td><span class='operation'>",
@@ -247,9 +234,6 @@ function refreshTable() {
                 return pagination;
             });
             $("#currentPage").val(currentPage);
-        },
-        complete: function (jqXHR, textStatus) {
-            endBlock();
         }
     });
 }

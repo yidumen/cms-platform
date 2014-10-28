@@ -38,8 +38,13 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">视频管理 <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="/video/manager">视频列表</a></li>
-                            <li><a href="/video/query">高级查询</a></li>
+                            <li role="presentation" class="dropdown-header">信息查询</li>
+                            <li><a href="/video/manager">全部视频列表</a></li>
+                            <li><a href="/video/query">高级条件查询</a></li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="dropdown-header">发布与维护</li>
+                            <li><a href="/video/create">添加新视频信息</a></li>
+                            <li><a href="/video/publish">发布视频</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -47,7 +52,7 @@
         </nav>
         <div id="container" class="container-fluid">
         </div>
-        <div id="block" class="modal" role="dialog" aria-labelledby="title" aria-hidden="true">
+        <div id="block" class="modal" role="dialog">
             <div class="modal-dialog modal-sm block">
                 <div class="modal-content">
                     <div class="modal-body">
