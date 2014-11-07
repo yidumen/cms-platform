@@ -8,7 +8,6 @@ import com.yidumen.dao.model.VideoQueryModel;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +104,7 @@ public final class VideoController {
     }
     @RequestMapping(value = "/verify",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Video> verifyAjax(Model model) {
+    public List<Video> ajaxVerify(Model model) {
         final VideoQueryModel queryModel = new VideoQueryModel();
         queryModel.addStatus(VideoStatus.VERIFY);
         return service.find(queryModel);

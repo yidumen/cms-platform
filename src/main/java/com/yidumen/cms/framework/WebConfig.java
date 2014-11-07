@@ -3,10 +3,12 @@ package com.yidumen.cms.framework;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+import com.yidumen.cms.view.model.ItemGroup;
+import com.yidumen.cms.view.model.ItemModel;
+import com.yidumen.cms.view.model.MenuModel;
 import com.yidumen.cms.webservice.VideoWebService;
+import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +28,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {VideoWebService.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
-
-    private final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -56,5 +56,32 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         resolver.setPrefix("/");
         resolver.setSuffix(".jsp");
         return resolver;
+    }
+
+    @Bean(name = "menus")
+    public List<MenuModel> getMenuModel() {
+        final List<MenuModel> result = new ArrayList<>();
+        {
+            MenuModel menu = new MenuModel();
+            menu.setName("视频管理");
+            {
+                ItemGroup group = new ItemGroup();
+                group.setName("视频查询");
+                group.addItem(new ItemModel("全部视频列表", "/video/manager"));
+                group.addItem(new ItemModel("高级条件查询", "/video/query"));
+                group.setPermission(1);
+                menu.addItem(group);
+            }
+            {
+                ItemGroup group = new ItemGroup();
+                group.setName("发布与维护");
+                group.addItem(new ItemModel("添加新视频信息", "/video/create"));
+                group.addItem(new ItemModel("发布视频", "/video/publish"));
+                group.setPermission(1);
+                menu.addItem(group);
+            }
+            result.add(menu);
+        }
+        return result;
     }
 }

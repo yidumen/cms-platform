@@ -3,6 +3,7 @@
     Created on : 2014-10-14, 15:44:06
     Author     : 蔡迪旻
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -36,16 +37,21 @@
             <div class="collapse navbar-collapse" id="menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">视频管理 <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="presentation" class="dropdown-header">信息查询</li>
-                            <li><a href="/video/manager">全部视频列表</a></li>
-                            <li><a href="/video/query">高级条件查询</a></li>
-                            <li role="presentation" class="divider"></li>
-                            <li role="presentation" class="dropdown-header">发布与维护</li>
-                            <li><a href="/video/create">添加新视频信息</a></li>
-                            <li><a href="/video/publish">发布视频</a></li>
-                        </ul>
+                        <c:forEach var="menu" items="${menus}">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${menu.name} <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li role="presentation" class="dropdown-header">${menu.name}菜单</li>
+                                    <c:forEach var="group" items="${menu.items}">
+                                        <c:if test="${group.permission >= permission}">
+                                        <li role="presentation" class="divider"></li>
+                                        <li role="presentation" class="dropdown-header">${group.name}</li>
+                                            <c:forEach var="item" items="${group.items}">
+                                            <li><a href="${item.uri}">${item.name}</a></li>
+                                            </c:forEach>
+                                        </c:if>
+                                    </c:forEach>
+                            </ul>
+                        </c:forEach>
                     </li>
                 </ul>
             </div>

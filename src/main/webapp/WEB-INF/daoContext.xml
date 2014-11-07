@@ -31,7 +31,6 @@
                 <value>com.yidumen.dao.entity.Sutra</value>
                 <value>com.yidumen.dao.entity.SutraMark</value>
                 <value>com.yidumen.dao.entity.Tag</value>
-                <value>com.yidumen.dao.entity.Tag</value>
                 <value>com.yidumen.dao.entity.UserMessage</value>
                 <value>com.yidumen.dao.entity.Video</value>
                 <value>com.yidumen.dao.entity.VideoInfo</value>
@@ -46,6 +45,9 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
     
     <bean id="videoDAO" class="com.yidumen.dao.impl.VideoHibernateImpl"  >
+        <constructor-arg index="0" type="org.hibernate.SessionFactory" ref="sessionFactory" />
+    </bean>
+    <bean id="accountDAO" class="com.yidumen.dao.impl.AccountHibernateImpl"  >
         <constructor-arg index="0" type="org.hibernate.SessionFactory" ref="sessionFactory" />
     </bean>
 </beans>
