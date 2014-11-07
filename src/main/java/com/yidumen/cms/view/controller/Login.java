@@ -32,6 +32,9 @@ public class Login {
     @RequestMapping(method = RequestMethod.GET)
     public String welcome(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return "login";
+        }
         String username = null, password = null;
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("username")) {
