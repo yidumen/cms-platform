@@ -117,7 +117,7 @@ public class VideoServiceImpl implements VideoService {
         credsProvider.setCredentials(new AuthScope(proxy), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
-        final Executor executor = Executor.newInstance(httpClientBuilder.build());
+//        final Executor executor = Executor.newInstance(httpClientBuilder.build());
         final HttpGet httpGet = new HttpGet("http://mo01.yidumen.com/service/video/info/" + file);
         httpGet.setConfig(RequestConfig.custom().setProxy(proxy).build());
         final CloseableHttpResponse response = httpClientBuilder.build().execute(httpGet);
