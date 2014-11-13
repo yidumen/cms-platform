@@ -20,8 +20,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -115,8 +118,11 @@ public class VideoServiceImpl implements VideoService {
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
         final Executor executor = Executor.newInstance(httpClientBuilder.build());
-        final HttpResponse response = executor.execute(
-                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).viaProxy(proxy).socketTimeout(5000).connectTimeout(5000)).returnResponse();
+        final HttpGet httpGet = new HttpGet("http://mo01.yidumen.com/service/video/info/" + file);
+        httpGet.setConfig(RequestConfig.custom().setProxy(proxy).build());
+        final CloseableHttpResponse response = httpClientBuilder.build().execute(httpGet);
+//        final HttpResponse response = executor.execute(
+//                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).viaProxy(proxy).socketTimeout(5000).connectTimeout(5000)).returnResponse();
         final int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode == 404) {
             throw new IllDataException("视频未部署");
