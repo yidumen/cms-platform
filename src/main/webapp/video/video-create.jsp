@@ -35,19 +35,6 @@
                         <span class="help-block">为0则忽略此序号</span>
                     </div>
                     <div class="form-group">
-                        <label>所属栏目<small class="text-muted">（其它栏目视频将不会在聊天室中显示）</small></label>
-                        <div class="radio">
-                            <label>
-                                <form:radiobutton path="chatroomVideo" value="true" />聊天室
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <form:radiobutton path="chatroomVideo" value="false" />其它栏目
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label>推荐度</label>
                         <form:input path="recommend" cssClass="form-control input-sm" />
                         <span class="help-block">为0则为不推荐</span>
