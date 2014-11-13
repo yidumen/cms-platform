@@ -1,9 +1,6 @@
 package com.yidumen.cms.view.controller;
 
 import com.yidumen.cms.service.UserService;
-import com.yidumen.cms.view.model.MenuModel;
-import com.yidumen.dao.entity.Account;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

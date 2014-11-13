@@ -18,7 +18,9 @@ import java.util.Map;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Executor;
+import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,10 +106,13 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public void publish(String file) throws IOException, IllDataException, ParseException {
-        final Executor executor = Executor.newInstance()
-                .auth(new HttpHost("10.242.175.127", 3128), "1336663694481251_default_57", "rad2yu5i2s");
-        final HttpResponse response = executor.execute(
-                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).socketTimeout(5000).connectTimeout(5000)).returnResponse();
+//        final Executor executor = Executor.newInstance()
+//                .auth(new HttpHost("10.242.175.127", 3128), "1336663694481251_default_57", "rad2yu5i2s");
+//        final HttpResponse response = executor.execute(
+//                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).socketTimeout(5000).connectTimeout(5000)).returnResponse();
+        HttpResponse response = Request.Get("http://mo01.yidumen.com/service/video/info/" + file).socketTimeout(5000).connectTimeout(5000)
+                .viaProxy(new HttpHost("10.242.175.127", 3128)).bodyForm(Form.form().add("username", "1336663694481251_default_57").add("password", "rad2yu5i2s").build())
+                .execute().returnResponse();
         final int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode == 404) {
             throw new IllDataException("视频未部署");

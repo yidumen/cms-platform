@@ -20,8 +20,8 @@
             <div class="panel-body">
                 <form class="form-signin" method="post">
                     <h2 class="form-signin-heading">请登录</h2>
-                    <input id="username" class="form-control" type="text" name="username" placeholder="输入手机或邮箱" required="true" autofocus="true">
-                    <input id="password" class="form-control" type="password" name="password" placeholder="输入密码" required="true" />
+                    <input id="username" class="form-control" type="text" name="username" placeholder="输入手机或邮箱" required autofocus>
+                    <input id="password" class="form-control" type="password" name="password" placeholder="输入密码" required>
                     <div class="checkbox">
                         <label>
                             <input id="autologin" type="checkbox" value="remember-me"> 自动登录
