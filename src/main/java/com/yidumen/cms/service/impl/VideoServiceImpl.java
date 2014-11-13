@@ -16,13 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -106,6 +103,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public void addVideo(Video video) {
+        video.setDuration(0L);
         video.setStatus(VideoStatus.VERIFY);
         videoDAO.create(video);
     }
