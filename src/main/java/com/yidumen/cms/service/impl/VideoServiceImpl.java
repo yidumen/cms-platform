@@ -23,6 +23,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,10 +111,11 @@ public class VideoServiceImpl implements VideoService {
     public void publish(String file) throws IOException, IllDataException, ParseException {
         final HttpHost proxy = new HttpHost("10.242.175.127", 3128);
         final CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        final AuthScope authScope = new AuthScope(proxy);
-        credsProvider.setCredentials(authScope, new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
-        final Executor executor = Executor.newInstance()
-                .auth(credsProvider.getCredentials(authScope));
+        credsProvider.setCredentials(new AuthScope(proxy), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
+        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        httpClientBuilder.setProxy(proxy);
+        httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
+        final Executor executor = Executor.newInstance(httpClientBuilder.build());
         final HttpResponse response = executor.execute(
                 Request.Get("http://mo01.yidumen.com/service/video/info/" + file).socketTimeout(5000).connectTimeout(5000)).returnResponse();
         final int statusCode = response.getStatusLine().getStatusCode();
