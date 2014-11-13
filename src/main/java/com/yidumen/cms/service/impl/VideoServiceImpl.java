@@ -113,11 +113,10 @@ public class VideoServiceImpl implements VideoService {
         final CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(new AuthScope(proxy), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-        httpClientBuilder.setProxy(proxy);
         httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
         final Executor executor = Executor.newInstance(httpClientBuilder.build());
         final HttpResponse response = executor.execute(
-                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).socketTimeout(5000).connectTimeout(5000)).returnResponse();
+                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).viaProxy(proxy).socketTimeout(5000).connectTimeout(5000)).returnResponse();
         final int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode == 404) {
             throw new IllDataException("视频未部署");
