@@ -1,6 +1,8 @@
 package com.yidumen.cms.view.controller;
 
+import com.aliyun.openservices.ClientException;
 import com.aliyun.openservices.oss.OSSClient;
+import com.aliyun.openservices.oss.OSSException;
 import com.aliyun.openservices.oss.model.OSSObject;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
@@ -133,29 +135,38 @@ public final class VideoController {
     @RequestMapping(value = "bat/{id}")
     public void downloadBat(HttpServletResponse response, @PathVariable Long id) throws IOException {
         final Video video = service.find(id);
-        final OSSObject object = client.getObject("yidumen", "cms/cms_single.bat");
-        final BufferedReader br = new BufferedReader(new InputStreamReader(object.getObjectContent()));
-        final ServletOutputStream os = response.getOutputStream();
-        String s;
-        String[] shoottime = new SimpleDateFormat("yyyy,MM,dd").format(video.getShootTime()).split(",");
-        while ((s = br.readLine()) != null) {
-            String news;
-            if (s.contains("filename_new")) {
-                news = s.replaceAll("filename_new", video.getFile() + "\r\n");
-            } else if (s.contains("title_new")) {
-                news = s.replaceAll("title_new", video.getTitle() + "\r\n");
-            } else if (s.contains("year_new")) {
-                news = s.replaceAll("year_new", shoottime[0].trim() + "\r\n");
-            } else if (s.contains("month_new")) {
-                news = s.replaceAll("month_new", shoottime[1].trim() + "\r\n");
-            } else if (s.contains("day_new")) {
-                news = s.replaceAll("day_new", shoottime[2].trim() + "\r\n");
-            } else {
-                news = s + "\r\n";
-            }
-            os.write(news.getBytes());
+        OSSObject object;
+        try {
+            object = client.getObject("yidumen", "cms/cms_single.bat");
+        } catch (OSSException | ClientException ex) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
-        br.close();
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename=" + video.getFile() + ".bat");
+        final ServletOutputStream os;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(object.getObjectContent()))) {
+            os = response.getOutputStream();
+            String s;
+            String[] shoottime = new SimpleDateFormat("yyyy,MM,dd").format(video.getShootTime()).split(",");
+            while ((s = br.readLine()) != null) {
+                String news;
+                if (s.contains("filename_new")) {
+                    news = s.replaceAll("filename_new", video.getFile() + "\r\n");
+                } else if (s.contains("title_new")) {
+                    news = s.replaceAll("title_new", video.getTitle() + "\r\n");
+                } else if (s.contains("year_new")) {
+                    news = s.replaceAll("year_new", shoottime[0].trim() + "\r\n");
+                } else if (s.contains("month_new")) {
+                    news = s.replaceAll("month_new", shoottime[1].trim() + "\r\n");
+                } else if (s.contains("day_new")) {
+                    news = s.replaceAll("day_new", shoottime[2].trim() + "\r\n");
+                } else {
+                    news = s + "\r\n";
+                }
+                os.write(news.getBytes());
+            }
+        }
         os.close();
     }
 }
