@@ -1,15 +1,17 @@
 package com.yidumen.cms.view.controller;
 
+import com.aliyun.openservices.oss.OSSClient;
+import com.aliyun.openservices.oss.model.OSSObject;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
 import com.yidumen.dao.constant.VideoStatus;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +44,8 @@ public final class VideoController {
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
     @Autowired
     private VideoService service;
+    @Autowired
+    private OSSClient client;
 
     @RequestMapping("manager")
     public String manager(Model model) {
@@ -125,11 +129,33 @@ public final class VideoController {
             return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @RequestMapping(value = "bat/{id}")
     public void downloadBat(HttpServletResponse response, @PathVariable Long id) throws IOException {
         final Video video = service.find(id);
-        
+        final OSSObject object = client.getObject("yidumen", "cms/cms_single.bat");
+        final BufferedReader br = new BufferedReader(new InputStreamReader(object.getObjectContent()));
         final ServletOutputStream os = response.getOutputStream();
-        
+        String s;
+        String[] shoottime = new SimpleDateFormat("yyyy,MM,dd").format(video.getShootTime()).split(",");
+        while ((s = br.readLine()) != null) {
+            String news;
+            if (s.contains("filename_new")) {
+                news = s.replaceAll("filename_new", video.getFile() + "\r\n");
+            } else if (s.contains("title_new")) {
+                news = s.replaceAll("title_new", video.getTitle() + "\r\n");
+            } else if (s.contains("year_new")) {
+                news = s.replaceAll("year_new", shoottime[0].trim() + "\r\n");
+            } else if (s.contains("month_new")) {
+                news = s.replaceAll("month_new", shoottime[1].trim() + "\r\n");
+            } else if (s.contains("day_new")) {
+                news = s.replaceAll("day_new", shoottime[2].trim() + "\r\n");
+            } else {
+                news = s + "\r\n";
+            }
+            os.write(news.getBytes());
+        }
+        br.close();
+        os.close();
     }
 }
