@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.alibaba.appengine</groupId>
             <artifactId>services-api</artifactId>
-            <version>1.4.2</version>
+            <version>1.4.24</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -26,6 +26,7 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -101,6 +102,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>aliyun-openservices</artifactId>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
     <repositories>

@@ -52,7 +52,7 @@
                         <form:input path="grade" cssClass="form-control input-sm" />
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">提交并下载批处理</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
                         </div>
                 </form:form>
             </div>
