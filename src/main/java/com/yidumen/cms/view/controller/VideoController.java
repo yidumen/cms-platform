@@ -101,9 +101,10 @@ public final class VideoController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
+    @ResponseBody
     public String createVideo(@ModelAttribute("video") Video video) {
         service.addVideo(video);
-        return verify();
+        return "0";
     }
 
     @RequestMapping(value = "publish", method = RequestMethod.GET)
