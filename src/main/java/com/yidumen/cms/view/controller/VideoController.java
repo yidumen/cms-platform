@@ -1,8 +1,6 @@
 package com.yidumen.cms.view.controller;
 
-import com.aliyun.openservices.ClientException;
 import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.OSSException;
 import com.aliyun.openservices.oss.model.OSSObject;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
@@ -135,13 +133,7 @@ public final class VideoController {
     @RequestMapping(value = "bat/{id}")
     public void downloadBat(HttpServletResponse response, @PathVariable Long id) throws IOException {
         final Video video = service.find(id);
-        OSSObject object;
-        try {
-            object = client.getObject("yidumen", "cms/cms_single.bat");
-        } catch (OSSException | ClientException ex) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
+        OSSObject object = client.getObject("yidumen", "cms/cms_single.bat");
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment;filename=" + video.getFile() + ".bat");
         final ServletOutputStream os;

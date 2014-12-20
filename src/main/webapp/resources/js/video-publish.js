@@ -29,6 +29,7 @@ function refreshTable() {
                         "<td>", item.recommend > 0 ? "<i class='icon-check'></i>" : "<i class='icon-check-empty'></i>", "</td>",
                         "<td><span class='operation'>",
                         '<a title="发布" class="icon-globe pull-left" data-file="' + item.file + '" href="javascritp:void(0)"></a>',
+                        '<a title="批处理" class="icon-file-code-o pull-left" href="/video/bat/' + item.id + '"></a>',
                         '<a title="删除" class="icon-trash pull-right" data-file="' + item.file + '" href="javascritp:void(0)"></a>',
                         "</span></td>",
                         "</tr>");
