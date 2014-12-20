@@ -156,7 +156,7 @@ public final class VideoController {
                 } else {
                     news = s + "\r\n";
                 }
-                os.write(news.getBytes());
+                os.write(news.getBytes("GBK"));
             }
         }
         os.close();
