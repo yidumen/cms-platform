@@ -66,7 +66,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             menu.setName("视频管理");
             {
                 ItemGroup group = new ItemGroup();
-                group.setName("视频查询");
+                group.setName("查询与编辑");
                 group.addItem(new ItemModel("全部视频列表", "/video/manager"));
                 group.addItem(new ItemModel("高级条件查询", "/video/query"));
                 group.setPermission(1);

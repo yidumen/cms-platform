@@ -2,45 +2,15 @@
     Created on : 2014-8-28, 13:51:35
     Author     : 蔡迪旻 <yidumen.com>
 */
-.table .table-col-id {
-    width: 16px;
+.operation {
+    width: 100%;
 }
-.table .table-col-file,
-.table .table-col-duration {
-    width: 1px;
+.operation>a:last-child {
+    margin-top: 2px;
 }
-.table .table-col-title {
-    width: fit-content;
-}
-.table .table-col-index {
-    width: 48px;
-}
-.table .table-col-date {
-    width: 90px;
-}
-.table .table-col-time {
-    width: 150px;
-}
-.table .table-col-column {
-    width: 60px;
-}
-.table .table-col-status {
-    width: 46px;
-}
-.table .table-col-opera {
-    width: 7em;
-}
-.info-caption {
+table th {
     text-align: left;
 }
-.text-video {
-    padding-top: 17px;
-}
-.pagination {
-    margin-top: 0px;
-}
-.operation>a {
-    padding-top: 3px;
-    text-decoration: none;
-    outline: none;
+.label {
+    margin-right: 10px !important;
 }

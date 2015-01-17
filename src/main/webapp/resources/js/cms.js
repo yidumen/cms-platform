@@ -1,15 +1,14 @@
-var container = jQuery("#container");
 $(".dropdown-menu li a").click(function (event) {
     var dom = jQuery(event.currentTarget);
     var link = dom.attr("href");
-    container.load(link);
-    jQuery(".dropdown").dropdown("toggle");
+    $("#container").load(link);
+    jQuery(".dropdown-menu").css("display", "none");
     dom.parents(".dropdown").addClass("active");
     return false;
 });
-$(".dropdown-toggle").click(function (event) {
-    jQuery(event.currentTarget).dropdown();
-});
+//$(".dropdown-toggle").click(function (event) {
+//    jQuery(event.currentTarget).dropdown();
+//});
 function setCookie(name, value) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + 10 * 365);
@@ -40,16 +39,4 @@ function showError(detail) {
     jQuery("body").append("<div class='alert alert-danger alert-dismissible center-block'><button type=’button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span></button>" + detail + "</div>")
             .slideDown();
 }
-$(document).ajaxStart(function () {
-    $("#block").modal({
-        backdrop: false,
-        keyboard: false
-    });
-});
-$(document).ajaxError(function (event, XMLHttpRequest, ajaxOptions) {
-    showError("<strong>操作失败！</strong>" + XMLHttpRequest.responseText);
-});
-$(document).ajaxComplete(function () {
-    $("#block").modal("hide");
-});
 

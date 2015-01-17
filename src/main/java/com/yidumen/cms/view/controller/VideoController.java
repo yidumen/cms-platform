@@ -4,6 +4,7 @@ import com.aliyun.openservices.oss.OSSClient;
 import com.aliyun.openservices.oss.model.OSSObject;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
+import com.yidumen.cms.view.model.DataTableModel;
 import com.yidumen.dao.constant.VideoStatus;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
@@ -23,14 +24,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  *
@@ -38,7 +37,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller
 @RequestMapping("video")
-@SessionAttributes("query")
 public final class VideoController {
 
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
@@ -49,19 +47,14 @@ public final class VideoController {
 
     @RequestMapping("manager")
     public String manager(Model model) {
-        model.addAttribute("count", service.getVideoCount());
         model.addAttribute("query", new VideoQueryModel());
         return "video/video-manager";
     }
-
-    @RequestMapping(value = "pagination/{index}", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+    
+    @RequestMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Video> videoList(@CookieValue("page.size") int pageSize,
-                                 @PathVariable("index") int index,
-                                 @ModelAttribute("query") VideoQueryModel model) {
-        model.setFirst((index - 1) * pageSize);
-        model.setLimit(pageSize);
-        return service.find(model);
+    public DataTableModel<Video> videoList(@ModelAttribute("query") VideoQueryModel model) {
+        return new DataTableModel<>(service.find(model));
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)

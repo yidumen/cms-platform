@@ -4,6 +4,7 @@ import com.yidumen.cms.service.impl.VideoServiceImpl;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.entity.VideoInfo;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +25,7 @@ public class VideoWebService {
         Video video = service.find(file);
         if (video == null) {
             video = new Video();
-            video.setExtInfo(new ArrayList<VideoInfo>());
+            video.setExtInfo(new HashSet<VideoInfo>());
         }
         return video;
     }

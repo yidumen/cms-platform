@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -75,6 +77,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> find(VideoQueryModel model) {
+        model.setAllEager(true);
         return videoDAO.find(model);
     }
 
@@ -134,10 +137,10 @@ public class VideoServiceImpl implements VideoService {
 
         final Video video = videoDAO.find(file);
         video.setDuration(Long.valueOf(map.get("Duration").toString()));
-        List<VideoInfo> videoInfos = video.getExtInfo();
+        Set<VideoInfo> videoInfos = video.getExtInfo();
 
         if (videoInfos == null || videoInfos.isEmpty()) {
-            videoInfos = new ArrayList<>();
+            videoInfos = new HashSet<>();
             for (VideoResolution resolution : VideoResolution.values()) {
                 VideoInfo info = new VideoInfo();
                 info.setResolution(resolution);

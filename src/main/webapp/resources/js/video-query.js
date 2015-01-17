@@ -1,24 +1,3 @@
-$(".date-shoot").datetimepicker({
-    language: "zh-CN",
-    format: "yyyy-mm-dd",
-    weekStart: 1,
-    autoclose: true,
-    startView: 2,
-    minView: 2,
-    todayBtn: "linked",
-    todayHighlight: true,
-    forceParse: false
-});
-$(".date-pub").datetimepicker({
-    language: "zh-CN",
-    format: "yyyy-mm-dd hh:ii:ss",
-    weekStart: 1,
-    autoclose: true,
-    startView: 2,
-    minView: 0,
-    todayHighlight: true,
-    forceParse: false
-});
 $("button[type='submit']").click(function () {
     var model = new Object();
     var pattern = /([A-Z]*)(\d)/;
@@ -34,7 +13,6 @@ $("button[type='submit']").click(function () {
                 info.resolution = matches[1];
                 info.fileSize = $(this).val();
                 property = "extInfo" + (matches[2] === "2" ? "2" : "");
-                console.log(property);
                 model[property].push(info);
             } else {
                 model[property] = $(this).val();
@@ -47,13 +25,13 @@ $("button[type='submit']").click(function () {
         data: JSON.stringify(model),
         type: "POST",
         dataType: 'html',
-        beforeSend: function (xhr) {
+        beforeSend: function () {
             startBlock();
         },
-        success: function (data, textStatus, jqXHR) {
+        success: function (data) {
             jQuery("#container").html(data);
         },
-        complete: function (jqXHR, textStatus) {
+        complete: function () {
             endBlock();
         }
     });

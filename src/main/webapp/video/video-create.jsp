@@ -9,56 +9,63 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
         <title>创建视频</title>
-        <link rel="stylesheet" href="/resources/css/bootstrap-datetimepicker.min.css">
+        <link rel="stylesheet" href="/resources/css/default.css">
     </head>
     <body>
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-2">
-                <form:form id="form" action="/video/add" commandName="video">
-                    <div class="form-group">
-                        <label>文件编号<small class="text-danger">（必填）</small></label>
-                        <form:input path="file" cssClass="form-control input-sm" required="true" />
+        <form:form id="form" action="/video/add" commandName="video">
+            <div class="panel inline-block margin5 top-align">
+                <div class="panel-header bg-darkRed fg-white">必填项</div>
+                <div class="panel-content">
+                    <h5>文件编号</h5>
+                    <div class="input-control text size4">
+                        <form:input path="file" required="true" />
                     </div>
-                    <div class="form-group">
-                        <label>视频标题<small class="text-danger">（必填）</small></label>
-                        <form:input path="title" cssClass="form-control input-sm" required="true" />
+                    <h5>视频标题</h5>
+                    <div class="input-control text">
+                        <form:input path="title" required="true" />
                     </div>
-                    <div class="form-group">
-                        <label>拍摄日期<small class="text-danger">（必填）</small></label>
-                        <form:input id="pub-shoot" data-font-awesome="true" path="shootTime" cssClass="form-control input-sm" required="true" />
+                    <h5>拍摄日期</h5>
+                    <div class="input-control text" data-role="datepicker" data-format="yyyy年mm月dd日" data-locale="zhCN">
+                        <form:input path="shootTime" required="true" /><button class="btn-date"></button>
                     </div>
-                    <div class="form-group">
-                        <label>发布序号</label>
-                        <form:input path="sort" cssClass="form-control input-sm" />
-                        <span class="help-block">为0则忽略此序号</span>
+                </div>
+            </div>
+            <div class="panel inline-block margin5">
+                <div class="panel-header">选填项</div>
+                <div class="panel-content">
+                    <h5>发布序号</h5>
+                    <div class="input-control text size4 block">
+                        <form:input path="sort" />
                     </div>
-                    <div class="form-group">
-                        <label>推荐度</label>
-                        <form:input path="recommend" cssClass="form-control input-sm" />
+                    <span>为0则忽略此序号</span>
+                    <h5>推荐度</h5>
+                    <div class="input-control text">
+                        <form:input path="recommend" />
                         <span class="help-block">为0则为不推荐</span>
                     </div>
-                    <div class="form-group">
-                        <label>视频描述（简短内容摘要）</label>
-                        <form:textarea path="descrpition" cssClass="form-control input-sm" />
+                    <h5>视频描述（简短内容摘要）</h5>
+                    <div class="input-control textarea">
+                        <form:textarea path="descrpition" />
                     </div>
-                    <div class="form-group">
-                        <label>备注</label>
-                        <form:input path="note" cssClass="form-control input-sm" />
+                    <h5>备注</h5>
+                    <div class="input-control text">
+                        <form:input path="note" />
                     </div>
-                    <div class="form-group">
-                        <label>分级信息</label>
-                        <form:input path="grade" cssClass="form-control input-sm" />
+                    <h5>分级信息</h5>
+                    <div class="input-control text">
+                        <form:input path="grade" />
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">提交</button>
-                        </div>
-                </form:form>
+                </div>
             </div>
-        </div>
-        <script src="/resources/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="/resources/js/bootstrap-datetimepicker.zh-CN.js"></script>
+            <hr>
+            <button type="submit" class="default large place-right">
+                <i class="fa fa-check"></i>
+                提交
+            </button>
+        </form:form>
+        <script src="/resources/js/metro.min.js"></script>
         <script src="/resources/js/video-pub.js"></script>
     </body>
 </html>

@@ -11,8 +11,8 @@
         <property name="locations" value="classpath:appengine-service.properties"/>
     </bean>
     <bean id="ossclient" class="com.aliyun.openservices.oss.OSSClient">
-        <constructor-arg name="endpoint" value="${oss.ydm.endpoint}" />
-        <constructor-arg name="accessKeyId" value="${oss.ydm.accessKeyId}" />
-        <constructor-arg name="accessKeySecret" value="${oss.ydm.accessKeySecret}" />
+        <constructor-arg index="0" type="java.lang.String" value="${oss.ydm.endpoint}" />
+        <constructor-arg index="1" type="java.lang.String" value="${oss.ydm.accessKeyId}" />
+        <constructor-arg index="2" type="java.lang.String" value="${oss.ydm.accessKeySecret}" />
     </bean>
 </beans>
