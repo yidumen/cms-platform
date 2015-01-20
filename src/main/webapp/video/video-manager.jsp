@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<html>
     <head>
         <link rel="stylesheet" href="/resources/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" href="/resources/css/video-info.css">

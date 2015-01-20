@@ -76,6 +76,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> find(VideoQueryModel model) {
+        model.setAllEager(true);
         return videoDAO.find(model);
     }
 
