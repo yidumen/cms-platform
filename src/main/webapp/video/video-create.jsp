@@ -11,7 +11,7 @@
     <head>
         <meta charset="utf-8">
         <title>创建视频</title>
-        <link rel="stylesheet" href="/resources/css/default.css">
+        <link rel="stylesheet" href="/resources/css/app.css">
     </head>
     <body>
         <form:form id="form" action="/video/add" commandName="video">

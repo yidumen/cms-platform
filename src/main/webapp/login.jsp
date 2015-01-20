@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
         <link rel="stylesheet" href="/resources/css/signin.css">
-        <link rel="stylesheet" href="/resources/css/default.css">
+        <link rel="stylesheet" href="/resources/css/app.css">
         <title>易度门管理平台</title>
     </head>
     <body class="metro">

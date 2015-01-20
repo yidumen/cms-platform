@@ -1,7 +1,7 @@
 var table = $("#video-table").dataTable({
     deferRender: true,
     lengthMenu: [10, 11, 12, 13, 14, 15, 20, 25, 30, 40, 50, "All"],
-    pageLength: 15,
+    pageLength: 14,
     autoWidth: false,
     ordering: false,
     pagingType: "full_numbers",
@@ -18,21 +18,21 @@ var table = $("#video-table").dataTable({
         {data: "pubDate"},
         {data: "recommend", render: function (data) {
                 if (data > 0) {
-                    return '<i class="fa fa-check-square-o"></i>';
+                    return '<i class="icon-checkbox"></i>';
                 } else {
-                    return '<i class="fa fa-square-o"></i>';
+                    return '<i class="icon-checkbox-unchecked"></i>';
                 }
             }
         },
         {data: "status"},
         {data: "id",
             render: function (data, type, row, meta) {
-                return '<div class="operation"><a class="fa fa-search" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a class="fa fa-edit" title="编辑" href="javascript:void(0);" data-id="' + data + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/" class="fa fa-external-link pull-right"></a></div>';
+                return '<div class="operation"><a class="icon-search" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a class="fa fa-edit" title="编辑" href="javascript:void(0);" data-id="' + data + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/" class="icon-new-tab-2 place-right"></a></div>';
             }
         }
     ]
 }).api();
-$("#table-content").on("click", ".operation .fa-search", function () {
+$("#table-content").on("click", ".operation .icon-search", function () {
     var data = table.data()[$(this).data("index")];
     $("#itemId").html(data.id);
     $("#file").html(data.file);
@@ -90,8 +90,8 @@ $("#table-content").on("click", ".operation .fa-search", function () {
         return content;
     });
     $.Dialog({
-        icon: '<i class="fa fa-file-video-o"></i>',
-        title: data.title,
+        icon: '<i class="icon-film"></i>',
+        title: "<strong>" + data.title + "</strong>",
         content: $("#amodal").html(),
         flat: true,
         shadow: true,

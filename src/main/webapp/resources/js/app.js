@@ -1,14 +1,3 @@
-$(".dropdown-menu li a").click(function (event) {
-    var dom = jQuery(event.currentTarget);
-    var link = dom.attr("href");
-    $("#container").load(link);
-    jQuery(".dropdown-menu").css("display", "none");
-    dom.parents(".dropdown").addClass("active");
-    return false;
-});
-//$(".dropdown-toggle").click(function (event) {
-//    jQuery(event.currentTarget).dropdown();
-//});
 function setCookie(name, value) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + 10 * 365);

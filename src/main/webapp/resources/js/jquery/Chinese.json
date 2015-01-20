@@ -12,10 +12,10 @@
     "sLoadingRecords": "<i class='fa fa-circle-o-notch fa-spin'></i>正在向服务器请求数据...",
     "sInfoThousands":  ",",
     "oPaginate": {
-        "sFirst":    "<i class='fa fa-angle-double-left'></i>",
-        "sPrevious": "<i class='fa fa-angle-left'></i>",
-        "sNext":     "<i class='fa fa-angle-right'></i>",
-        "sLast":     "<i class='fa fa-angle-double-right'></i>"
+        "sFirst":    "<i class='icon-first-2'></i>",
+        "sPrevious": "<i class='icon-arrow-left-4'></i>",
+        "sNext":     "<i class='icon-arrow-right-4'></i>",
+        "sLast":     "<i class=' icon-last-2'></i>"
     },
     "oAria": {
         "sSortAscending":  ": 以升序排列此列",

@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="/resources/css/default.css">
+        <link rel="stylesheet" href="/resources/css/app.css">
         <title>视频高级查询</title>
     </head>
     <body>

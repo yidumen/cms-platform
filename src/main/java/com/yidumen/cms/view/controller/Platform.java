@@ -1,6 +1,7 @@
 package com.yidumen.cms.view.controller;
 
 import com.yidumen.cms.service.UserService;
+import com.yidumen.dao.entity.Account;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,11 @@ public class Platform {
         WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
         model.addAttribute("menus", context.getBean("menus"));
         final Long id = (Long) session.getAttribute("user");
-        int permission = userService.find(id).getUserGroup().ordinal();
+        final Account user = userService.find(id);
+        int permission = user.getUserGroup().ordinal();
         model.addAttribute("permission", permission);
-        return "/main";
+        model.addAttribute("name", user.getNickname());
+        model.addAttribute("group", user.getUserGroup().getName());
+        return "/navigate";
     }
 }
