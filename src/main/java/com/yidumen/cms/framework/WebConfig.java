@@ -1,5 +1,6 @@
 package com.yidumen.cms.framework;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
@@ -38,7 +39,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(module);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(objectMapper);
         converters.add(converter);
