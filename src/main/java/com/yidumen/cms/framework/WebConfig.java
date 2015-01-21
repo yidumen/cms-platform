@@ -39,7 +39,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(module);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+//        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(objectMapper);
         converters.add(converter);

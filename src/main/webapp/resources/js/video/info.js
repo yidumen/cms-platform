@@ -27,7 +27,7 @@ var table = $("#video-table").dataTable({
         {data: "status"},
         {data: "id",
             render: function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-search" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a class="fa fa-edit" title="编辑" href="javascript:void(0);" data-id="' + data + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/" class="icon-new-tab-2 place-right"></a></div>';
+                return '<div class="operation"><a class="icon-search" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a class="fa fa-edit" title="编辑" href="javascript:void(0);" data-id="' + data + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
             }
         }
     ]

@@ -14,8 +14,20 @@
 .top-align{
     vertical-align: top;
 }
-#breadcrumb {
+#navigate, #toolbar{
+    display: table;
+}
+#navigate>*, #toolbar>* {
+    display: table-cell;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#toolbar {
     position: absolute;
-    top: 14px;
-    left: 52px;
+    top: 5px;
+    right: 5px;
+}
+#toolbar a {
+    width: 100%;
+    height: 100%;
 }

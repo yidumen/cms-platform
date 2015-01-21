@@ -45,10 +45,10 @@ public final class VideoController {
     @Autowired
     private OSSClient client;
 
-    @RequestMapping("manager")
-    public String manager(Model model) {
+    @RequestMapping("info")
+    public String info(Model model) {
         model.addAttribute("query", new VideoQueryModel());
-        return "video/video-manager";
+        return "video/info";
     }
     
     @RequestMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,7 +60,7 @@ public final class VideoController {
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
     public String editVideo(@PathVariable("id") Long id, Model model) {
         model.addAttribute("video", service.find(id));
-        return "video/video-edit";
+        return "video/edit";
     }
 
     @RequestMapping(value = "submit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -77,20 +77,20 @@ public final class VideoController {
     @RequestMapping(value = "query", method = RequestMethod.GET)
     public String queryVideo(Model model) {
         model.addAttribute("query", new VideoQueryModel());
-        return "video/video-query";
+        return "video/query";
     }
 
     @RequestMapping(value = "query/process", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String processQuery(@RequestBody VideoQueryModel query, Model model) {
         model.addAttribute("query", query);
         model.addAttribute("count", service.getVideoCount(query));
-        return "video/video-manager";
+        return "video/manager";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String publishVideo(Model model) {
         model.addAttribute("video", new Video());
-        return "video/video-create";
+        return "video/create";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
@@ -102,7 +102,7 @@ public final class VideoController {
 
     @RequestMapping(value = "publish", method = RequestMethod.GET)
     public String verify() {
-        return "video/video-publish";
+        return "video/publish";
     }
 
     @RequestMapping(value = "verify", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

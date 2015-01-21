@@ -10,6 +10,8 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
+        <link rel="stylesheet" href="/resources/css/iconFont.css">
         <link rel="stylesheet" href="/resources/css/app.css">
         <title>视频高级查询</title>
     </head>
@@ -127,6 +129,6 @@
             </button>
         </div>
         <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/video-query.js"></script>
+        <script src="/resources/js/video/query.js"></script>
     </body>
 </html>

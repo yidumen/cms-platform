@@ -37,7 +37,7 @@
 
             <div class="tile-group three">
                 <div class="tile-group-title">视频管理</div>
-                <a class="tile double double-vertical bg-darkBlue" href="/video/manager">
+                <a class="tile double double-vertical bg-darkBlue" href="/video/info">
                     <div class="tile-status">
                         <span class="name">所有视频</span>
                     </div>

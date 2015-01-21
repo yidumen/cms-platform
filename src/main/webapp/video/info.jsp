@@ -8,20 +8,26 @@
 <html>
     <head>
         <title>视频列表</title>
+        <meta charset="utf-8">
         <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
         <link rel="stylesheet" href="/resources/css/iconFont.css">
         <link rel="stylesheet" href="/resources/css/app.css">
         <link rel="stylesheet" href="/resources/css/video-info.css">
     </head>
     <body class="metro">
-        <h1 class="no-margin text-muted"><a href="javascript:window.history.back(); "><span class="icon-arrow-left-3 smaller on-right"></span></a></h1>
-        <div id="breadcrumb" class="breadcrumbs">
-            <ul>
-                <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
-                <li><a>视频管理</a></li>
-                <li class="active"><a>所有视频信息</a></li>
-                <li></li>
-            </ul>
+        <div id="navigate">
+            <h1 class="no-margin"><a class="text-muted" href="javascript:window.history.back(); "><span class="icon-arrow-left-3 smaller on-right"></span></a></h1>
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
+                    <li><a>视频管理</a></li>
+                    <li class="active"><a>所有视频信息</a></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div id="toolbar">
+                <h3 class="bg-hover-black border bd-black"><a class="fg-hover-white fg-black padding15" href="/video/query">高级查询</a></h3>
+            </div>
         </div>
         <hr class="ntm">
         <div>
@@ -90,6 +96,6 @@
         <script src="/resources/js/jquery/jquery.dataTables.min.js"></script>
         <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/video-manager.js"></script>
+        <script src="/resources/js/video/info.js"></script>
     </body>
 </html>
