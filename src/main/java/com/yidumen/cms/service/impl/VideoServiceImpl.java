@@ -12,7 +12,7 @@ import com.yidumen.dao.model.VideoQueryModel;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +150,6 @@ public class VideoServiceImpl implements VideoService {
             video.setExtInfo(videoInfos);
         }
         log.debug("videoInfo has {} item", videoInfos.size());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
         final List<Map<String, Object>> extInfo = (List<Map<String, Object>>) map.get("extInfo");
         log.debug("extInfo has {}", extInfo.size());
         for (Map<String, Object> infos : extInfo) {
@@ -161,11 +160,10 @@ public class VideoServiceImpl implements VideoService {
                     videoInfo.setHeight(Integer.parseInt(info));
                     videoInfo.setWidth(Integer.valueOf(infos.get("Width").toString()));
                     videoInfo.setFileSize(infos.get("FileSizeString").toString());
-                    log.debug("Modified is {}", infos.get("Modified"));
-                    video.setPubDate(format.parse(infos.get("Modified").toString()));
                 }
             }
         }
+        video.setPubDate(new Date());
         video.setStatus(VideoStatus.PUBLISH);
         videoDAO.edit(video);
     }
