@@ -9,7 +9,7 @@
     "sSearch":       "搜索:",
     "sUrl":          "",
     "sEmptyTable":     "表中数据为空",
-    "sLoadingRecords": "<i class='fa fa-circle-o-notch fa-spin'></i>正在向服务器请求数据...",
+    "sLoadingRecords": "<i class='icon-rotate icon-spin'></i>正在向服务器请求数据...",
     "sInfoThousands":  ",",
     "oPaginate": {
         "sFirst":    "<i class='icon-first-2'></i>",

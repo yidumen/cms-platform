@@ -32,4 +32,6 @@ public interface VideoService {
     void addVideo(Video video);
 
     void publish(String file) throws IOException, IllDataException, ParseException;
+
+    Long findMaxSortNumber();
 }

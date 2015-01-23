@@ -4,7 +4,6 @@ import com.aliyun.openservices.oss.OSSClient;
 import com.aliyun.openservices.oss.model.OSSObject;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.cms.view.model.DataTableModel;
 import com.yidumen.dao.constant.VideoStatus;
 import com.yidumen.dao.entity.Video;
 import com.yidumen.dao.model.VideoQueryModel;
@@ -13,9 +12,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  *
@@ -37,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("video")
+@SessionAttributes("query")
 public final class VideoController {
 
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
@@ -50,11 +54,14 @@ public final class VideoController {
         model.addAttribute("query", new VideoQueryModel());
         return "video/info";
     }
-    
+
     @RequestMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public DataTableModel<Video> videoList(@ModelAttribute("query") VideoQueryModel model) {
-        return new DataTableModel<>(service.find(model));
+    public Map<String, List<Video>> videoList(@ModelAttribute("query") VideoQueryModel model, HttpSession session) {
+        Map<String, List<Video>> result = new HashMap<>();
+        result.put("data", service.find(model));
+        session.removeAttribute("query");
+        return result;
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
@@ -83,8 +90,7 @@ public final class VideoController {
     @RequestMapping(value = "query/process", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String processQuery(@RequestBody VideoQueryModel query, Model model) {
         model.addAttribute("query", query);
-        model.addAttribute("count", service.getVideoCount(query));
-        return "video/manager";
+        return "video/info";
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
@@ -94,10 +100,9 @@ public final class VideoController {
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    @ResponseBody
-    public String createVideo(@ModelAttribute("video") Video video) {
+    public String createVideo(Video video) {
         service.addVideo(video);
-        return "0";
+        return "redirect:publish";
     }
 
     @RequestMapping(value = "publish", method = RequestMethod.GET)
@@ -107,10 +112,12 @@ public final class VideoController {
 
     @RequestMapping(value = "verify", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Video> ajaxVerify(Model model) {
+    public Map<String, List<Video>> ajaxVerify(Model model) {
         final VideoQueryModel queryModel = new VideoQueryModel();
         queryModel.addStatus(VideoStatus.VERIFY);
-        return service.find(queryModel);
+        Map<String, List<Video>> result = new HashMap<>();
+        result.put("data", service.find(queryModel));
+        return result;
     }
 
     @RequestMapping(value = "publish/{file}", method = RequestMethod.POST)
@@ -122,6 +129,12 @@ public final class VideoController {
         } catch (IOException | IllDataException | ParseException ex) {
             return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @RequestMapping(value = "maxsort", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Long maxSortNumber() {
+        return service.findMaxSortNumber();
     }
 
     @RequestMapping(value = "bat/{id}")

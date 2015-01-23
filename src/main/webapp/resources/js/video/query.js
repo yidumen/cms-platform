@@ -3,7 +3,7 @@ $("button[type='submit']").click(function () {
     var pattern = /([A-Z]*)(\d)/;
     model.extInfo = new Array();
     model.extInfo2 = new Array();
-    jQuery("input").each(function () {
+    jQuery("input, select").each(function () {
         var property = $(this).attr("name");
         var value = $(this).val();
         if (value !== "") {
@@ -19,20 +19,14 @@ $("button[type='submit']").click(function () {
             }
         }
     });
-    jQuery.ajax({
+    $.ajax({
         url: "/video/query/process",
-        contentType: "application/json; charset=utf-8",
+        contentType: "application/json",
         data: JSON.stringify(model),
         type: "POST",
         dataType: 'html',
-        beforeSend: function () {
-            startBlock();
-        },
         success: function (data) {
-            jQuery("#container").html(data);
-        },
-        complete: function () {
-            endBlock();
+            $("body").html(data);
         }
     });
 });

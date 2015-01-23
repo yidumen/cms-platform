@@ -1,6 +1,6 @@
 var table = $("#video-table").dataTable({
     deferRender: true,
-    lengthMenu: [10, 11, 12, 13, 14, 15, 20, 25, 30, 40, 50, "All"],
+    lengthMenu: [10, 11, 12, 13, 14, 15, 20, 25, 30, 40, 50],
     pageLength: 14,
     autoWidth: false,
     ordering: false,
@@ -12,7 +12,14 @@ var table = $("#video-table").dataTable({
     columns: [
         {data: "file"},
         {data: "title"},
-        {data: "sort"},
+        {data: "sort", render: function (data) {
+                if (data > 0) {
+                    return data;
+                } else {
+                    return '<span class="icon-blocked"></span>';
+                }
+            }
+        },
         {data: "duration"},
         {data: "shootTime"},
         {data: "pubDate"},
@@ -27,12 +34,12 @@ var table = $("#video-table").dataTable({
         {data: "status"},
         {data: "id",
             render: function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-search" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a class="fa fa-edit" title="编辑" href="javascript:void(0);" data-id="' + data + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
+                return '<div class="operation"><a class="icon-zoom-in" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
             }
         }
     ]
 }).api();
-$("#table-content").on("click", ".operation .icon-search", function () {
+$("#table-content").on("click", ".operation .icon-zoom-in", function () {
     var data = table.data()[$(this).data("index")];
     $("#itemId").html(data.id);
     $("#file").html(data.file);

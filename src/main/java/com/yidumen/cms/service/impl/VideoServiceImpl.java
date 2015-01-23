@@ -168,4 +168,11 @@ public class VideoServiceImpl implements VideoService {
         videoDAO.edit(video);
     }
 
+    @Override
+    public Long findMaxSortNumber() {
+        final VideoQueryModel model = new VideoQueryModel();
+        model.setMaxProperty("sort");
+        return videoDAO.max(model);
+    }
+
 }

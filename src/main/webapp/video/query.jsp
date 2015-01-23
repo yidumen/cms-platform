@@ -5,17 +5,30 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
         <link rel="stylesheet" href="/resources/css/iconFont.css">
         <link rel="stylesheet" href="/resources/css/app.css">
         <title>视频高级查询</title>
     </head>
-    <body>
+    <body class="metro">
+        <div id="navigate">
+            <h1 class="no-margin"><a class="text-muted" href="javascript:window.history.back(); "><span class="icon-arrow-left-3 smaller on-right"></span></a></h1>
+            <div class="breadcrumbs">
+                <ul>
+                    <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
+                    <li><a>视频管理</a></li>
+                    <li><a>公共查询</a></li>
+                    <li class="active"><a>高级过滤条件</a></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
         <div class="panel inline-block margin5">
             <div class="panel-header bg-lightBlue fg-white">基础条件</div>
             <div class="panel-content">
@@ -54,20 +67,20 @@
             <div class="panel-content">
                 <h5>拍摄日期：</h5>
                 <span>从</span>
-                <div class="input-control text size2" data-role="datepicker" data-format="yyyy年mm月dd日" data-locale="zhCN">
+                <div class="input-control text size2" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
                     <input type="text" name="shootTime" placeholder="早"><button class="btn-date"></button>
                 </div>
                 <span>到</span>
-                <div class="input-control text size2" data-role="datepicker" data-format="yyyy年mm月dd日" data-locale="zhCN">
+                <div class="input-control text size2" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
                     <input type="text" name="shootTime2" placeholder="晚"><button class="btn-date"></button>
                 </div>
                 <h5>发布时间：</h5>
                 <span>从</span>
-                <div class="input-control text size2" data-role="datepicker" data-format="yyyy年mm月dd日" data-locale="zhCN">
+                <div class="input-control text size2" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
                     <input type="text" name="pubDate" placeholder="早"><button class="btn-date"></button>
                 </div>
                 <span>到</span>
-                <div class="input-control text size2" data-role="datepicker" data-format="yyyy年mm月dd日" data-locale="zhCN">
+                <div class="input-control text size2" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
                     <input type="text" name="pubDate2" placeholder="晚"><button class="btn-date"></button>
                 </div>
                 <h5>发布序号：</h5>
@@ -102,7 +115,7 @@
             <div class="panel-content">
                 <span>以</span>
                 <div class="input-control select">
-                    <select>
+                    <select id="orderProperty" name="orderProperty">
                         <option value="id">默认</option>
                         <option value="file">文件编号</option>
                         <option value="duration">视频时长</option>
@@ -113,9 +126,9 @@
                 </div>
                 <span>字段</span>
                 <div class="input-control select">
-                    <select>
-                        <option value="false">升序</option>
-                        <option value="true">降序</option>
+                    <select id="desc" name="desc">
+                        <option value="false">递增</option>
+                        <option value="true">递减</option>
                     </select>
                 </div>
                 <span>排列</span>
@@ -123,11 +136,13 @@
         </div>
         <hr>
         <div>
-            <button  type="submit" class="default large place-right">
+            <button type="submit" class="default large place-right">
                 <i class="fa fa-filter"></i>
                 提交查询
             </button>
         </div>
+        <script src="/resources/js/jquery/jquery.min.js"></script>
+        <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
         <script src="/resources/js/video/query.js"></script>
     </body>

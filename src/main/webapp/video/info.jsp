@@ -8,7 +8,7 @@
 <html>
     <head>
         <title>视频列表</title>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
         <link rel="stylesheet" href="/resources/css/iconFont.css">
         <link rel="stylesheet" href="/resources/css/app.css">
@@ -21,12 +21,13 @@
                 <ul>
                     <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
                     <li><a>视频管理</a></li>
+                    <li><a>公共查询</a></li>
                     <li class="active"><a>所有视频信息</a></li>
                     <li></li>
                 </ul>
             </div>
-            <div id="toolbar">
-                <h3 class="bg-hover-black border bd-black"><a class="fg-hover-white fg-black padding15" href="/video/query">高级查询</a></h3>
+            <div id="toolbar" class="text-right">
+                <i class="icon-help text-success on-left-more padding10"></i><span class="icon-zoom-in on-left padding5">详细信息</span><span class="icon-new-tab-2">页面预览</span>
             </div>
         </div>
         <hr class="ntm">
