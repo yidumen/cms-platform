@@ -1,5 +1,5 @@
 var table = $("#video-table").dataTable({
-    paging:false,
+    paging: false,
     autoWidth: false,
     ordering: false,
     ajax: "/video/verify",
@@ -29,7 +29,7 @@ var table = $("#video-table").dataTable({
         {data: "status"},
         {data: "id",
             render: function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-globe on-left" title="发布" href="javascript:void(0);" data-file="' + row.file + '"></a><a title="批处理" class="icon-new" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="icon-remove place-right" data-id="' + data + '"></a></div>';
+                return '<div class="operation"><a class="icon-globe on-left-more" title="发布" href="javascript:void(0);" data-file="' + row.file + '"></a><a title="批处理" class="icon-new" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="icon-remove place-right" data-id="' + data + '"></a></div>';
             }
         }
     ]

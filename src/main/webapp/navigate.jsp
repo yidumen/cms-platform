@@ -30,7 +30,7 @@
             </div>
 
             <div class="tile-group two">
-                <div class="tile-group-title">视频管理</div>
+                <div class="tile-group-title">视频信息管理</div>
                 <hr class="ntm">
                 <a class="tile double bg-darkOrange" href="/video/info">
                     <div class="tile-content icon"><i class="icon-film"></i></div>
@@ -67,6 +67,5 @@
         <script src="/resources/js/jquery/jquery.min.js"></script>
         <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/video/video-pub.js"></script>
     </body>
 </html>

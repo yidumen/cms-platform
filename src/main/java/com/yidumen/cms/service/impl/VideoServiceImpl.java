@@ -11,21 +11,12 @@ import com.yidumen.dao.entity.VideoInfo;
 import com.yidumen.dao.model.VideoQueryModel;
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,23 +51,23 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video find(Long id) {
+    public Video find(final Long id) {
         return videoDAO.find(id);
     }
 
     @Override
-    public Video find(String file) {
+    public Video find(final String file) {
         return videoDAO.find(file);
     }
 
     @Override
-    public void removeVideo(Video video) {
+    public void removeVideo(final Video video) {
         videoDAO.remove(video);
         log.debug("视频 {} 已删除", video.getTitle());
     }
 
     @Override
-    public List<Video> find(VideoQueryModel model) {
+    public List<Video> find(final VideoQueryModel model) {
         model.setAllEager(true);
         return videoDAO.find(model);
     }
@@ -86,7 +77,7 @@ public class VideoServiceImpl implements VideoService {
         return videoDAO.count();
     }
 
-    private void validateSort(long sort, String file) throws IllDataException {
+    private void validateSort(final long sort, final String file) throws IllDataException {
         VideoQueryModel model = new VideoQueryModel();
         model.setSort(sort);
         model.setSort2(sort);
@@ -94,43 +85,26 @@ public class VideoServiceImpl implements VideoService {
         if (!videos.isEmpty()) {
             final String file2 = videos.get(0).getFile();
             if (!file.equals(file2)) {
-                throw new IllDataException("发布序号已被 " + file + " 使用");
+                throw new IllDataException("发布序号 " + sort + " 已被 " + file2 + " 使用");
             }
         }
     }
 
     @Override
-    public Long getVideoCount(VideoQueryModel model) {
+    public Long getVideoCount(final VideoQueryModel model) {
         return videoDAO.count(model);
     }
 
     @Override
-    public void addVideo(Video video) {
+    public void addVideo(final Video video) {
         video.setDuration(0L);
         video.setStatus(VideoStatus.VERIFY);
         videoDAO.create(video);
     }
 
     @Override
-    public void publish(String file) throws IOException, IllDataException, ParseException {
-        final HttpHost proxy = new HttpHost("10.242.175.127", 3128);
-        final CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope(proxy), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
-        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-        httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
-//        final Executor executor = Executor.newInstance(httpClientBuilder.build());
-        final HttpGet httpGet = new HttpGet("http://mo01.yidumen.com/service/video/info/" + file);
-        httpGet.setConfig(RequestConfig.custom().setProxy(proxy).build());
-        final CloseableHttpResponse response = httpClientBuilder.build().execute(httpGet);
-//        final HttpResponse response = executor.execute(
-//                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).viaProxy(proxy).socketTimeout(5000).connectTimeout(5000)).returnResponse();
-        final int statusCode = response.getStatusLine().getStatusCode();
-        if (statusCode == 404) {
-            throw new IllDataException("视频未部署");
-        }
-        if (statusCode == 500) {
-            throw new IllDataException("请检查视频中转站是否在线");
-        }
+    public void publish(final String file) throws IOException, IllDataException, ParseException {
+        final CloseableHttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + file);
         final String json = EntityUtils.toString(response.getEntity());
         final ObjectMapper mapper = new ObjectMapper();
         final Map<String, Object> map = mapper.readValue(json, Map.class);
@@ -140,9 +114,9 @@ public class VideoServiceImpl implements VideoService {
         Set<VideoInfo> videoInfos = video.getExtInfo();
 
         if (videoInfos == null || videoInfos.isEmpty()) {
-            videoInfos = new HashSet<>();
-            for (VideoResolution resolution : VideoResolution.values()) {
-                VideoInfo info = new VideoInfo();
+            videoInfos = new LinkedHashSet<>();
+            for (final VideoResolution resolution : VideoResolution.values()) {
+                final VideoInfo info = new VideoInfo();
                 info.setResolution(resolution);
                 info.setVideo(video);
                 videoInfos.add(info);
@@ -152,10 +126,10 @@ public class VideoServiceImpl implements VideoService {
         log.debug("videoInfo has {} item", videoInfos.size());
         final List<Map<String, Object>> extInfo = (List<Map<String, Object>>) map.get("extInfo");
         log.debug("extInfo has {}", extInfo.size());
-        for (Map<String, Object> infos : extInfo) {
-            String info = infos.get("Resolution").toString();
+        for (final Map<String, Object> infos : extInfo) {
+            final String info = infos.get("Resolution").toString();
             log.debug(info);
-            for (VideoInfo videoInfo : videoInfos) {
+            for (final VideoInfo videoInfo : videoInfos) {
                 if (info.equals(videoInfo.getResolution().getResolution())) {
                     videoInfo.setHeight(Integer.parseInt(info));
                     videoInfo.setWidth(Integer.valueOf(infos.get("Width").toString()));
@@ -169,9 +143,9 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Long findMaxSortNumber() {
+    public Object findMax(final String property) {
         final VideoQueryModel model = new VideoQueryModel();
-        model.setMaxProperty("sort");
+        model.setMaxProperty(property);
         return videoDAO.max(model);
     }
 

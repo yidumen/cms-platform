@@ -53,4 +53,7 @@
     <bean id="accountDAO" class="com.yidumen.dao.impl.AccountHibernateImpl"  >
         <constructor-arg index="0" type="org.hibernate.SessionFactory" ref="sessionFactory" />
     </bean>
+    <bean id="tagDAO" class="com.yidumen.dao.impl.TagHibernateImpl"  >
+        <constructor-arg index="0" type="org.hibernate.SessionFactory" ref="sessionFactory" />
+    </bean>
 </beans>

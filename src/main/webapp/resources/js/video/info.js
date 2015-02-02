@@ -34,12 +34,12 @@ var table = $("#video-table").dataTable({
         {data: "status"},
         {data: "id",
             render: function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-zoom-in" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
+                return '<div class="operation"><a class="icon-info" title="完整信息" href="javascript:void(0);" data-index="' + meta.row + '"></a>&nbsp;&nbsp;<a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
             }
         }
     ]
 }).api();
-$("#table-content").on("click", ".operation .icon-zoom-in", function () {
+$("#table-content").on("click", ".operation .icon-info", function () {
     var data = table.data()[$(this).data("index")];
     $("#itemId").html(data.id);
     $("#file").html(data.file);

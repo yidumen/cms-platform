@@ -25,64 +25,65 @@
                     <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
                     <li><a>视频管理</a></li>
                     <li><a>视频发布</a></li>
-                    <li class="active"><a>添加视频信息</a></li>
+                    <li class="active"><a>添加新视频信息</a></li>
                     <li></li>
                 </ul>
             </div>
         </div>
         <form:form id="form" action="/video/add" commandName="video">
-            <div class="panel inline-block margin5 top-align">
-                <div class="panel-header bg-darkRed fg-white">必填项</div>
-                <div class="panel-content">
-                    <h5>文件编号</h5>
-                    <div class="input-control text size4">
-                        <form:input path="file" required="true" />
-                    </div>
-                    <h5>视频标题</h5>
-                    <div class="input-control text">
-                        <form:input path="title" required="true" />
-                    </div>
-                    <h5>拍摄日期</h5>
-                    <div class="input-control text" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
-                        <form:input path="shootTime" required="true" /><button class="btn-date"></button>
-                    </div>
-                </div>
-            </div>
-            <div class="panel inline-block margin5">
-                <div class="panel-header">选填项</div>
-                <div class="panel-content">
-                    <h5>发布序号</h5>
-                    <div class="input-control text size4 block">
-                        <form:input path="sort" />
-                    </div>
-                    <span class="help-block">为0则忽略此序号</span>
-                    <h5>推荐度</h5>
-                    <div class="input-control text">
-                        <form:input path="recommend" />
-                        <span class="help-block">为0则为不推荐</span>
-                    </div>
-                    <h5>视频描述（简短内容摘要）</h5>
-                    <div class="input-control textarea">
-                        <form:textarea path="descrpition" />
-                    </div>
-                    <h5>备注</h5>
-                    <div class="input-control text">
-                        <form:input path="note" />
-                    </div>
-                    <h5>分级信息</h5>
-                    <div class="input-control text">
-                        <form:input path="grade" />
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <button type="submit" class="default large place-right">
-                <i class="icon-checkmark"></i>
-                提交
-            </button>
+          <div class="panel inline-block margin5 top-align">
+              <div class="panel-header bg-darkRed fg-white">重要必填项</div>
+              <div class="panel-content">
+                  <h5>文件编号</h5>
+                  <div class="input-control text size4">
+                      <form:input path="file" required="true" />
+                  </div>
+                  <h5>视频标题</h5>
+                  <div class="input-control text">
+                      <form:input path="title" required="true" />
+                  </div>
+                  <h5>拍摄日期</h5>
+                  <div class="input-control text" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
+                      <form:input path="shootTime" required="true" /><button class="btn-date"></button>
+                  </div>
+              </div>
+          </div>
+          <div class="panel inline-block margin5">
+              <div class="panel-header">一般选填项</div>
+              <div class="panel-content">
+                  <h5>发布序号<a id="auto-sort" href="#" class="button primary mini place-right">自动生成</a></h5>
+                  <div class="input-control text">
+                      <form:input path="sort" />
+                      <span class="help-block icon-help-2">为0则忽略此序号</span>
+                  </div>
+                  <h5>推荐度<a id="auto-recommend" href="#" class="button primary mini place-right">自动生成</a></h5>
+                  <div class="input-control text">
+                      <form:input path="recommend" />
+                      <span class="help-block icon-help-2">为0则为不推荐</span>
+                  </div>
+                  <h5>视频描述（简短内容摘要）</h5>
+                  <div class="input-control textarea">
+                      <form:textarea path="descrpition" />
+                  </div>
+                  <h5>备注</h5>
+                  <div class="input-control text">
+                      <form:input path="note" />
+                  </div>
+                  <h5>分级信息</h5>
+                  <div class="input-control text">
+                      <form:input path="grade" />
+                  </div>
+              </div>
+          </div>
+          <hr>
+          <button type="submit" class="default large place-right">
+              <i class="icon-checkmark"></i>
+              提交
+          </button>
         </form:form>
         <script src="/resources/js/jquery/jquery.min.js"></script>
         <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
+        <script src="/resources/js/video/create.js"></script>
     </body>
 </html>

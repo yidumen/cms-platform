@@ -33,5 +33,5 @@ public interface VideoService {
 
     void publish(String file) throws IOException, IllDataException, ParseException;
 
-    Long findMaxSortNumber();
+    Object findMax(String property);
 }

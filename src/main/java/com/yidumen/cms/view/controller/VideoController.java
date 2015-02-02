@@ -69,16 +69,26 @@ public final class VideoController {
         model.addAttribute("video", service.find(id));
         return "video/edit";
     }
-
+    @RequestMapping(value = "ajax/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Video findVideo(@PathVariable Long id) {
+        return service.find(id);
+    }
+    
     @RequestMapping(value = "submit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String submitVideo(@RequestBody Video video) {
+    public Map<String, Object> submitVideo(@RequestBody final Video video) {
+        final Map<String, Object> result = new HashMap<>(2);
         try {
             service.updateVideo(video);
+            result.put("code", 0);
+            result.put("message", "视频信息已成功更新");
+            return result;
         } catch (IllDataException ex) {
-            return ex.getMessage();
+            result.put("code", 1);
+            result.put("message", ex.getLocalizedMessage());
+            return result;
         }
-        return "0";
     }
 
     @RequestMapping(value = "query", method = RequestMethod.GET)
@@ -115,7 +125,7 @@ public final class VideoController {
     public Map<String, List<Video>> ajaxVerify(Model model) {
         final VideoQueryModel queryModel = new VideoQueryModel();
         queryModel.addStatus(VideoStatus.VERIFY);
-        Map<String, List<Video>> result = new HashMap<>();
+        final Map<String, List<Video>> result = new HashMap<>();
         result.put("data", service.find(queryModel));
         return result;
     }
@@ -131,10 +141,10 @@ public final class VideoController {
         }
     }
 
-    @RequestMapping(value = "maxsort", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "max/{property}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Long maxSortNumber() {
-        return service.findMaxSortNumber();
+    public Object max(@PathVariable String property) {
+        return service.findMax(property);
     }
 
     @RequestMapping(value = "bat/{id}")
@@ -167,5 +177,17 @@ public final class VideoController {
             }
         }
         os.close();
+    }
+
+    @RequestMapping("manager")
+    public String manager(Model model) {
+        model.addAttribute("query", new VideoQueryModel());
+        return "video/manager";
+    }
+
+    @RequestMapping("edit/{id}")
+    public String edit(Model model, @PathVariable Long id) {
+        model.addAttribute("video", service.find(id));
+        return "video/edit";
     }
 }

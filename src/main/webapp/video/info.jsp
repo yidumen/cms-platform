@@ -27,7 +27,7 @@
                 </ul>
             </div>
             <div id="toolbar" class="text-right">
-                <i class="icon-help text-success on-left-more padding10"></i><span class="icon-zoom-in on-left padding5">详细信息</span><span class="icon-new-tab-2">页面预览</span>
+                <i class="icon-help text-success on-left-more padding10"></i><span class="icon-info on-left padding5">详细信息</span><span class="icon-new-tab-2">页面预览</span>
             </div>
         </div>
         <hr class="ntm">
