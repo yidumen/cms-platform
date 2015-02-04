@@ -13,6 +13,6 @@ public class Account extends BaseModel<Account> {
     }
 
     public Account findByName(final String name) {
-        return findFirst("select * name from Video where name = ?", name);
+        return findFirst("select * from Account where email = ? or phone = ?", name, name);
     }
 }

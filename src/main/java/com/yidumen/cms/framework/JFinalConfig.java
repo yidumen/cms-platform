@@ -6,6 +6,7 @@ import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.log.Log4jLoggerFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.spring.SpringPlugin;
@@ -25,6 +26,7 @@ public class JFinalConfig extends com.jfinal.config.JFinalConfig {
     public void configConstant(Constants me) {
         me.setDevMode(true);
         me.setEncoding("UTF-8");
+        me.setLoggerFactory(new Log4jLoggerFactory());
     }
 
     @Override
@@ -41,7 +43,7 @@ public class JFinalConfig extends com.jfinal.config.JFinalConfig {
         arp.addMapping("Video", Video.class);
         arp.addMapping("Account", Account.class);
         arp.addMapping("Tag", Tag.class);
-        me.add(new SpringPlugin());
+        me.add(new SpringPlugin("classpath:applicationContext.xml"));
     }
 
     @Override

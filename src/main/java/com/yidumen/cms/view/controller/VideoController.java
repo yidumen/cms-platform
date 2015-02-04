@@ -35,7 +35,8 @@ public final class VideoController extends Controller {
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
     @Inject.BY_TYPE
     private VideoService service;
-    private OSSClient client;
+    @Inject.BY_NAME
+    private OSSClient ossclient;
 
     public void info() {
         setSessionAttr("query", new HashMap<String, Object[]>());
@@ -118,7 +119,7 @@ public final class VideoController extends Controller {
     public void bat() throws IOException {
         final Long id = getParaToLong(0);
         final Video video = service.find(id);
-        OSSObject object = client.getObject("yidumen", "cms/cms_single.bat");
+        OSSObject object = ossclient.getObject("yidumen", "cms/cms_single.bat");
         HttpServletResponse response = getResponse();
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment;filename=" + video.get("file") + ".bat");

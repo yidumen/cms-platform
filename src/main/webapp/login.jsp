@@ -18,7 +18,7 @@
     <body class="metro">
         <div class="login-panel center-screen border shadow padding20">
             <h3>请登录</h3>
-            <form method="post">
+            <form method="post" action="/login">
                 <div class="input-control text">
                     <input id="username" type="text" name="username" placeholder="输入手机或邮箱" required autofocus>
                     <button class="btn-clear"></button>
