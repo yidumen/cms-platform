@@ -2,168 +2,137 @@ package com.yidumen.cms.view.controller;
 
 import com.aliyun.openservices.oss.OSSClient;
 import com.aliyun.openservices.oss.model.OSSObject;
+import com.jfinal.aop.Before;
+import com.jfinal.core.ActionKey;
+import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.spring.Inject;
+import com.jfinal.plugin.spring.IocInterceptor;
+import com.jfinal.render.TextRender;
+import com.yidumen.cms.dao.Video;
+import com.yidumen.cms.dao.constant.VideoStatus;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.dao.constant.VideoStatus;
-import com.yidumen.dao.entity.Video;
-import com.yidumen.dao.model.VideoQueryModel;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Controller
-@RequestMapping("video")
-@SessionAttributes("query")
-public final class VideoController {
+@Before(IocInterceptor.class)
+public final class VideoController extends Controller {
 
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
-    @Autowired
+    @Inject.BY_TYPE
     private VideoService service;
-    @Autowired
     private OSSClient client;
 
-    @RequestMapping("info")
-    public String info(Model model) {
-        model.addAttribute("query", new VideoQueryModel());
-        return "video/info";
+    public void info() {
+        setSessionAttr("query", new HashMap<String, Object[]>());
+        renderJsp("info.jsp");
     }
 
-    @RequestMapping(value = "list", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, List<Video>> videoList(@ModelAttribute("query") VideoQueryModel model, HttpSession session) {
-        Map<String, List<Video>> result = new HashMap<>();
-        result.put("data", service.find(model));
-        session.removeAttribute("query");
-        return result;
+    public void list() {
+        Map<String, Object[]> model = getSessionAttr("query");
+        setAttr("data", service.find(model));
+        removeSessionAttr("query");
+        renderJson();
     }
 
-    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String editVideo(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("video", service.find(id));
-        return "video/edit";
+    public void findVideo() {
+        renderJson(service.find(getParaToLong(0)));
     }
-    @RequestMapping(value = "ajax/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Video findVideo(@PathVariable Long id) {
-        return service.find(id);
-    }
-    
-    @RequestMapping(value = "submit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, Object> submitVideo(@RequestBody final Video video) {
+    @ActionKey("submit")
+    public void submitVideo() {
+        final Video video = getModel(Video.class);
         final Map<String, Object> result = new HashMap<>(2);
         try {
             service.updateVideo(video);
-            result.put("code", 0);
-            result.put("message", "视频信息已成功更新");
-            return result;
+            setAttr("code", 0);
+            setAttr("message", "视频信息已成功更新");
+            renderJson();
         } catch (IllDataException ex) {
-            result.put("code", 1);
-            result.put("message", ex.getLocalizedMessage());
-            return result;
+            setAttr("code", 1);
+            setAttr("message", ex.getLocalizedMessage());
+            renderJson();
         }
     }
 
-    @RequestMapping(value = "query", method = RequestMethod.GET)
-    public String queryVideo(Model model) {
-        model.addAttribute("query", new VideoQueryModel());
-        return "video/query";
+    public void query() {
+        setSessionAttr("query", new HashMap<String, Object[]>());
+        renderJsp("query.jsp");
     }
 
-    @RequestMapping(value = "query/process", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String processQuery(@RequestBody VideoQueryModel query, Model model) {
-        model.addAttribute("query", query);
-        return "video/info";
+    @ActionKey("query/process")
+    public void processQuery() {
+        Map<String, String[]> query = getParaMap();
+        setSessionAttr("query", query);
+        renderJsp("info.jsp");
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    public String publishVideo(Model model) {
-        model.addAttribute("video", new Video());
-        return "video/create";
+    public void create() {
+        setAttr("video", new Video());
+        renderJsp( "video/create");
     }
 
-    @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String createVideo(Video video) {
-        service.addVideo(video);
-        return "redirect:publish";
+    public void add() {
+        redirect("publish");
     }
 
-    @RequestMapping(value = "publish", method = RequestMethod.GET)
-    public String verify() {
-        return "video/publish";
+    public void publish() {
+        renderJsp("publish.jsp");
     }
 
-    @RequestMapping(value = "verify", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Map<String, List<Video>> ajaxVerify(Model model) {
-        final VideoQueryModel queryModel = new VideoQueryModel();
-        queryModel.addStatus(VideoStatus.VERIFY);
-        final Map<String, List<Video>> result = new HashMap<>();
-        result.put("data", service.find(queryModel));
-        return result;
+    public void verift() {
+        final Video video = new Video();
+        video.set("status", VideoStatus.VERIFY.ordinal());
+        setAttr("data", service.find(video));
+        renderJson();
     }
 
-    @RequestMapping(value = "publish/{file}", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<String> pulishConfim(@PathVariable("file") String file) {
+    public void published() {
+        final String file = getPara(0);
         try {
             service.publish(file);
-            return new ResponseEntity<>(HttpStatus.OK);
+            renderText("ok");
         } catch (IOException | IllDataException | ParseException ex) {
-            return new ResponseEntity<>(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            renderError(500, new TextRender(ex.getLocalizedMessage()));
         }
     }
 
-    @RequestMapping(value = "max/{property}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Object max(@PathVariable String property) {
-        return service.findMax(property);
+    public void max() {
+        final String property = getPara(0);
+        renderJson(service.findMax(property));
     }
 
-    @RequestMapping(value = "bat/{id}")
-    public void downloadBat(HttpServletResponse response, @PathVariable Long id) throws IOException {
+    public void bat() throws IOException {
+        final Long id = getParaToLong(0);
         final Video video = service.find(id);
         OSSObject object = client.getObject("yidumen", "cms/cms_single.bat");
+        HttpServletResponse response = getResponse();
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename=" + video.getFile() + ".bat");
+        response.setHeader("Content-Disposition", "attachment;filename=" + video.get("file") + ".bat");
         final ServletOutputStream os;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(object.getObjectContent()))) {
             os = response.getOutputStream();
             String s;
-            String[] shoottime = new SimpleDateFormat("yyyy,MM,dd").format(video.getShootTime()).split(",");
+            String[] shoottime = new SimpleDateFormat("yyyy,MM,dd").format(video.getDate("shootTime")).split(",");
             while ((s = br.readLine()) != null) {
                 String news;
                 if (s.contains("filename_new")) {
-                    news = s.replaceAll("filename_new", video.getFile() + "\r\n");
+                    news = s.replaceAll("filename_new", video.get("file") + "\r\n");
                 } else if (s.contains("title_new")) {
-                    news = s.replaceAll("title_new", video.getTitle() + "\r\n");
+                    news = s.replaceAll("title_new", video.get("title") + "\r\n");
                 } else if (s.contains("year_new")) {
                     news = s.replaceAll("year_new", shoottime[0].trim() + "\r\n");
                 } else if (s.contains("month_new")) {
@@ -179,15 +148,13 @@ public final class VideoController {
         os.close();
     }
 
-    @RequestMapping("manager")
-    public String manager(Model model) {
-        model.addAttribute("query", new VideoQueryModel());
-        return "video/manager";
+    public void manager(Model model) {
+        setSessionAttr("query", new HashMap<String, Object[]>());
+        renderJsp("manager.jsp");
     }
 
-    @RequestMapping("edit/{id}")
-    public String edit(Model model, @PathVariable Long id) {
-        model.addAttribute("video", service.find(id));
-        return "video/edit";
+    public void edit() {
+        setAttr("video", service.find(getParaToLong(0)));
+        renderJsp("edit.jsp");
     }
 }

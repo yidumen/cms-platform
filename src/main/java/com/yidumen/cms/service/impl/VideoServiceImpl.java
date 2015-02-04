@@ -1,89 +1,82 @@
 package com.yidumen.cms.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.jfinal.plugin.activerecord.Record;
+import com.yidumen.cms.dao.Video;
+import com.yidumen.cms.dao.constant.VideoResolution;
+import com.yidumen.cms.dao.constant.VideoStatus;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.dao.VideoDAO;
-import com.yidumen.dao.constant.VideoResolution;
-import com.yidumen.dao.constant.VideoStatus;
-import com.yidumen.dao.entity.Video;
-import com.yidumen.dao.entity.VideoInfo;
-import com.yidumen.dao.model.VideoQueryModel;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Service
-@Transactional
 public class VideoServiceImpl implements VideoService {
 
     private final Logger log = LoggerFactory.getLogger(VideoServiceImpl.class);
-    @Autowired
-    private VideoDAO videoDAO;
+    private final Video videoDAO;
+
+    public VideoServiceImpl() {
+        this.videoDAO = Video.dao;
+    }
 
     @Override
     public List<Video> getVideos() {
-        log.debug("获取全部视频");
         return videoDAO.findAll();
     }
 
     @Override
     public void updateVideo(final Video video) throws IllDataException {
-        if (video.getSort() > 0) {
-            validateSort(video.getSort(), video.getFile());
+        if (video.getInt("sort") > 0) {
+            validateSort(video.getInt("sort"), video.getStr("file"));
         }
-        videoDAO.edit(video);
+        video.update();
     }
 
     @Override
     public Video find(final Long id) {
-        return videoDAO.find(id);
+        return videoDAO.findById(id);
     }
 
     @Override
     public Video find(final String file) {
-        return videoDAO.find(file);
+        final Video video = new Video();
+        video.set("file", file);
+        return video.findUnique(video);
     }
 
     @Override
     public void removeVideo(final Video video) {
-        videoDAO.remove(video);
-        log.debug("视频 {} 已删除", video.getTitle());
+        video.delete();
     }
 
     @Override
-    public List<Video> find(final VideoQueryModel model) {
-        model.setAllEager(true);
-        return videoDAO.find(model);
+    public List<Video> find(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition);
     }
 
     @Override
     public long getVideoCount() {
-        return videoDAO.count();
+        return 0;
     }
 
     private void validateSort(final long sort, final String file) throws IllDataException {
-        VideoQueryModel model = new VideoQueryModel();
-        model.setSort(sort);
-        model.setSort2(sort);
-        List<Video> videos = videoDAO.find(model);
-        if (!videos.isEmpty()) {
-            final String file2 = videos.get(0).getFile();
+        final Video model = new Video();
+        model.set("sort", sort);
+        final Video video = videoDAO.findUnique(model);
+        if (video != null) {
+            final String file2 = video.getStr("file");
             if (!file.equals(file2)) {
                 throw new IllDataException("发布序号 " + sort + " 已被 " + file2 + " 使用");
             }
@@ -91,37 +84,37 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Long getVideoCount(final VideoQueryModel model) {
-        return videoDAO.count(model);
+    public int getVideoCount(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition).size();
     }
 
     @Override
     public void addVideo(final Video video) {
-        video.setDuration(0L);
-        video.setStatus(VideoStatus.VERIFY);
-        videoDAO.create(video);
+        video.set("duration", 0);
+        video.set("status", VideoStatus.VERIFY.ordinal());
+        video.save();
     }
 
     @Override
     public void publish(final String file) throws IOException, IllDataException, ParseException {
-        final CloseableHttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + file);
+        final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + file);
         final String json = EntityUtils.toString(response.getEntity());
-        final ObjectMapper mapper = new ObjectMapper();
-        final Map<String, Object> map = mapper.readValue(json, Map.class);
-
-        final Video video = videoDAO.find(file);
-        video.setDuration(Long.valueOf(map.get("Duration").toString()));
-        Set<VideoInfo> videoInfos = video.getExtInfo();
-
+        final Gson gson = new Gson();
+        final Map<String, Object> map = gson.fromJson(json, Map.class);
+        final Video model = new Video();
+        model.set("file", file);
+        final Video video = videoDAO.findUnique(model);
+        video.set("duration",Long.valueOf(map.get("Duration").toString()));
+        List<Record> videoInfos = video.extInfo().get("extInfo");
         if (videoInfos == null || videoInfos.isEmpty()) {
-            videoInfos = new LinkedHashSet<>();
+            videoInfos = new ArrayList<>();
             for (final VideoResolution resolution : VideoResolution.values()) {
-                final VideoInfo info = new VideoInfo();
-                info.setResolution(resolution);
-                info.setVideo(video);
+                final Record info = new Record();
+                info.set("resolution", resolution.ordinal());
+                info.set("video_id", video.get("id"));
                 videoInfos.add(info);
             }
-            video.setExtInfo(videoInfos);
+            video.put("extInfo", videoInfos);
         }
         log.debug("videoInfo has {} item", videoInfos.size());
         final List<Map<String, Object>> extInfo = (List<Map<String, Object>>) map.get("extInfo");
@@ -129,24 +122,28 @@ public class VideoServiceImpl implements VideoService {
         for (final Map<String, Object> infos : extInfo) {
             final String info = infos.get("Resolution").toString();
             log.debug(info);
-            for (final VideoInfo videoInfo : videoInfos) {
-                if (info.equals(videoInfo.getResolution().getResolution())) {
-                    videoInfo.setHeight(Integer.parseInt(info));
-                    videoInfo.setWidth(Integer.valueOf(infos.get("Width").toString()));
-                    videoInfo.setFileSize(infos.get("FileSizeString").toString());
+            for (final Record videoInfo : videoInfos) {
+                if (info.equals(VideoResolution.getByOrdinal(videoInfo.getInt("resolution")).getResolution())) {
+                    videoInfo.set("height", Integer.parseInt(info));
+                    videoInfo.set("width", Integer.parseInt(info));
+                    videoInfo.set("fileSize", infos.get("FileSizeString").toString());
                 }
             }
         }
-        video.setPubDate(new Date());
-        video.setStatus(VideoStatus.PUBLISH);
-        videoDAO.edit(video);
+        video.set("pubDate", new Date());
+        video.set("status", VideoStatus.PUBLISH.ordinal());
+        video.updateWithRelate();
     }
 
     @Override
-    public Object findMax(final String property) {
-        final VideoQueryModel model = new VideoQueryModel();
-        model.setMaxProperty(property);
-        return videoDAO.max(model);
+    public Object findMax(String property) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List<Video> find(Video video) {
+        return videoDAO.findByCondition(video);
+    }
+
 
 }

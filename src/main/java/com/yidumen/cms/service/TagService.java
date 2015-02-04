@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.dao.entity.Tag;
+import com.yidumen.cms.dao.Tag;
 import java.util.List;
 
 /**
