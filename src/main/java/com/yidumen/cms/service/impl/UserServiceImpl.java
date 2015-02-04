@@ -14,14 +14,12 @@ import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.FailedLoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Service
-public class UserServiceImpl implements UserService {
+public final class UserServiceImpl implements UserService {
 
     private final Logger LOG;
     private final Account dao;

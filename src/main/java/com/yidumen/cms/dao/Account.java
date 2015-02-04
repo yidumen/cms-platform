@@ -4,7 +4,7 @@ package com.yidumen.cms.dao;
  *
  * @author 蔡迪旻
  */
-public class Account extends BaseModel<Account> {
+public final class Account extends BaseModel<Account> {
 
     public static final Account dao = new Account();
 

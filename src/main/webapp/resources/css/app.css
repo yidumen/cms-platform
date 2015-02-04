@@ -1,3 +1,7 @@
+.login-panel {
+    width: 380px;
+    max-height: 240px;
+}
 .center-screen {
   position:absolute;
   top:0;

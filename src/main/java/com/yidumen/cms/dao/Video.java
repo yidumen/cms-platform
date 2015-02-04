@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author 蔡迪旻
  */
-public class Video extends BaseModel<Video> {
+public final class Video extends BaseModel<Video> {
     public static final Video dao = new Video();
 
     public Video() {

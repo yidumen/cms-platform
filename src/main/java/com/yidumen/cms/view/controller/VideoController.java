@@ -2,15 +2,14 @@ package com.yidumen.cms.view.controller;
 
 import com.aliyun.openservices.oss.OSSClient;
 import com.aliyun.openservices.oss.model.OSSObject;
-import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.spring.Inject;
-import com.jfinal.plugin.spring.IocInterceptor;
 import com.jfinal.render.TextRender;
 import com.yidumen.cms.dao.Video;
 import com.yidumen.cms.dao.constant.VideoStatus;
+import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
 import java.io.BufferedReader;
@@ -19,6 +18,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -29,14 +29,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Before(IocInterceptor.class)
 public final class VideoController extends Controller {
 
     private final static Logger log = LoggerFactory.getLogger(VideoController.class);
-    @Inject.BY_TYPE
-    private VideoService service;
-    @Inject.BY_NAME
-    private OSSClient ossclient;
+    private final VideoService service;
+    private final OSSClient ossclient;
+
+    public VideoController() {
+        service = ServiceFactory.generateVideoService();
+        PropKit.use("appengine-service.properties");
+        ossclient = new OSSClient(PropKit.get("oss.ydm.endpoint"), PropKit.get("oss.ydm.accessKeyId"), PropKit.get("oss.ydm.accessKeySecret"));
+    }
 
     public void info() {
         setSessionAttr("query", new HashMap<String, Object[]>());
@@ -45,7 +48,11 @@ public final class VideoController extends Controller {
 
     public void list() {
         Map<String, Object[]> model = getSessionAttr("query");
-        setAttr("data", service.find(model));
+        final List<Video> videos = service.find(model);
+        for (Video video : videos) {
+            video.extInfo();
+        }
+        setAttr("data", videos);
         removeSessionAttr("query");
         renderJson();
     }

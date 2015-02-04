@@ -17,14 +17,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Service
-public class VideoServiceImpl implements VideoService {
+public final class VideoServiceImpl implements VideoService {
 
     private final Logger log = LoggerFactory.getLogger(VideoServiceImpl.class);
     private final Video videoDAO;

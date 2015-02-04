@@ -20,7 +20,7 @@ import com.yidumen.cms.view.controller.VideoController;
  * 配置JFinal
  * @author 蔡迪旻
  */
-public class JFinalConfig extends com.jfinal.config.JFinalConfig {
+public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configConstant(Constants me) {
@@ -43,7 +43,6 @@ public class JFinalConfig extends com.jfinal.config.JFinalConfig {
         arp.addMapping("Video", Video.class);
         arp.addMapping("Account", Account.class);
         arp.addMapping("Tag", Tag.class);
-        me.add(new SpringPlugin("classpath:applicationContext.xml"));
     }
 
     @Override

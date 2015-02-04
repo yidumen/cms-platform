@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author 蔡迪旻
  */
-public class Tag extends BaseModel<Tag> {
+public final class Tag extends BaseModel<Tag> {
 
     public static final Tag dao = new Tag();
 
