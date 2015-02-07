@@ -74,32 +74,11 @@ public final class VideoController extends Controller {
 
     public void create() {
         setAttr("video", new Video());
-        render( "video/create");
-    }
-
-    public void add() {
-        redirect("publish");
+        render("create.html");
     }
 
     public void publish() {
         render("publish.html");
-    }
-
-    public void verift() {
-        final Video video = new Video();
-        video.set("status", VideoStatus.VERIFY.ordinal());
-        setAttr("data", service.find(video));
-        renderJson();
-    }
-
-    public void published() {
-        final String file = getPara(0);
-        try {
-            service.publish(file);
-            renderText("ok");
-        } catch (IOException | IllDataException | ParseException ex) {
-            renderError(500, new TextRender(ex.getLocalizedMessage()));
-        }
     }
 
     public void max() {

@@ -33,7 +33,7 @@ public interface VideoService {
 
     void addVideo(Video video);
 
-    void publish(String file) throws IOException, IllDataException, ParseException;
+    void publish(Long id) throws IOException, IllDataException, ParseException;
 
     Object findMax(String property);
 }

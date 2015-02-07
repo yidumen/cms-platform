@@ -96,15 +96,13 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void publish(final String file) throws IOException, IllDataException, ParseException {
-        final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + file);
+    public void publish(final Long id) throws IOException, IllDataException, ParseException {
+        final Video video = videoDAO.findById(id);
+        final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
         final Gson gson = new Gson();
         final Map<String, Object> map = gson.fromJson(json, Map.class);
-        final Video model = new Video();
-        model.set("file", file);
-        final Video video = videoDAO.findUnique(model);
-        video.set("duration",Long.valueOf(map.get("Duration").toString()));
+        video.set("duration", Float.valueOf(map.get("Duration").toString()).longValue());
         List<Record> videoInfos = video.extInfo().get("extInfo");
         if (videoInfos == null || videoInfos.isEmpty()) {
             videoInfos = new ArrayList<>();
