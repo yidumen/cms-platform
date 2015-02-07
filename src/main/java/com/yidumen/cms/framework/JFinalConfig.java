@@ -9,12 +9,12 @@ import com.jfinal.config.Routes;
 import com.jfinal.log.Log4jLoggerFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
-import com.jfinal.plugin.spring.SpringPlugin;
 import com.yidumen.cms.dao.Account;
 import com.yidumen.cms.dao.Tag;
 import com.yidumen.cms.dao.Video;
 import com.yidumen.cms.view.controller.LoginController;
 import com.yidumen.cms.view.controller.VideoController;
+import com.yidumen.cms.view.controller.ajax.VideoAjaxCtrl;
 
 /**
  * 配置JFinal
@@ -33,6 +33,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
     public void configRoute(Routes me) {
         me.add("/", LoginController.class);
         me.add("/video", VideoController.class);
+        me.add("/ajax/video", VideoAjaxCtrl.class);
     }
 
     @Override
@@ -51,6 +52,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configHandler(Handlers me) {
+        me.add(new SecurityHandler());
     }
     
 }

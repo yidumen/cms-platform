@@ -24,26 +24,13 @@
                 <i class="icon-help text-success on-left-more padding10"></i><span class="icon-info on-left padding5">详细信息</span><span class="icon-new-tab-2">页面预览</span>
             </div>
         </div>
-        <hr class="ntm">
-        <div>
-            <table id="video-table" class="table striped hovered dataTable" frame="below">
-                <thead>
-                    <tr>
-                        <th style="width: 56px;">编号</th>
-                        <th style="width: auto;">标题</th>
-                        <th style="width: 48px;">序号</th>
-                        <th style="width: 80px;">时长</th>
-                        <th style="width: 100px;">拍摄日期</th>
-                        <th style="width: 156px;">发布/更新 时间</th>
-                        <th style="width: 30px;">荐</th>
-                        <th style="width: 48px;">状态</th>
-                        <th style="width: 100px;">操作</th>
-                    </tr>
-                </thead>
-                <tbody id="table-content"></tbody>
-            </table>
-            <div id="amodal" class="hide">
-                <table cellpadding="10">
+        <hr class="ntm nbm"/>
+        <div ng-app="video">
+            <div ng-controller="infoController">
+                <table id="video-table" class="table striped hovered dataTable" frame="below" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
+            </div>
+            <div detail-dialog dlg-node="#video-table" dlg-target=".operation .icon-info" class="hide">
+                <table style="width: 560px" cellpadding="10">
                     <tr>
                         <td><strong>记录标识：</strong></td><td id="itemId" class="text-muted"></td>
                         <td><strong>视频编号：</strong></td><td id="file" class="text-muted"></td>
@@ -91,6 +78,10 @@
         <script src="/resources/js/jquery/jquery.dataTables.min.js"></script>
         <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/video/info.js"></script>
+        <script src="/resources/js/angularJs/angular.min.js"></script>
+        <script src="/resources/js/angularJs/angular-resource.min.js"></script>
+        <script src="/resources/js/angularJs/angular-datatables.min.js"></script>
+        <script src="/resources/js/app.js"></script>
+        <script src="/resources/js/video.js"></script>
     </body>
 </html>

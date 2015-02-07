@@ -1,31 +1,16 @@
-function setCookie(name, value) {
-    var exdate = new Date();
-    exdate.setDate(exdate.getDate() + 10 * 365);
-    document.cookie = name + "=" + value + ";expires=" + exdate.toGMTString();
+angular.module("metroui", ['datatables', 'ngResource'])
+        .run(function (DTDefaultOptions) {
+            DTDefaultOptions.setLanguageSource('/resources/js/jquery/Chinese.json');
+        })
+        .service("dtOptions", function (DTOptionsBuilder) {
+            return DTOptionsBuilder.newOptions()
+                    .withOption("autoWidth", false)
+                    .withOption("lengthMenu", [10, 11, 12, 13, 14, 15, 20, 25, 30, 40, 50])
+                    .withOption("deferRender", true)
+                    .withOption("pagingType", "full_numbers")
+                    .withOption("order", []);
+        });
+function getPathVariable() {
+    var variable = window.location.pathname.split("/");
+    return variable[variable.length - 1];
 }
-function getCookie(c_name) {
-    if (document.cookie.length > 0)
-    {
-        var c_start = document.cookie.indexOf(c_name + "=");
-        if (c_start !== -1)
-        {
-            c_start = c_start + c_name.length + 1;
-            var c_end = document.cookie.indexOf(";", c_start);
-            if (c_end === -1)
-                c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start, c_end));
-        }
-    }
-    return "";
-}
-function showMessage(message, detail) {
-    jQuery(".alert").alert('close');
-    jQuery("body").append("<div class='alert alert-success alert-dismissible center-block'><button type=’button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span></button><strong>" + message + "</strong>" + detail + "</div>")
-            .slideDown();
-}
-function showError(detail) {
-    jQuery(".alert").alert('close');
-    jQuery("body").append("<div class='alert alert-danger alert-dismissible center-block'><button type=’button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span></button>" + detail + "</div>")
-            .slideDown();
-}
-

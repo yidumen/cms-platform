@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="video">
     <head>
         <title>视频信息编辑</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -32,65 +32,88 @@
             </div>
         </div>
         <hr class="ntm">
-        <table class="center-block" style="width: 770px" cellpadding="10">
-            <tr>
-                <td><strong>视频标题：</strong></td><td colspan="7"><div class="input-control text"><input type="text" id="title" name="title"></div></td>
-            </tr>
-            <tr>
-                <td><strong>记录标识：</strong></td><td id="itemId"></td>
-                <td><strong>视频编号：</strong></td><td id="file" class="text-muted"></td>
-                <td><strong>当前状态：</strong></td><td id="status" class="text-muted"></td>
-                <td><strong>播放时长：</strong></td><td id="dur" class="text-muted"></td>
-            </tr>
-            <tr>
-                <td><strong>发布序号：</strong></td><td><div class="input-control text size1"><input type="text" id="sort" name="sort"></div></td>
-                <td><strong>分级信息：</strong></td><td><div class="input-control text size1"><input type="text" id="grade" name="grade"></div></td>
-                <td class="text-right"><strong>推荐度：</strong></td><td><div class="input-control text size1"><input type="text" id="recommend" name="recommend"></div></td>
-                <td><strong>拍摄日期：</strong></td><td><div class="input-control text size2"><input type="text" id="shoot" name="shoot"><button class="btn-date"></button></div></td>
-            </tr>
-            <tr>
-                <td><strong>发布时间：</strong></td><td id="pub" class="text-muted" colspan="2"></td>
-                <td class="text-right"><strong>所属栏目：</strong></td><td class="text-muted" colspan="4"><button id="col" class="btn-add"><span class="icon-plus-2"></span></button></td>
-            </tr>
-            <tr>
-                <td class="text-right"><strong>标签：</strong></td><td class="text-muted" colspan="7"><button id="tag" class="btn-add"><span class="icon-plus-2"></span></button></td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top"><strong>视频描述：</strong></td><td colspan="3"><div class="input-control textarea size3"><textarea id="desc" name="desciption"></textarea></div></td>
-                <td class="text-right" style="vertical-align: top"><strong>备注：</strong></td><td colspan="3"><div class="input-control textarea size3"><textarea id="note" name="note"></textarea></div></td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top"><strong>文件信息：</strong></td><td colspan="3">
-                    <table class="table bordered" style="vertical-align: top">
-                        <thead>
-                            <tr>
-                                <td>清晰度</td>
-                                <td>文件大小</td>
-                            </tr>
-                        </thead>
-                        <tbody id="ext" class="text-muted"></tbody>
-                    </table>
-                </td>
-                <td colspan="4" style="vertical-align: top">
-                    <div id="help">
-                        <div>填写提示：</div>
-                        <div class="col-sm-4">
-                            <p class="text-warning">推荐度为0即为不推荐，推荐度高<br>的视频排列会更靠前。</p>
-                            <p class="text-warning">同理，发布序号为0即为不排序。</p>
-                            <p class="text-info">您并不能任意修改所有信息。某些信息<br>必须通过特定的工作流程才会被更新。<br>如：状态、更新时间等。</p>
+        <form ng-controller="editController">
+            <table class="center-block" style="width: 1000px" cellpadding="10">
+                <tr>
+                    <td><strong>视频标题：</strong></td><td colspan="7"><div class="input-control text"><input type="text" ng-model="model.title"></div></td>
+                </tr>
+                <tr>
+                    <td><strong>记录标识：</strong></td><td class="text-muted" ng-bind="::model.id"></td>
+                    <td><strong>视频编号：</strong></td><td class="text-muted" ng-bind="::model.file"></td>
+                    <td><strong>当前状态：</strong></td><td class="text-muted" ng-bind="::model.status | status"></td>
+                    <td><strong>播放时长：</strong></td><td class="text-muted" ng-bind="::model.duration | duration"></td>
+                </tr>
+                <tr>
+                    <td><strong>发布序号：</strong></td><td><div class="input-control text size1"><input type="text" ng-model="model.sort"></div></td>
+                    <td><strong>分级信息：</strong></td><td><div class="input-control text size1"><input type="text" ng-model="model.grade"></div></td>
+                    <td class="text-right"><strong>推荐度：</strong></td><td><div class="input-control text size1"><input type="text" ng-model="model.recommend"></div></td>
+                    <td><strong>拍摄日期：</strong></td><td><div class="input-control text size2"><input type="text" ng-model="model.shootTime"><button class="btn-date"></button></div></td>
+                </tr>
+                <tr>
+                    <td><strong>发布时间：</strong></td><td class="text-muted" colspan="2" ng-bind="::model.pubDate"></td>
+                    <td class="text-right"><strong>所属栏目：</strong></td>
+                    <td class="text-muted" colspan="4">
+                        <span ng-repeat="col in model.tags">
+                            <span class="bg-darkOrange fg-white on-left-more padding5" ng-if="col.type === 2"><span ng-bind="col.tagname"></span></span>
+                        </span>
+                        <button class="btn-add"><span class="icon-plus-2"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>标签：</strong></td>
+                    <td class="text-muted" colspan="7">
+                        <span ng-repeat="col in model.tags">
+                            <span class="bg-cyan fg-white on-left-more padding5" ng-if="col.type === 0"><span ng-bind="col.tagname"></span></span>
+                        </span>
+                        <button class="btn-add"><span class="icon-plus-2"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top"><strong>视频描述：</strong></td><td colspan="3"><div class="input-control textarea size3"><textarea ng-model="model.descrpition"></textarea></div></td>
+                    <td class="text-right" style="vertical-align: top"><strong>备注：</strong></td><td colspan="3"><div class="input-control textarea size3"><textarea ng-model="model.note"></textarea></div></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top"><strong>文件信息：</strong></td><td colspan="4">
+                        <table class="table bordered" style="vertical-align: top">
+                            <thead>
+                                <tr>
+                                    <td>清晰度</td>
+                                    <td>文件大小</td>
+                                </tr>
+                            </thead>
+                            <tbody class="text-muted">
+                                <tr ng-repeat="info in ::model.extInfo">
+                                    <td ng-bind="info.resolution"></td>
+                                    <td ng-bind="info.fileSize"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td colspan="4" style="vertical-align: top">
+                        <div id="help">
+                            <div>填写提示：</div>
+                            <div class="col-sm-4">
+                                <p class="text-warning">推荐度为0即为不推荐，推荐度高的视频排列会更靠前。</p>
+                                <p class="text-warning">同理，发布序号为0即为不排序。</p>
+                                <p class="text-info">您并不能任意修改所有信息。某些信息必须通过特定的<br>工作流程才会被更新。如：状态、更新时间等。</p>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <hr class="ntm">
-        <div class="center-block" style="width: 200px;margin-bottom: 50px">
-            <button class="primary large">提交</button>
-        </div>
+                    </td>
+                </tr>
+            </table>
+            <hr class="ntm">
+            <div class="center-block" style="width: 200px;margin-bottom: 50px">
+                <button class="primary large">提交</button>
+            </div>
+        </form>
         <script src="/resources/js/jquery/jquery.min.js"></script>
+        <script src="/resources/js/jquery/jquery.dataTables.min.js"></script>
         <script src="/resources/js/jquery/jquery.widget.min.js"></script>
         <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/jquery/jquery.url.js"></script>
-        <script src="/resources/js/video/edit.js"></script>
+        <script src="/resources/js/angularJs/angular.min.js"></script>
+        <script src="/resources/js/angularJs/angular-resource.min.js"></script>
+        <script src="/resources/js/angularJs/angular-datatables.min.js"></script>
+        <script src="/resources/js/app.js"></script>
+        <script src="/resources/js/video.js"></script>
     </body>
 </html>

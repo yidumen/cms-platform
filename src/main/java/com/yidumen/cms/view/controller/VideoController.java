@@ -5,7 +5,6 @@ import com.aliyun.openservices.oss.model.OSSObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PropKit;
-import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.render.TextRender;
 import com.yidumen.cms.dao.Video;
 import com.yidumen.cms.dao.constant.VideoStatus;
@@ -18,7 +17,6 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class VideoController extends Controller {
 
-    private final static Logger log = LoggerFactory.getLogger(VideoController.class);
+    private final static Logger LOG = LoggerFactory.getLogger(VideoController.class);
     private final VideoService service;
     private final OSSClient ossclient;
 
@@ -43,23 +41,9 @@ public final class VideoController extends Controller {
 
     public void info() {
         setSessionAttr("query", new HashMap<String, Object[]>());
-        renderJsp("info.jsp");
+        render("info.html");
     }
 
-    public void list() {
-        Map<String, Object[]> model = getSessionAttr("query");
-        final List<Video> videos = service.find(model);
-        for (Video video : videos) {
-            video.extInfo();
-        }
-        setAttr("data", videos);
-        removeSessionAttr("query");
-        renderJson();
-    }
-
-    public void findVideo() {
-        renderJson(service.find(getParaToLong(0)));
-    }
     @ActionKey("submit")
     public void submitVideo() {
         final Video video = getModel(Video.class);
@@ -78,19 +62,19 @@ public final class VideoController extends Controller {
 
     public void query() {
         setSessionAttr("query", new HashMap<String, Object[]>());
-        renderJsp("query.jsp");
+        render("query.html");
     }
 
     @ActionKey("query/process")
     public void processQuery() {
         Map<String, String[]> query = getParaMap();
         setSessionAttr("query", query);
-        renderJsp("info.jsp");
+        render("info.html");
     }
 
     public void create() {
         setAttr("video", new Video());
-        renderJsp( "video/create");
+        render( "video/create");
     }
 
     public void add() {
@@ -98,7 +82,7 @@ public final class VideoController extends Controller {
     }
 
     public void publish() {
-        renderJsp("publish.jsp");
+        render("publish.html");
     }
 
     public void verift() {
@@ -156,13 +140,12 @@ public final class VideoController extends Controller {
         os.close();
     }
 
-    public void manager(Model model) {
-        setSessionAttr("query", new HashMap<String, Object[]>());
-        renderJsp("manager.jsp");
+    public void manager() {
+        render("manager.html");
     }
 
     public void edit() {
         setAttr("video", service.find(getParaToLong(0)));
-        renderJsp("edit.jsp");
+        render("edit.html");
     }
 }

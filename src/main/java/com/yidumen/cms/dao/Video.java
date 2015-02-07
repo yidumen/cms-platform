@@ -16,8 +16,13 @@ public final class Video extends BaseModel<Video> {
     }
     
     public Video extInfo() {
-        List<Record> extInfos = Db.find("select * from VideoInfo where video_id = ?", this.get("id"));
+        final List<Record> extInfos = Db.find("select * from VideoInfo where video_id = ?", this.get("id"));
         return this.put("extInfo", extInfos);
+    }
+    
+    public Video addTags() {
+        final List<Tag> tags = Tag.dao.find("select Tag.*, Tag_Video.*, Video.id from Tag inner join Tag_Video on Tag_Video.tags_id = Tag.id inner join Video on Tag_Video.videos_id = Video.id where Video.id = ?", this.get("id"));
+        return this.put("tags", tags);
     }
     
     public void updateWithRelate() {
