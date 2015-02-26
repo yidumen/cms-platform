@@ -12,4 +12,5 @@
 hs_err_pid*
 /target/
 /customs.json
-cms-platform*
+.idea
+cms-platform.iml

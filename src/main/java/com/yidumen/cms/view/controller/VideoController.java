@@ -11,6 +11,7 @@ import com.yidumen.cms.dao.constant.VideoStatus;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,11 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
 public final class VideoController extends Controller {
@@ -44,21 +45,6 @@ public final class VideoController extends Controller {
         render("info.html");
     }
 
-    @ActionKey("submit")
-    public void submitVideo() {
-        final Video video = getModel(Video.class);
-        final Map<String, Object> result = new HashMap<>(2);
-        try {
-            service.updateVideo(video);
-            setAttr("code", 0);
-            setAttr("message", "视频信息已成功更新");
-            renderJson();
-        } catch (IllDataException ex) {
-            setAttr("code", 1);
-            setAttr("message", ex.getLocalizedMessage());
-            renderJson();
-        }
-    }
 
     public void query() {
         setSessionAttr("query", new HashMap<String, Object[]>());
@@ -81,10 +67,6 @@ public final class VideoController extends Controller {
         render("publish.html");
     }
 
-    public void max() {
-        final String property = getPara(0);
-        renderJson(service.findMax(property));
-    }
 
     public void bat() throws IOException {
         final Long id = getParaToLong(0);

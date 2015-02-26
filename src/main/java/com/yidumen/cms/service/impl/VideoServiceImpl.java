@@ -1,5 +1,6 @@
 package com.yidumen.cms.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.jfinal.plugin.activerecord.Record;
 import com.yidumen.cms.dao.Video;
@@ -7,19 +8,20 @@ import com.yidumen.cms.dao.constant.VideoResolution;
 import com.yidumen.cms.dao.constant.VideoStatus;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
 public final class VideoServiceImpl implements VideoService {
@@ -37,11 +39,14 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void updateVideo(final Video video) throws IllDataException {
+    public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
         if (video.getInt("sort") > 0) {
             validateSort(video.getInt("sort"), video.getStr("file"));
         }
-        video.update();
+        if (updateDate) {
+            video.set("pubDate", new Date());
+        }
+        video.updateWithRelate();
     }
 
     @Override
@@ -68,17 +73,25 @@ public final class VideoServiceImpl implements VideoService {
 
     @Override
     public long getVideoCount() {
-        return 0;
+        return videoDAO.count();
     }
 
-    private void validateSort(final long sort, final String file) throws IllDataException {
+    private void validateSort(final Integer sort, final String file) throws IllDataException {
         final Video model = new Video();
         model.set("sort", sort);
-        final Video video = videoDAO.findUnique(model);
+        Video video = videoDAO.findUnique(model);
         if (video != null) {
             final String file2 = video.getStr("file");
             if (!file.equals(file2)) {
                 throw new IllDataException("发布序号 " + sort + " 已被 " + file2 + " 使用");
+            }
+        }
+        model.clear().set("file", file);
+        video = videoDAO.findUnique(model);
+        if (video != null) {
+            final String file2 = video.getStr("file");
+            if (!file.equals(file2)) {
+                throw new IllDataException("视频编号已被占用");
             }
         }
     }
@@ -91,17 +104,24 @@ public final class VideoServiceImpl implements VideoService {
     @Override
     public void addVideo(final Video video) {
         video.set("duration", 0);
+        if (video.get("sort") == null) {
+            video.set("sort", 0);
+        }
+        if (video.get("recommend") == null) {
+            video.set("recommend", 0);
+        }
         video.set("status", VideoStatus.VERIFY.ordinal());
         video.save();
     }
 
     @Override
-    public void publish(final Long id) throws IOException, IllDataException, ParseException {
+    public Video publish(final Long id) throws IOException, IllDataException, ParseException {
         final Video video = videoDAO.findById(id);
         final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
         final Gson gson = new Gson();
-        final Map<String, Object> map = gson.fromJson(json, Map.class);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final Map<String, Object> map = objectMapper.readValue(json, Map.class);
         video.set("duration", Float.valueOf(map.get("Duration").toString()).longValue());
         List<Record> videoInfos = video.extInfo().get("extInfo");
         if (videoInfos == null || videoInfos.isEmpty()) {
@@ -131,11 +151,12 @@ public final class VideoServiceImpl implements VideoService {
         video.set("pubDate", new Date());
         video.set("status", VideoStatus.PUBLISH.ordinal());
         video.updateWithRelate();
+        return video;
     }
 
     @Override
     public Object findMax(String property) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return videoDAO.max(property);
     }
 
     @Override

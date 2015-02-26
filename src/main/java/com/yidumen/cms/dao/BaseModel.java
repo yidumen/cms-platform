@@ -1,14 +1,14 @@
 package com.yidumen.cms.dao;
 
 import com.jfinal.plugin.activerecord.Model;
+
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * @param <T>
  * @author 蔡迪旻
  * @version 1.0
- * @param <T>
  */
 public class BaseModel<T extends Model> extends Model<T> {
 
@@ -63,7 +63,7 @@ public class BaseModel<T extends Model> extends Model<T> {
         sql.delete(sql.lastIndexOf(" and "), sql.length());
         return this.find(sql.toString(), entity.getAttrValues());
     }
-    
+
     public T findUnique(T entity) {
         String[] attrNames = entity.getAttrNames();
         if (attrNames == null || attrNames.length == 0) {
@@ -79,5 +79,13 @@ public class BaseModel<T extends Model> extends Model<T> {
 
     public List<T> findAll() {
         return this.find("select * from " + table);
+    }
+
+    public Long count() {
+        return this.findFirst("select count(id) as count from "+ table).getLong("count");
+    }
+
+    public Object max(String property) {
+        return this.findFirst("select max(" + property + ") as max from " + table).get("max");
     }
 }

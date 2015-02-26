@@ -1,39 +1,70 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-    <head>
-        <title>易度门管理平台</title>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
-        <link rel="stylesheet" href="/resources/css/app.css">
-    </head>
-    <body class="metro">
-        <div class="login-panel center-screen border shadow padding20">
-            <h3>请登录</h3>
-            <form method="post" action="/login">
-                <div class="input-control text">
-                    <input id="username" type="text" name="username" placeholder="输入手机或邮箱" required autofocus>
-                    <button class="btn-clear"></button>
-                </div>
-                <div class="input-control password">
-                    <input id="password" type="password" name="password" placeholder="输入密码" required>
-                    <button class="btn-reveal"></button>
-                </div>
-                <div class="input-control checkbox">
-                    <label>
-                        <input id="autologin" type="checkbox" value="remember-me">
-                        <span class="check"></span>
-                        <span>自动登录</span>
-                    </label>
-                </div>
-                <button type="submit" class="info bg-hover-darkCyan large place-right">登 录</button>
-            </form>
-        </div>
-        <script src="/resources/js/jquery/jquery.min.js"></script>
-        <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/cms.js"></script>
-        <script src="/resources/js/md5-min.js"></script>
-        <script src="/resources/js/login.js"></script>
-    </body>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>易度门管理平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" href="resources/css/amazeui.min.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="am-g">
+        <h1>易度门管理平台</h1>
+
+        <p><a class="am-margin-right" href="https://github.com/yidumen/cms-platform" target="_blank"><i class="am-icon-github am-icon-sm"></i> 项目地址</a>
+            <a class="am-margin-right" href="https://github.com/yidumen/cms-platform/issues" target="_blank"><i class="am-icon-comments-o am-icon-sm"></i> 反馈意见/建议</a>
+            <a class="am-margin-right" href="https://github.com/yidumen/cms-platform/wiki" target="_blank"><i class="am-icon-server am-icon-sm"></i> 帮助/博客</a>
+        </p>
+    </div>
+    <hr/>
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <h3>登录</h3>
+        <hr>
+        <form method="post" action="/login" class="am-form">
+            <label for="username">用户名:</label>
+            <input id="username" type="text" name="username" placeholder="输入手机或邮箱" required autofocus>
+            <br>
+            <label for="password">密码:</label>
+            <input id="password" type="password" name="password" placeholder="输入密码" required>
+            <br>
+            <label for="autologin">
+                <input id="autologin" type="checkbox" value="remember-me">
+                <span>自动登录</span>
+            </label>
+            <br>
+
+            <div class="am-cf">
+                <button type="submit" class="am-btn am-btn-primary am-btn-lg am-fl">登 录</button>
+            </div>
+        </form>
+        <hr>
+        <p><span class="am-icon-copyright"></span> 珠海玛雅文化有限公司 CopyRight 2015</p>
+    </div>
+</div>
+<script src="resources/js/jquery/jquery.min.js"></script>
+<script src="resources/js/md5-min.js"></script>
+<script src="resources/js/login.js"></script>
+</body>
 </html>

@@ -1,82 +1,11 @@
-angular.module("video", ['metroui'])
-    .directive("detailDialog", function (statusFilter, durationFilter) {
-        return {
-            link: function (scope, element, attrs) {
-                $(attrs.dlgNode).on("click", attrs.dlgTarget, function () {
-                    var id = $(this).data("id");
-                    $.ajax({
-                        url: "/ajax/video/detail/" + id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            $("#itemId").html(data.id);
-                            $("#file").html(data.file);
-                            $("#dur").html(durationFilter(data.duration));
-                            $("#sort").html(data.sort);
-                            $("#grade").html(data.grade);
-                            $("#recommend").html(function () {
-                                return data.recommend > 0 ? data.recommend : "不推荐";
-                            });
-                            $("#shoot").html(data.shootTime);
-                            $("#status").html(statusFilter(data.status));
-                            $("#pub").html(data.pubDate);
-                            var tags = new Array(), cols = new Array();
-                            for (var i = 0, max = data.tags.length; i < max; i++) {
-                                if (data.tags[i].type === 2) {
-                                    cols.push(data.tags[i].tagname);
-                                } else if (data.tags[i].type === 0) {
-                                    tags.push(data.tags[i].tagname);
-                                }
-                            }
-                            $("#col").html(function () {
-                                var content = new String();
-                                for (var i = 0, max = cols.length; i < max; i++) {
-                                    content = content.concat('<div class="label bg-darkOrange fg-white">', cols[i], '</div>');
-                                }
-                                return content;
-                            });
-                            $("#tag").html(function () {
-                                var content = new String();
-                                for (var i = 0, max = tags.length; i < max; i++) {
-                                    content = content.concat('<div class="label bg-cyan fg-white">', tags[i], '</div>');
-                                }
-                                return content;
-                            });
-                            $("#desc").html(function () {
-                                if (data.descrpition && data.descrpition.length > 0) {
-                                    return data.descrpition;
-                                } else {
-                                    return "无描述信息";
-                                }
-                            });
-                            $("#note").html(function () {
-                                if (data.note && data.note.length > 0) {
-                                    return data.note;
-                                } else {
-                                    return "无备注信息";
-                                }
-                            });
-                            $("#ext").html(function () {
-                                var content = new String();
-                                for (var i = 0, max = data.extInfo.length; i < max; i++) {
-                                    content = content.concat("<tr><td>", data.extInfo[i].resolution, "</td>",
-                                        "<td>", data.extInfo[i].fileSize, "</td></tr>");
-                                }
-                                return content;
-                            });
-                            $.Dialog({
-                                icon: '<i class="icon-film"></i>',
-                                title: "<strong>" + data.title + "</strong>",
-                                content: element.html(),
-                                flat: true,
-                                shadow: true,
-                                padding: 20
-                            });
-                        }
-                    })
-                });
-            }
-        };
+angular.module("video", ['ngResource', 'ngRoute', 'component'])
+    .config(function ($routeProvider) {
+        $routeProvider.when("/video/info", {controller: 'infoController', templateUrl: "/video/info"})
+            .when("/video/create", {controller: 'createController', templateUrl: '/video/create'})
+            .when('/video/publish', {controller: 'publishController', templateUrl: '/video/publish'})
+            .when('/video/manager', {controller: 'managerController', templateUrl: '/video/manager'})
+            //当请求“/video/edit/number”时实际上只是请求一个静态页面“/video/edit”，但这个页面加载后会读取number作为参数然后再查询数据
+            .when('/video/edit/:id', {controller: 'editController', templateUrl: '/video/edit'});
     })
     .filter("duration", function () {
         return function (input) {
@@ -99,21 +28,20 @@ angular.module("video", ['metroui'])
             return result;
         };
     })
-    .filter("recommend", function () {
-        return function (input) {
-            if (input > 0) {
-                return 'icon-checkbox';
-            } else {
-                return 'icon-checkbox-unchecked';
-            }
-        };
-    })
     .service("statusEnum", function () {
         return ["已发布", "待审核", "已归档"];
     })
     .filter("status", function (statusEnum) {
         return function (input) {
             return statusEnum[input];
+        };
+    })
+    .service('resolutionEnum', function () {
+        return ['超清', '高清', '标清', '流畅'];
+    })
+    .filter('resolution', function (resolutionEnum) {
+        return function (input) {
+            return resolutionEnum[input];
         };
     })
     .controller("queryController", function ($scope) {
@@ -125,67 +53,56 @@ angular.module("video", ['metroui'])
             console.log(angular.toJson($scope.model));
         };
     })
-    .controller("infoController", function ($scope, statusFilter, durationFilter, dtOptions, DTColumnBuilder) {
-        $scope.dtOptions = dtOptions.withSource("/ajax/video/info").withOption("pageLength", 14);
+    .controller("infoController", function ($scope, $resource, $compile, statusFilter, durationFilter, dtOptions, DTColumnBuilder) {
+        $scope.dtOptions = dtOptions.withSource("/ajax/video/info").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
+            $compile(angular.element(row).contents())($scope);
+        });
         $scope.dtColumns = [
-            DTColumnBuilder.newColumn("file", "编号").withOption("width", 70),
+            DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
             DTColumnBuilder.newColumn("title", "视频标题"),
-            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 70),
-            DTColumnBuilder.newColumn("duration", "时长").withOption("width", 80).renderWith(function (data) {
+            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 64),
+            DTColumnBuilder.newColumn("duration", "时长").withOption("width", 100).renderWith(function (data) {
                 return durationFilter(data);
             }),
-            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 100),
-            DTColumnBuilder.newColumn("pubDate", "发布/更新 时间").withOption("width", 156),
-            DTColumnBuilder.newColumn("recommend", "荐").withOption("width", 56).renderWith(function (data) {
+            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 120),
+            DTColumnBuilder.newColumn("pubDate", "发布/更新 时间").withOption("width", 180),
+            DTColumnBuilder.newColumn("recommend", "荐").withOption("width", 46).renderWith(function (data) {
                 if (data > 0) {
-                    return '<i class="icon-checkbox"></i>';
+                    return '<i class="am-icon-check-square-o"></i>';
                 } else {
-                    return '<i class="icon-checkbox-unchecked"></i>';
+                    return '<i class="am-icon-square-o"></i>';
                 }
             }),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
                 return statusFilter(data);
             }),
             DTColumnBuilder.newColumn(null).withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-info" title="完整信息" href="javascript:void(0);" data-id="' + data.id + '"></a>&nbsp;&nbsp;<a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="icon-new-tab-2 place-right"></a></div>';
-            })
+                return '<div class="operation"><a class="am-icon-info-circle am-margin-right" href="" title="完整信息" ng-click="showDetail(' + data.id + ')"></a><a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="am-icon-external-link am-fr"></a></div>';
+            }).notSortable()
         ];
+        $scope.showDetail = function (id) {
+            $resource('/ajax/video/detail/:id', {id: id}).get().$promise.then(function (data) {
+                $scope.video = data;
+                console.log(data.exInfo);
+                $('#detail-dialog').modal({
+                    width: 560,
+                    height: 530
+                });
+            })
+        };
     })
     .controller("managerController", function ($scope, statusFilter, durationFilter, dtOptions, DTColumnBuilder) {
-        $('#edit-panel').hide();
         $scope.dtOptions = dtOptions
             .withSource("/ajax/video/manager")
-            .withOption("pageLength", 14)
-            .withOption('rowCallback', function (row, data) {
-                $('#edit-panel').hide();
-                $('td', row).unbind('click');
-                $('td', row).bind('click', function () {
-                    $scope.$apply(function () {
-                        if ($(row).hasClass('info')) {
-                            $(row).removeClass('info');
-                            $('#edit-panel').fadeOut();
-                        }
-                        else {
-                            $('tr.info').removeClass("info");
-                            $(row).addClass('info');
-                            $scope.videoId = data.id;
-                            var node = $(row).position();
-                            $('#edit-panel').animate({top: (node.top - 81) + "px"}).show();
-                        }
-                    });
-                });
-                return row;
-
-            });
-        ;
+            .withOption("pageLength", 12);
         $scope.dtColumns = [
-            DTColumnBuilder.newColumn("file", "编号").withOption("width", 70),
+            DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
             DTColumnBuilder.newColumn("title", "视频标题"),
-            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 70),
-            DTColumnBuilder.newColumn("duration", "时长").withOption("width", 80).renderWith(function (data) {
+            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 64),
+            DTColumnBuilder.newColumn("duration", "时长").withOption("width", 100).renderWith(function (data) {
                 return durationFilter(data);
             }),
-            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 80).renderWith(function (data) {
+            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 70).renderWith(function (data) {
                 var result = new String();
                 if (data.length > 0) {
                     for (var i = 0, max = data.length; i < max; i++) {
@@ -201,65 +118,138 @@ angular.module("video", ['metroui'])
                     return '无';
                 }
             }),
-            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 100),
-            DTColumnBuilder.newColumn("pubDate", "发布/更新 时间").withOption("width", 156),
+            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 120),
+            DTColumnBuilder.newColumn("pubDate", "发布/更新 时间").withOption("width", 180),
             DTColumnBuilder.newColumn("recommend", "推荐度").withOption("width", 80),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
                 return statusFilter(data);
-            })
+            }),
+            DTColumnBuilder.newColumn(null).withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
+                return '<div class="operation"><a class="am-icon-edit am-margin-right" href="#/video/edit/' + data.id + '"></a></div>';
+            }).notSortable()
         ];
     })
-    .controller("editController", function ($scope, $resource) {
-        $resource("/ajax/video/detail/:id", {id: getPathVariable()}).get().$promise.then(function (data) {
+    .controller("editController", function ($scope, $resource, $location, pathVariable) {
+        $resource("/ajax/video/detail/:id", {id: pathVariable[pathVariable.length - 1]}).get().$promise.then(function (data) {
+            $scope.update = false;
             $scope.model = data;
-            console.log($scope.model.tags)
+            $scope.mTag = data.tags.map(function (item, index, array) {
+                return item.id;
+            })
         });
+        $resource('/ajax/tag/tags').query().$promise.then(function (data) {
+            $scope.cols = data.filter(function (item, index, array) {
+                return item.type == 2;
+            });
+            $scope.tags = data.filter(function (item, index, array) {
+                return item.type == 0;
+            });
+        });
+        $scope.addTag = function (tag) {
+            var index = $scope.mTag.indexOf(tag.id);
+            if (index >= 0) {
+                $scope.model.tags.splice(index, 1);
+                $scope.mTag.splice(index, 1)
+            } else {
+                $scope.model.tags.push(tag);
+                $scope.mTag.push(tag.id);
+            }
+        };
+        $scope.submit = function () {
+            //console.log($scope.model.sort);
+            $resource("/ajax/video/update/:pubDate", {pubDate: $scope.update}).save($scope.model).$promise.then(function (data) {
+                $scope.$parent.$broadcast('serverResponsed', data);
+                $location.path("/video/manager").replace();
+            });
+        };
     })
     .controller("publishController", function ($scope, $resource, $compile, statusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
-        $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("pageLength", 13).withOption("createdRow", function (row, data, dataIndex) {
+        $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });
         $scope.dtColumns = [
-            DTColumnBuilder.newColumn("file", "编号").withOption("width", 70),
+            DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
             DTColumnBuilder.newColumn("title", "视频标题"),
-            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 70),
-            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 100),
-            DTColumnBuilder.newColumn("recommend", "荐").withOption("width", 56).renderWith(function (data) {
+            DTColumnBuilder.newColumn("sort", "序号").withOption("width", 64),
+            DTColumnBuilder.newColumn("shootTime", "拍摄时间").withOption("width", 120),
+            DTColumnBuilder.newColumn("recommend", "荐").withOption("width", 46).renderWith(function (data) {
                 if (data > 0) {
-                    return '<i class="icon-checkbox"></i>';
+                    return '<i class="am-icon-check-square-o"></i>';
                 } else {
-                    return '<i class="icon-checkbox-unchecked"></i>';
+                    return '<i class="am-icon-square-o"></i>';
                 }
             }),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
                 return statusFilter(data);
             }),
             DTColumnBuilder.newColumn("id").withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
-                return '<div class="operation"><a class="icon-globe on-left-more" title="发布" href="javascript:void(0);" ng-click="publish(' + data + ')"></a><a title="批处理" class="icon-new" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="icon-remove place-right" data-id="' + data + '"></a></div>';
-            })
+                return '<div class="operation"><a class="am-icon-globe am-margin-right-xs" title="发布" href="javascript:void(0);" ng-click="publish(' + data + ')"></a><a title="批处理" class="am-icon-file-text-o" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="am-icon-remove am-fr" data-id="' + data + '"></a></div>';
+            }).notSortable()
         ];
         DTInstances.getLast().then(function (dtInstance) {
             $scope.dtInstance = dtInstance;
         });
         $scope.publish = function (id) {
             $resource("/ajax/video/pub/:id", {id: id}).get().$promise.then(function (data) {
-                if (data.code == 0) {
-                    $.Notify({
-                        caption: "成功",
-                        content: "视频已成功发布",
-                        style: {background: "blue", color: "white"},
-                        timeout: 5000
-                    });
-                    $scope.dtInstance.reloadData();
-                } else {
-                    $.Notify({
-                        caption: "失败",
-                        content: data.message,
-                        style: {background: "red", color: "white"},
-                        timeout: 10000
-                    });
-                }
+                $scope.$parent.$broadcast('serverResponsed', data);
+                $scope.dtInstance.reloadData();
             });
         };
+    })
+    .controller("createController", function ($scope, $resource) {
+        var maxSort, maxRecommend;
+        $scope.model = {};
+        $scope.model.tags = [];
+        $resource('/ajax/tag/tags').query().$promise.then(function (data) {
+            $scope.cols = data.filter(function (item, index, array) {
+                var isColumn = item.type === 2;
+                if (isColumn) {
+                    if (item.tagname === '聊天室') {
+                        $scope.model.tags.push(item);
+                        $scope.mTag = [item.id];
+                    }
+                }
+                return item.type == 2;
+            });
+            $scope.tags = data.filter(function (item, index, array) {
+                return item.type == 0;
+            });
+        });
+        $scope.addTag = function (tag) {
+            var index = $scope.mTag.indexOf(tag.id);
+            if (index >= 0) {
+                $scope.model.tags.splice(index, 1);
+                $scope.mTag.splice(index, 1)
+            } else {
+                $scope.model.tags.push(tag);
+                $scope.mTag.push(tag.id);
+            }
+        };
+        $resource("/ajax/video/max/sort").get().$promise.then(function (data) {
+            maxSort = data.max;
+        })
+        $resource("/ajax/video/max/recommend").get().$promise.then(function (data) {
+            maxRecommend = data.max;
+        })
+        $scope.submit = function () {
+            $scope.model.shootTime = $('#shootTime').val();
+            if (!$scope.model.shootTime) {
+                return;
+            }
+            $resource("/ajax/video/create").save($scope.model).$promise.then(function () {
+                $.Notify({
+                    caption: "成功",
+                    content: "视频信息创建完成",
+                    style: {background: "blue", color: "white"},
+                    timeout: 5000
+                });
+            });
+            window.location.href = "/video/publish"
+        }
+        $scope.setSort = function () {
+            $scope.model.sort = maxSort + 1;
+        }
+        $scope.setRecommend = function () {
+            $scope.model.recommend = maxRecommend + 1;
+        }
     });
-

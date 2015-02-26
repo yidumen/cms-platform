@@ -1,81 +1,91 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>创建视频</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
-        <link rel="stylesheet" href="/resources/css/iconFont.css">
-        <link rel="stylesheet" href="/resources/css/app.css">
-    </head>
-    <body class="metro">
-        <div id="navigate">
-            <h1 class="no-margin"><a class="text-muted" href="javascript:window.history.back(); "><span class="icon-arrow-left-3 smaller on-right"></span></a></h1>
-            <div class="breadcrumbs">
-                <ul>
-                    <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
-                    <li><a>视频管理</a></li>
-                    <li><a>视频发布</a></li>
-                    <li class="active"><a>添加新视频信息</a></li>
-                    <li></li>
-                </ul>
+<form ng-submit="submit()" class="am-form am-text-sm">
+    <div class="am-panel am-panel-danger am-text-top" style="display: inline-block; width: 340px">
+        <div class="am-panel-hd">重要必填</div>
+        <div class="am-panel-bd">
+
+            <div class="am-form-group">
+                <label>文件编号</label>
+                <input class="am-form-field" ng-model="model.file" required>
+            </div>
+
+            <div class="am-form-group">
+                <label>视频标题</label>
+                <input class="am-form-field" ng-model="model.title" required>
+            </div>
+            <div class="am-form-group am-form-icon">
+                <label>拍摄日期</label>
+
+                <div class="am-form-icon"><i class="am-icon-calendar"></i><input datepicker class="am-form-field" type="text" ng-model="model.shootTime" required></div>
+            </div>
+            <div class="am-form-group">
+                <label>所属栏目</label>
+
+                <div class="am-form-icon" data-am-modal="{target: '#amodal', closeViaDimmer: false, width: 300}">
+                    <i class="am-icon-tag"></i>
+
+                    <div class="am-form-field static-input">
+                        <span class="am-margin-right-xs" ng-repeat="col in model.tags" ng-if="col.type == 2" ng-bind="col.tagname"></span>
+                    </div>
+                </div>
             </div>
         </div>
-        <form:form id="form" action="/video/add" commandName="video">
-          <div class="panel inline-block margin5 top-align">
-              <div class="panel-header bg-darkRed fg-white">重要必填项</div>
-              <div class="panel-content">
-                  <h5>文件编号</h5>
-                  <div class="input-control text size4">
-                      <form:input path="file" required="true" />
-                  </div>
-                  <h5>视频标题</h5>
-                  <div class="input-control text">
-                      <form:input path="title" required="true" />
-                  </div>
-                  <h5>拍摄日期</h5>
-                  <div class="input-control text" data-role="datepicker" data-format="yyyy-mm-dd" data-locale="zhCN">
-                      <form:input path="shootTime" required="true" /><button class="btn-date"></button>
-                  </div>
-              </div>
-          </div>
-          <div class="panel inline-block margin5">
-              <div class="panel-header">一般选填项</div>
-              <div class="panel-content">
-                  <h5>发布序号<a id="auto-sort" href="#" class="button primary mini place-right">自动生成</a></h5>
-                  <div class="input-control text">
-                      <form:input path="sort" />
-                      <span class="help-block icon-help-2">为0则忽略此序号</span>
-                  </div>
-                  <h5>推荐度<a id="auto-recommend" href="#" class="button primary mini place-right">自动生成</a></h5>
-                  <div class="input-control text">
-                      <form:input path="recommend" />
-                      <span class="help-block icon-help-2">为0则为不推荐</span>
-                  </div>
-                  <h5>视频描述（简短内容摘要）</h5>
-                  <div class="input-control textarea">
-                      <form:textarea path="descrpition" />
-                  </div>
-                  <h5>备注</h5>
-                  <div class="input-control text">
-                      <form:input path="note" />
-                  </div>
-                  <h5>分级信息</h5>
-                  <div class="input-control text">
-                      <form:input path="grade" />
-                  </div>
-              </div>
-          </div>
-          <hr>
-          <button type="submit" class="default large place-right">
-              <i class="icon-checkmark"></i>
-              提交
-          </button>
-        </form:form>
-        <script src="/resources/js/jquery/jquery.min.js"></script>
-        <script src="/resources/js/jquery/jquery.widget.min.js"></script>
-        <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/video/create.js"></script>
-    </body>
-</html>
+    </div>
+    <div class="am-panel am-panel-primary" style="display: inline-block; width: 340px">
+        <div class="am-panel-hd">一般选填</div>
+        <div class="am-panel-bd">
+
+            <div class="am-form-group">
+                <label>发布序号</label><a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setSort()">自动生成</a>
+                <input class="am-form-field" ng-model="model.sort">
+            </div>
+
+            <div class="am-form-group">
+                <label>推荐度</label><a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setRecommend()">自动生成</a>
+                <input class="am-form-field" ng-model="model.recommend">
+            </div>
+
+
+            <div class="am-form-group">
+                <label>分级信息</label>
+                <input class="am-form-field" ng-model="model.grade">
+            </div>
+        </div>
+    </div>
+    <section class="am-panel am-panel-default am-text-top" style="display: inline-block; width: 340px">
+        <header class="am-panel-hd">其它</header>
+        <div class="am-panel-bd">
+            <div class="am-form-group">
+                <label>视频描述
+                    <small>（简短内容摘要）</small>
+                </label>
+                <textarea class="am-form-field" ng-model="model.descrpition" rows="4"></textarea>
+            </div>
+
+            <div class="am-form-group">
+                <label>备注</label>
+                <textarea class="am-form-field" ng-model="model.note" rows="3"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+    <button type="submit" class="am-btn am-btn-primary">
+        <i class="am-icon-check"></i>
+        提交
+    </button>
+</form>
+<div id="amodal" class="am-modal am-modal-confirm" tabindex="-1">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">栏目列表
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <ul class="am-list am-text-left">
+                <li ng-class="{active:mTag.indexOf(col.id)>=0}" ng-repeat="col in cols" ng-click="addTag(col)"><a href="" class="am-margin-left" ng-bind="col.tagname"></a></li>
+            </ul>
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>确定</span>
+        </div>
+    </div>
+</div>

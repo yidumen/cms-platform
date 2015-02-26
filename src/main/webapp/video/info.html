@@ -1,87 +1,80 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>视频列表</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" href="/resources/css/metro-bootstrap.css">
-        <link rel="stylesheet" href="/resources/css/iconFont.css">
-        <link rel="stylesheet" href="/resources/css/app.css">
-        <link rel="stylesheet" href="/resources/css/video-info.css">
-    </head>
-    <body class="metro">
-        <div id="navigate">
-            <h1 class="no-margin"><a class="text-muted" href="javascript:window.history.back(); "><span class="icon-arrow-left-3 smaller on-right"></span></a></h1>
-            <div class="breadcrumbs">
-                <ul>
-                    <li><a href="/platform"><span class="icon-home icon"></span>平台</a></li>
-                    <li><a>视频管理</a></li>
-                    <li><a>公共查询</a></li>
-                    <li class="active"><a>所有视频信息</a></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div id="toolbar" class="text-right">
-                <i class="icon-help text-success on-left-more padding10"></i><span class="icon-info on-left padding5">详细信息</span><span class="icon-new-tab-2">页面预览</span>
-            </div>
+<table id="video-table" class="am-table am-table-striped am-table-hover" frame="below" datatable=""
+       dt-options="dtOptions" dt-disable-deep-watchers="true"
+       dt-columns="dtColumns"></table>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="detail-dialog">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+            {{video.title}}<a href="javascript: void(0)" class="am-close am-close-spin"
+                              data-am-modal-close>&times;</a>
         </div>
-        <hr class="ntm nbm"/>
-        <div ng-app="video">
-            <div ng-controller="infoController">
-                <table id="video-table" class="table striped hovered dataTable" frame="below" datatable="" dt-options="dtOptions" dt-columns="dtColumns"></table>
-            </div>
-            <div detail-dialog dlg-node="#video-table" dlg-target=".operation .icon-info" class="hide">
-                <table style="width: 560px" cellpadding="10">
-                    <tr>
-                        <td><strong>记录标识：</strong></td><td id="itemId" class="text-muted"></td>
-                        <td><strong>视频编号：</strong></td><td id="file" class="text-muted"></td>
-                        <td><strong>播放时长：</strong></td><td id="dur" class="text-muted"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>发布序号：</strong></td><td id="sort" class="text-muted"></td>
-                        <td><strong>分级信息：</strong></td><td id="grade" class="text-muted"></td>
-                        <td><strong>拍摄日期：</strong></td><td id="shoot" class="text-muted"></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>推荐度：</strong></td><td id="recommend" class="text-muted"></td>
-                        <td><strong>当前状态：</strong></td><td id="status" class="text-muted"></td>
-                        <td><strong>发布时间：</strong></td><td id="pub" class="text-muted"></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>所属栏目：</strong></td><td id="col" class="text-muted" colspan="5"></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>标签：</strong></td><td id="tag" class="text-muted" colspan="5"></td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top"><strong>视频描述：</strong></td><td id="desc" class="text-muted" colspan="5"></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right" style="vertical-align: top"><strong>备注：</strong></td><td id="note" class="text-muted" colspan="5"></td>
-                    </tr>
-                    <tr>
-                        <td style="vertical-align: top"><strong>文件信息：</strong></td><td colspan="5">
-                            <table class="table bordered">
-                                <thead>
-                                    <tr>
-                                        <td>清晰度</td>
-                                        <td>文件大小</td>
-                                    </tr>
-                                </thead>
-                                <tbody id="ext" class="text-muted"></tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+        <div class="am-modal-bd">
+            <table style="border-spacing: 10px;border-collapse: inherit;text-align: left">
+                <tr>
+                    <td>记录标识：</td>
+                    <td class="am-link-muted" ng-bind="video.id"></td>
+                    <td>视频编号：</td>
+                    <td class="am-link-muted" ng-bind="video.file"></td>
+                    <td>播放时长：</td>
+                    <td class="am-link-muted" ng-bind="video.duration|duration"></td>
+                </tr>
+                <tr>
+                    <td>发布序号：</td>
+                    <td class="am-link-muted" ng-bind="video.sort"></td>
+                    <td>分级信息：</td>
+                    <td class="am-link-muted" ng-bind="video.grade"></td>
+                    <td>拍摄日期：</td>
+                    <td class="am-link-muted" ng-bind="video.shootTime"></td>
+                </tr>
+                <tr>
+                    <td class="am-text-right">推荐度：</td>
+                    <td class="am-link-muted" ng-bind="video.recommend"></td>
+                    <td>当前状态：</td>
+                    <td class="am-link-muted" ng-bind="video.status"></td>
+                    <td>发布时间：</td>
+                    <td class="am-link-muted" ng-bind="video.pubDate"></td>
+                </tr>
+                <tr>
+                    <td class="am-text-right">所属栏目：</td>
+                    <td class="am-link-muted" colspan="5">
+                        <span class="am-margin-right-xs" ng-repeat="col in video.tags" ng-if="col.type == 2" ng-bind="col.tagname"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="am-text-right">标签：</td>
+                    <td colspan="5">
+                            <span class="am-margin-right am-badge am-badge-success am-radius"
+                                  ng-repeat="tag in video.tags" ng-if="tag.type == 0" ng-bind="tag.tagname"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">视频描述：</td>
+                    <td class="am-link-muted" colspan="5" ng-bind="video.descrpition"></td>
+                </tr>
+                <tr>
+                    <td class="am-text-right" style="vertical-align: top">备注：</td>
+                    <td class="am-link-muted" colspan="5" ng-bind="video.note"></td>
+                </tr>
+                <tr>
+                    <td class="am-text-top">文件信息：</td>
+                    <td colspan="4">
+                        <table class="am-table am-table-bordered">
+                            <thead>
+                            <tr class="am-text-middle">
+                                <td>清晰度</td>
+                                <td>文件大小</td>
+                            </tr>
+                            </thead>
+                            <tbody class="am-link-muted">
+                            <tr class="am-text-middle" ng-repeat="info in video.extInfo">
+                                <td ng-bind="info.resolution|resolution"></td>
+                                <td class="am-text-right" ng-bind="info.fileSize"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
         </div>
-        <script src="/resources/js/jquery/jquery.min.js"></script>
-        <script src="/resources/js/jquery/jquery.dataTables.min.js"></script>
-        <script src="/resources/js/jquery/jquery.widget.min.js"></script>
-        <script src="/resources/js/metro.min.js"></script>
-        <script src="/resources/js/angularJs/angular.min.js"></script>
-        <script src="/resources/js/angularJs/angular-resource.min.js"></script>
-        <script src="/resources/js/angularJs/angular-datatables.min.js"></script>
-        <script src="/resources/js/app.js"></script>
-        <script src="/resources/js/video.js"></script>
-    </body>
-</html>
+    </div>
+</div>

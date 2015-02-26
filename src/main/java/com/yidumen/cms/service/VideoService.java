@@ -21,7 +21,7 @@ public interface VideoService {
 
     void removeVideo(Video video);
 
-    void updateVideo(Video video) throws IllDataException;
+    void updateVideo(Video video, boolean updateDate) throws IllDataException;
 
     List<Video> find(Map<String, Object[]> condition);
 
@@ -33,7 +33,7 @@ public interface VideoService {
 
     void addVideo(Video video);
 
-    void publish(Long id) throws IOException, IllDataException, ParseException;
+    Video publish(Long id) throws IOException, IllDataException, ParseException;
 
     Object findMax(String property);
 }

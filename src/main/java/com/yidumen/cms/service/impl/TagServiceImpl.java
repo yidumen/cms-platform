@@ -18,4 +18,9 @@ public final class TagServiceImpl implements TagService {
         return dao.findByType(TagType.COLUMN);
     }
 
+    @Override
+    public List<Tag> findAll() {
+        return dao.findAll();
+    }
+
 }

@@ -1,26 +1,24 @@
 package com.yidumen.cms.view.controller.ajax;
 
-import com.jfinal.core.Controller;
-import com.jfinal.render.TextRender;
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.dao.Video;
 import com.yidumen.cms.dao.constant.VideoStatus;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
-
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
-import java.util.Map;
-
 import com.yidumen.cms.service.exception.IllDataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+
 /**
- *
  * @author 蔡迪旻
  */
-public final class VideoAjaxCtrl extends Controller {
+@Before(Tx.class)
+public final class VideoAjaxCtrl extends BaseAjaxCtrl {
     private final static Logger LOG = LoggerFactory.getLogger(VideoAjaxCtrl.class);
     private final VideoService service;
 
@@ -38,7 +36,7 @@ public final class VideoAjaxCtrl extends Controller {
         final Video video = service.find(id).extInfo().addTags();
         renderJson(video);
     }
-    
+
     public void manager() {
         final List<Video> videos = service.getVideos();
         for (Video video : videos) {
@@ -56,14 +54,43 @@ public final class VideoAjaxCtrl extends Controller {
     public void pub() {
         Long id = getParaToLong(0);
         try {
-            service.publish(id);
+            final Video video = service.publish(id);
             setAttr("code", 0);
+            setAttr("message", "视频" + video.get("file") + "已发布！");
             renderJson();
         } catch (IOException | IllDataException | ParseException ex) {
-            setAttr("code", 1);
+            setAttr("code", 2);
             setAttr("message", ex.getLocalizedMessage());
             renderJson();
         }
     }
-    
+
+    public void update() {
+        final boolean isUpdateDate = getParaToBoolean(0);
+        final Video video = getModelFromJsonRequest(new Video());
+        try {
+            service.updateVideo(video, isUpdateDate);
+            setAttr("code", 0);
+            setAttr("message", "视频 "+video.get("file")+" 信息已成功更新");
+            renderJson();
+        } catch (IllDataException ex) {
+            setAttr("code", 2);
+            setAttr("message", ex.getLocalizedMessage());
+            renderJson();
+        }
+    }
+
+    public void create() {
+        final Video video = getModelFromJsonRequest(new Video());
+        service.addVideo(video);
+        setAttr("code", 0);
+        setAttr("message", "视频 "+video.get("file")+" 信息已添加");
+        redirect("/video/publish");
+    }
+
+    public void max() {
+        final String property = getPara(0);
+        setAttr("max", service.findMax(property));
+        renderJson();
+    }
 }
