@@ -1,4 +1,4 @@
-package com.yidumen.cms.dao;
+package com.yidumen.cms.model;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 蔡迪旻
@@ -21,6 +20,10 @@ public final class Video extends BaseModel<Video> {
         super("Video");
     }
 
+    public List<Video> getNew(int limit) {
+        return this.find("SELECT * FROM Video ORDER BY pubDate DESC LIMIT ?", limit);
+    }
+    
     public Video extInfo() {
         final List<Record> extInfos = Db.find("select * from VideoInfo where video_id = ? order by resolution", this.get("id"));
         return this.put("extInfo", extInfos);

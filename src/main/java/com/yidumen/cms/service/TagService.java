@@ -1,6 +1,7 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.dao.Tag;
+import com.yidumen.cms.model.Tag;
+
 import java.util.List;
 
 /**

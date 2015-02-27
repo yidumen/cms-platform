@@ -1,7 +1,8 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.dao.Account;
+import com.yidumen.cms.model.Account;
 import com.yidumen.cms.service.exception.IllDataException;
+
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.FailedLoginException;

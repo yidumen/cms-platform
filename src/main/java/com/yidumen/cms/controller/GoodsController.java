@@ -1,11 +1,11 @@
-package com.yidumen.cms.view.controller;
+package com.yidumen.cms.controller;
 
 import com.jfinal.core.Controller;
 
 /**
  * Created by cdm on 15/2/23.
  */
-public class GoodsController extends Controller {
+public final class GoodsController extends Controller {
     public void info() {
         render("info.html");
     }

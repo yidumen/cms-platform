@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.dao.Goods;
+import com.yidumen.cms.model.Goods;
 
 import java.util.List;
 

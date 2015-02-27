@@ -1,4 +1,4 @@
-package com.yidumen.cms.dao;
+package com.yidumen.cms.model;
 
 /**
  *

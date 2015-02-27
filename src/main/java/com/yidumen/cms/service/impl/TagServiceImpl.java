@@ -1,8 +1,9 @@
 package com.yidumen.cms.service.impl;
 
-import com.yidumen.cms.dao.Tag;
-import com.yidumen.cms.dao.constant.TagType;
+import com.yidumen.cms.constant.TagType;
+import com.yidumen.cms.model.Tag;
 import com.yidumen.cms.service.TagService;
+
 import java.util.List;
 
 public final class TagServiceImpl implements TagService {

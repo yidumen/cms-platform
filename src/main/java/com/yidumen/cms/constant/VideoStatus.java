@@ -1,4 +1,4 @@
-package com.yidumen.cms.dao.constant;
+package com.yidumen.cms.constant;
 
 /**
  *

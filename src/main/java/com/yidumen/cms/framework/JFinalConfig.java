@@ -5,16 +5,18 @@ import com.jfinal.config.*;
 import com.jfinal.log.Log4jLoggerFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
-import com.yidumen.cms.dao.Account;
-import com.yidumen.cms.dao.Goods;
-import com.yidumen.cms.dao.Tag;
-import com.yidumen.cms.dao.Video;
-import com.yidumen.cms.view.controller.GoodsController;
-import com.yidumen.cms.view.controller.LoginController;
-import com.yidumen.cms.view.controller.VideoController;
-import com.yidumen.cms.view.controller.ajax.GoodsAjaxCtrl;
-import com.yidumen.cms.view.controller.ajax.TagAjaxCtrl;
-import com.yidumen.cms.view.controller.ajax.VideoAjaxCtrl;
+import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import com.yidumen.cms.controller.GoodsController;
+import com.yidumen.cms.controller.LoginController;
+import com.yidumen.cms.controller.VideoController;
+import com.yidumen.cms.controller.ajax.GoodsAjaxCtrl;
+import com.yidumen.cms.controller.ajax.TagAjaxCtrl;
+import com.yidumen.cms.controller.ajax.VideoAjaxCtrl;
+import com.yidumen.cms.controller.wechat.MessageController;
+import com.yidumen.cms.model.Account;
+import com.yidumen.cms.model.Goods;
+import com.yidumen.cms.model.Tag;
+import com.yidumen.cms.model.Video;
 
 /**
  * 配置JFinal
@@ -27,6 +29,8 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.setDevMode(false);
         me.setEncoding("UTF-8");
         me.setLoggerFactory(new Log4jLoggerFactory());
+
+        ApiConfigKit.setDevMode(me.getDevMode());
     }
 
     @Override
@@ -37,6 +41,8 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.add("/ajax/video", VideoAjaxCtrl.class);
         me.add("/ajax/tag", TagAjaxCtrl.class);
         me.add("/ajax/goods", GoodsAjaxCtrl.class);
+        
+        me.add("/wechat/message", MessageController.class);
     }
 
     @Override

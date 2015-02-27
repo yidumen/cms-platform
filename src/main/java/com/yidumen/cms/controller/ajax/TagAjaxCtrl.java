@@ -1,15 +1,15 @@
-package com.yidumen.cms.view.controller.ajax;
+package com.yidumen.cms.controller.ajax;
 
-import com.jfinal.core.Controller;
-import com.yidumen.cms.dao.Tag;
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.TagService;
-import java.util.List;
 
 /**
  *
  * @author 蔡迪旻
  */
+@Before(Tx.class)
 public final class TagAjaxCtrl extends BaseAjaxCtrl {
 
     private final TagService tagService;

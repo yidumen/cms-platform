@@ -3,11 +3,15 @@ package com.yidumen.cms.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.jfinal.plugin.activerecord.Record;
-import com.yidumen.cms.dao.Video;
-import com.yidumen.cms.dao.constant.VideoResolution;
-import com.yidumen.cms.dao.constant.VideoStatus;
+import com.yidumen.cms.constant.VideoResolution;
+import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -15,11 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author 蔡迪旻 <yidumen.com>
@@ -157,6 +156,11 @@ public final class VideoServiceImpl implements VideoService {
     @Override
     public Object findMax(String property) {
         return videoDAO.max(property);
+    }
+
+    @Override
+    public List<Video> getNewVideos(int limit) {
+        return videoDAO.getNew(limit);
     }
 
     @Override

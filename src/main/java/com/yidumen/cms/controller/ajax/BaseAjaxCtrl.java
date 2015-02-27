@@ -1,9 +1,7 @@
-package com.yidumen.cms.view.controller.ajax;
+package com.yidumen.cms.controller.ajax;
 
-import com.aliyun.common.utils.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Model;

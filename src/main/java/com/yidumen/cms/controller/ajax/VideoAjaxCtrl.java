@@ -1,9 +1,9 @@
-package com.yidumen.cms.view.controller.ajax;
+package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.yidumen.cms.dao.Video;
-import com.yidumen.cms.dao.constant.VideoStatus;
+import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;

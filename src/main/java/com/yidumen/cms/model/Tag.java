@@ -1,6 +1,7 @@
-package com.yidumen.cms.dao;
+package com.yidumen.cms.model;
 
-import com.yidumen.cms.dao.constant.TagType;
+import com.yidumen.cms.constant.TagType;
+
 import java.util.List;
 
 /**

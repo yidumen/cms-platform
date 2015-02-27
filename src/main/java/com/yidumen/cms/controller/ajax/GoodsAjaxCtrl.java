@@ -1,4 +1,4 @@
-package com.yidumen.cms.view.controller.ajax;
+package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
@@ -9,7 +9,7 @@ import com.yidumen.cms.service.ServiceFactory;
  * Created by cdm on 15/2/25.
  */
 @Before(Tx.class)
-public class GoodsAjaxCtrl extends BaseAjaxCtrl {
+public final class GoodsAjaxCtrl extends BaseAjaxCtrl {
     private final GoodsService service;
 
     public GoodsAjaxCtrl() {

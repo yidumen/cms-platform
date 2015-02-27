@@ -1,7 +1,8 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.dao.Video;
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.exception.IllDataException;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -36,4 +37,6 @@ public interface VideoService {
     Video publish(Long id) throws IOException, IllDataException, ParseException;
 
     Object findMax(String property);
+    
+    List<Video> getNewVideos(int limit);
 }

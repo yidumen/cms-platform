@@ -1,7 +1,7 @@
 package com.yidumen.cms.service.impl;
 
-import com.yidumen.cms.dao.Goods;
-import com.yidumen.cms.dao.constant.GoodsStatus;
+import com.yidumen.cms.constant.GoodsStatus;
+import com.yidumen.cms.model.Goods;
 import com.yidumen.cms.service.GoodsService;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by cdm on 15/2/25.
  */
-public class GoodsServiceImpl implements GoodsService {
+public final class GoodsServiceImpl implements GoodsService {
     private final Goods goods;
 
     public GoodsServiceImpl() {
