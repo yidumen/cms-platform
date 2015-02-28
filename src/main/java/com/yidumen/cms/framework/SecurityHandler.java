@@ -28,7 +28,6 @@ public final class SecurityHandler extends Handler {
             }
             return;
         }
-        nextHandler.handle(target, request, response, isHandled);
     }
 
 }

@@ -22,6 +22,7 @@ public final class ResourceHandler extends Handler {
     @Override
     public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
         if (!target.startsWith("/oss")) {
+            nextHandler.handle(target, request, response, isHandled);
             return;
         }
         HttpClient client = new DefaultHttpClient();
@@ -37,6 +38,5 @@ public final class ResourceHandler extends Handler {
             isHandled[0] = true;
         } catch (IOException e) {
         }
-        return;
     }
 }

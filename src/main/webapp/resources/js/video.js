@@ -102,14 +102,14 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             DTColumnBuilder.newColumn("duration", "时长").withOption("width", 100).renderWith(function (data) {
                 return durationFilter(data);
             }),
-            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 70).renderWith(function (data) {
+            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 90).renderWith(function (data) {
                 var result = new String();
                 if (data.length > 0) {
                     for (var i = 0, max = data.length; i < max; i++) {
                         if (data[i].type === 2) {
                             if (data[i].tagname !== "") {
-                                result = result.concat(" ");
                                 result = result.concat(data[i].tagname);
+                                result = result.concat("<br>");
                             }
                         }
                     }
