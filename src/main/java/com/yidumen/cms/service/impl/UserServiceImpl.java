@@ -1,52 +1,48 @@
 package com.yidumen.cms.service.impl;
 
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.tx.Tx;
+import com.yidumen.cms.constant.AccountGroup;
+import com.yidumen.cms.model.Account;
 import com.yidumen.cms.service.UserService;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.dao.AccountDAO;
-import com.yidumen.dao.constant.AccountGroup;
-import com.yidumen.dao.entity.Account;
-import com.yidumen.dao.entity.VerifyInfo;
-import java.sql.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.FailedLoginException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.sql.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Service
-@Transactional
-public class UserServiceImpl implements UserService {
+public final class UserServiceImpl implements UserService {
 
     private final Logger LOG;
-    @Autowired
-    private AccountDAO accountDAO;
+    private final Account dao;
 
     public UserServiceImpl() {
         this.LOG = LoggerFactory.getLogger(this.getClass());
+        this.dao = Account.dao;
     }
 
     @Override
     public Account find(Long id) {
-        return accountDAO.find(id);
+        return dao.findById(id);
     }
 
     @Override
     public Account verify(final String username, final String password)
             throws AccountNotFoundException, FailedLoginException {
-        Account result = accountDAO.find(username.toLowerCase());
-        if (result == null || result.getUserGroup().equals(AccountGroup.USER)) {
+        final Account result = dao.findByName(username.toLowerCase());
+        if (result == null || result.get("userGroup").equals(AccountGroup.USER)) {
             throw new AccountNotFoundException("没有这个用户");
         }
-        if (result.getPassword().equals(password)) {
+        if (result.get("password").equals(password)) {
             return result;
         } else {
             throw new FailedLoginException("密码错误");
@@ -54,28 +50,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Before(Tx.class)
     public Account register(String username, final String password, final String ip)
             throws AccountException, IllDataException {
         username = username.toLowerCase();
-        Account user = accountDAO.find(username);
+        Account user = dao.findByName(username);
         if (user != null) {
             throw new AccountException("用户已存在");
         }
         user = new Account();
         if (checkPhone(username)) {
-            user.setPhone(username);
+            user.set("username", username);
         } else if (checkEmail(username)) {
-            user.setEmail(username);
+            user.set("email", username);
         } else {
             throw new IllDataException("用户名格式不对");
         }
-        user.setPassword(password);
-        user.setUserGroup(AccountGroup.USER);
-        user.setCreatedate(new Date(System.currentTimeMillis()));
-        final VerifyInfo verifyInfo = new VerifyInfo();
-        user.setVerifyInfo(verifyInfo);
-        user.setStatus(true);
-        accountDAO.create(user);
+        user.set("password", password)
+                .set("userGroup", AccountGroup.USER.ordinal())
+                .set("createdate", new Date(System.currentTimeMillis()))
+                .set("status", true)
+                .save();
         return user;
     }
 
@@ -99,8 +94,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Before(Tx.class)
     public void update(Account account) {
-        accountDAO.edit(account);
+        account.update();
     }
 
 }
