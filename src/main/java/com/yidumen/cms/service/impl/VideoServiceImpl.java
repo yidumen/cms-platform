@@ -1,83 +1,73 @@
 package com.yidumen.cms.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.jfinal.plugin.activerecord.Record;
+import com.yidumen.cms.constant.VideoResolution;
+import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.dao.VideoDAO;
-import com.yidumen.dao.constant.VideoResolution;
-import com.yidumen.dao.constant.VideoStatus;
-import com.yidumen.dao.entity.Video;
-import com.yidumen.dao.entity.VideoInfo;
-import com.yidumen.dao.model.VideoQueryModel;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Service
-@Transactional
-public class VideoServiceImpl implements VideoService {
+public final class VideoServiceImpl implements VideoService {
 
     private final Logger log = LoggerFactory.getLogger(VideoServiceImpl.class);
-    @Autowired
-    private VideoDAO videoDAO;
+    private final Video videoDAO;
+
+    public VideoServiceImpl() {
+        this.videoDAO = Video.dao;
+    }
 
     @Override
     public List<Video> getVideos() {
-        log.debug("获取全部视频");
         return videoDAO.findAll();
     }
 
     @Override
-    public void updateVideo(final Video video) throws IllDataException {
-        if (video.getSort() > 0) {
-            validateSort(video.getSort(), video.getFile());
+    public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
+        if (video.getInt("sort") > 0) {
+            validateSort(video.getInt("sort"), video.getStr("file"));
         }
-        videoDAO.edit(video);
+        if (updateDate) {
+            video.set("pubDate", new Date());
+        }
+        video.updateWithRelate();
     }
 
     @Override
-    public Video find(Long id) {
-        return videoDAO.find(id);
+    public Video find(final Long id) {
+        return videoDAO.findById(id);
     }
 
     @Override
-    public Video find(String file) {
-        return videoDAO.find(file);
+    public Video find(final String file) {
+        final Video video = new Video();
+        video.set("file", file);
+        return video.findUnique(video);
     }
 
     @Override
-    public void removeVideo(Video video) {
-        videoDAO.remove(video);
-        log.debug("视频 {} 已删除", video.getTitle());
+    public void removeVideo(final Video video) {
+        video.delete();
     }
 
     @Override
-    public List<Video> find(VideoQueryModel model) {
-        model.setAllEager(true);
-        return videoDAO.find(model);
+    public List<Video> find(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition);
     }
 
     @Override
@@ -85,88 +75,98 @@ public class VideoServiceImpl implements VideoService {
         return videoDAO.count();
     }
 
-    private void validateSort(long sort, String file) throws IllDataException {
-        VideoQueryModel model = new VideoQueryModel();
-        model.setSort(sort);
-        model.setSort2(sort);
-        List<Video> videos = videoDAO.find(model);
-        if (!videos.isEmpty()) {
-            final String file2 = videos.get(0).getFile();
+    private void validateSort(final Integer sort, final String file) throws IllDataException {
+        final Video model = new Video();
+        model.set("sort", sort);
+        Video video = videoDAO.findUnique(model);
+        if (video != null) {
+            final String file2 = video.getStr("file");
             if (!file.equals(file2)) {
-                throw new IllDataException("发布序号已被 " + file + " 使用");
+                throw new IllDataException("发布序号 " + sort + " 已被 " + file2 + " 使用");
+            }
+        }
+        model.clear().set("file", file);
+        video = videoDAO.findUnique(model);
+        if (video != null) {
+            final String file2 = video.getStr("file");
+            if (!file.equals(file2)) {
+                throw new IllDataException("视频编号已被占用");
             }
         }
     }
 
     @Override
-    public Long getVideoCount(VideoQueryModel model) {
-        return videoDAO.count(model);
+    public int getVideoCount(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition).size();
     }
 
     @Override
-    public void addVideo(Video video) {
-        video.setDuration(0L);
-        video.setStatus(VideoStatus.VERIFY);
-        videoDAO.create(video);
+    public void addVideo(final Video video) {
+        video.set("duration", 0);
+        if (video.get("sort") == null) {
+            video.set("sort", 0);
+        }
+        if (video.get("recommend") == null) {
+            video.set("recommend", 0);
+        }
+        video.set("status", VideoStatus.VERIFY.ordinal());
+        video.save();
     }
 
     @Override
-    public void publish(String file) throws IOException, IllDataException, ParseException {
-        final HttpHost proxy = new HttpHost("10.242.175.127", 3128);
-        final CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope(proxy), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
-        final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-        httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
-//        final Executor executor = Executor.newInstance(httpClientBuilder.build());
-        final HttpGet httpGet = new HttpGet("http://mo01.yidumen.com/service/video/info/" + file);
-        httpGet.setConfig(RequestConfig.custom().setProxy(proxy).build());
-        final CloseableHttpResponse response = httpClientBuilder.build().execute(httpGet);
-//        final HttpResponse response = executor.execute(
-//                Request.Get("http://mo01.yidumen.com/service/video/info/" + file).viaProxy(proxy).socketTimeout(5000).connectTimeout(5000)).returnResponse();
-        final int statusCode = response.getStatusLine().getStatusCode();
-        if (statusCode == 404) {
-            throw new IllDataException("视频未部署");
-        }
-        if (statusCode == 500) {
-            throw new IllDataException("请检查视频中转站是否在线");
-        }
+    public Video publish(final Long id) throws IOException, IllDataException, ParseException {
+        final Video video = videoDAO.findById(id);
+        final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
-        final ObjectMapper mapper = new ObjectMapper();
-        final Map<String, Object> map = mapper.readValue(json, Map.class);
-
-        final Video video = videoDAO.find(file);
-        video.setDuration(Long.valueOf(map.get("Duration").toString()));
-        Set<VideoInfo> videoInfos = video.getExtInfo();
-
+        final Gson gson = new Gson();
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final Map<String, Object> map = objectMapper.readValue(json, Map.class);
+        video.set("duration", Float.valueOf(map.get("Duration").toString()).longValue());
+        List<Record> videoInfos = video.extInfo().get("extInfo");
         if (videoInfos == null || videoInfos.isEmpty()) {
-            videoInfos = new HashSet<>();
-            for (VideoResolution resolution : VideoResolution.values()) {
-                VideoInfo info = new VideoInfo();
-                info.setResolution(resolution);
-                info.setVideo(video);
+            videoInfos = new ArrayList<>();
+            for (final VideoResolution resolution : VideoResolution.values()) {
+                final Record info = new Record();
+                info.set("resolution", resolution.ordinal());
+                info.set("video_id", video.get("id"));
                 videoInfos.add(info);
             }
-            video.setExtInfo(videoInfos);
+            video.put("extInfo", videoInfos);
         }
         log.debug("videoInfo has {} item", videoInfos.size());
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
         final List<Map<String, Object>> extInfo = (List<Map<String, Object>>) map.get("extInfo");
         log.debug("extInfo has {}", extInfo.size());
-        for (Map<String, Object> infos : extInfo) {
-            String info = infos.get("Resolution").toString();
+        for (final Map<String, Object> infos : extInfo) {
+            final String info = infos.get("Resolution").toString();
             log.debug(info);
-            for (VideoInfo videoInfo : videoInfos) {
-                if (info.equals(videoInfo.getResolution().getResolution())) {
-                    videoInfo.setHeight(Integer.parseInt(info));
-                    videoInfo.setWidth(Integer.valueOf(infos.get("Width").toString()));
-                    videoInfo.setFileSize(infos.get("FileSizeString").toString());
-                    log.debug("Modified is {}", infos.get("Modified"));
-                    video.setPubDate(format.parse(infos.get("Modified").toString()));
+            for (final Record videoInfo : videoInfos) {
+                if (info.equals(VideoResolution.getByOrdinal(videoInfo.getInt("resolution")).getResolution())) {
+                    videoInfo.set("height", Integer.parseInt(info));
+                    videoInfo.set("width", Integer.parseInt(info));
+                    videoInfo.set("fileSize", infos.get("FileSizeString").toString());
                 }
             }
         }
-        video.setStatus(VideoStatus.PUBLISH);
-        videoDAO.edit(video);
+        video.set("pubDate", new Date());
+        video.set("status", VideoStatus.PUBLISH.ordinal());
+        video.updateWithRelate();
+        return video;
     }
+
+    @Override
+    public Object findMax(String property) {
+        return videoDAO.max(property);
+    }
+
+    @Override
+    public List<Video> getNewVideos(int limit) {
+        return videoDAO.getNew(limit);
+    }
+
+    @Override
+    public List<Video> find(Video video) {
+        return videoDAO.findByCondition(video);
+    }
+
 
 }
