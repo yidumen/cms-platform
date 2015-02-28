@@ -66,6 +66,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configHandler(Handlers me) {
+        me.add(new ResourceHandler());
         me.add(new SecurityHandler());
     }
     

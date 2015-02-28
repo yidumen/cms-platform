@@ -18,7 +18,7 @@ import java.io.IOException;
  *
  * @author 蔡迪旻
  */
-public class ResourceHandler extends Handler {
+public final class ResourceHandler extends Handler {
     @Override
     public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
         if (!target.startsWith("/oss")) {
