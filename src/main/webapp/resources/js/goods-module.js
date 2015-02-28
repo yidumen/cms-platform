@@ -7,12 +7,12 @@ angular.module("goods", ['ngResource', 'ngRoute', 'component'])
             .when("/goods/process", {controller: "processController", templateUrl: "/goods/process"})
             .when("/goods/trash", {controller: "trashController", templateUrl: "/goods/trash"});
     })
-    .service("statusEnum", function () {
+    .service("tagStatus", function () {
         return ["已处理", "待处理", "已作废"];
     })
-    .filter("status", function (statusEnum) {
+    .filter("status", function (tagStatus) {
         return function (input) {
-            return statusEnum[input];
+            return tagStatus[input];
         };
     })
     .controller("goods-info", function ($scope, $resource, statusFilter, dtOptions, DTColumnBuilder) {

@@ -28,12 +28,12 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             return result;
         };
     })
-    .service("statusEnum", function () {
+    .service("videoStatus", function () {
         return ["已发布", "待审核", "已归档"];
     })
-    .filter("status", function (statusEnum) {
+    .filter("status", function (videoStatus) {
         return function (input) {
-            return statusEnum[input];
+            return videoStatus[input];
         };
     })
     .service('resolutionEnum', function () {
