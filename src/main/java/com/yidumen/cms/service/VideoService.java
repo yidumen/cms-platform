@@ -1,11 +1,12 @@
 package com.yidumen.cms.service;
 
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.exception.IllDataException;
-import com.yidumen.dao.entity.Video;
-import com.yidumen.dao.model.VideoQueryModel;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,15 +22,21 @@ public interface VideoService {
 
     void removeVideo(Video video);
 
-    void updateVideo(Video video) throws IllDataException;
+    void updateVideo(Video video, boolean updateDate) throws IllDataException;
 
-    List<Video> find(VideoQueryModel model);
+    List<Video> find(Map<String, Object[]> condition);
+
+    List<Video> find(Video video);
 
     long getVideoCount();
 
-    Long getVideoCount(VideoQueryModel model);
+    int getVideoCount(Map<String, Object[]> condition);
 
     void addVideo(Video video);
 
-    void publish(String file) throws IOException, IllDataException, ParseException;
+    Video publish(Long id) throws IOException, IllDataException, ParseException;
+
+    Object findMax(String property);
+    
+    List<Video> getNewVideos(int limit);
 }

@@ -4,7 +4,7 @@ package com.yidumen.cms.service.exception;
  *
  * @author 蔡迪旻
  */
-public class IllDataException extends Exception {
+public final class IllDataException extends Exception {
 
     /**
      * Creates a new instance of <code>SortInUseException</code> without detail
