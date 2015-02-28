@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author 蔡迪旻 <yidumen.com>
  */
-public class GetNewestVideo implements Action {
+public final class GetNewestVideo implements Action {
     private final VideoService service;
 
     public GetNewestVideo() {

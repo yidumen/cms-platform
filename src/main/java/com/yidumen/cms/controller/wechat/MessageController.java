@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by cdm on 15/2/27.
  */
-public class MessageController extends MsgControllerAdapter {
+public final class MessageController extends MsgControllerAdapter {
     @Override
     protected void processInFollowEvent(InFollowEvent inFollowEvent) {
         final List<Record> rules = Db.find("SELECT * FROM MSGKEY WHERE REPLYKEY = 'subcsribe'");
