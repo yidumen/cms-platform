@@ -17,7 +17,7 @@ import java.io.IOException;
  *
  * @author 蔡迪旻
  */
-public class Util {
+public final class Util {
 
     public static HttpResponse httpRequest(final String url) throws IOException, IllDataException {
         final CredentialsProvider credsProvider = new BasicCredentialsProvider();
@@ -33,7 +33,7 @@ public class Util {
             throw new IllDataException("视频未部署");
         }
         if (statusCode == 500) {
-            throw new IllDataException("请检查视频中转站是否在线");
+            throw new IllDataException("请检查文件服务器是否在线");
         }
         return response;
     }

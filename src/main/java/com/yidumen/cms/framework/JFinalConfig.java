@@ -23,6 +23,10 @@ import com.yidumen.cms.model.Video;
  * @author 蔡迪旻
  */
 public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
+    @Override
+    public void afterJFinalStart() {
+        this.loadPropertyFile("appengine-service.properties");
+    }
 
     @Override
     public void configConstant(Constants me) {
