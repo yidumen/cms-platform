@@ -7,15 +7,15 @@ angular.module("goods", ['ngResource', 'ngRoute', 'component'])
             .when("/goods/process", {controller: "processController", templateUrl: "/goods/process"})
             .when("/goods/trash", {controller: "trashController", templateUrl: "/goods/trash"});
     })
-    .service("tagStatus", function () {
+    .service("goodsStatusEnum", function () {
         return ["已处理", "待处理", "已作废"];
     })
-    .filter("status", function (tagStatus) {
+    .filter("goodsStatus", function (goodsStatusEnum) {
         return function (input) {
-            return tagStatus[input];
+            return goodsStatusEnum[input];
         };
     })
-    .controller("goods-info", function ($scope, $resource, statusFilter, dtOptions, DTColumnBuilder) {
+    .controller("goods-info", function ($scope, $resource, goodsStatusFilter, dtOptions, DTColumnBuilder) {
         $scope.dtOptions = dtOptions
             .withSource("/ajax/goods/info")
             .withOption("pageLength", 12);
@@ -25,12 +25,12 @@ angular.module("goods", ['ngResource', 'ngRoute', 'component'])
             DTColumnBuilder.newColumn("address", "地址"),
             DTColumnBuilder.newColumn("createdate", "提交时间").withOption("width", 180),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
-                return statusFilter(data);
+                return goodsStatusFilter(data);
             })
             //DTColumnBuilder.newColumn("postNumber", "快递单号").withOption("width", 160)
         ];
     })
-    .controller("processController", function ($scope, $resource, $compile, statusFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller("processController", function ($scope, $resource, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder, DTInstances) {
         $scope.dtOptions = dtOptions.withSource("/ajax/goods/unprocess").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });
@@ -60,7 +60,7 @@ angular.module("goods", ['ngResource', 'ngRoute', 'component'])
             })
         }
     })
-    .controller("trashController", function ($scope, $resource, $compile, statusFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller("trashController", function ($scope, $resource, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder, DTInstances) {
         $scope.dtOptions = dtOptions.withSource("/ajax/goods/trashed").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });

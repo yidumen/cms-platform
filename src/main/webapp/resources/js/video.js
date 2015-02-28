@@ -28,12 +28,12 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             return result;
         };
     })
-    .service("videoStatus", function () {
+    .service("videoStatusEnum", function () {
         return ["已发布", "待审核", "已归档"];
     })
-    .filter("status", function (videoStatus) {
+    .filter("videoStatus", function (videoStatusEnum) {
         return function (input) {
-            return videoStatus[input];
+            return videoStatusEnum[input];
         };
     })
     .service('resolutionEnum', function () {
@@ -53,7 +53,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             console.log(angular.toJson($scope.model));
         };
     })
-    .controller("infoController", function ($scope, $resource, $compile, statusFilter, durationFilter, dtOptions, DTColumnBuilder) {
+    .controller("infoController", function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
         $scope.dtOptions = dtOptions.withSource("/ajax/video/info").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });
@@ -74,7 +74,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
                 }
             }),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
-                return statusFilter(data);
+                return videoStatusFilter(data);
             }),
             DTColumnBuilder.newColumn(null).withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
                 return '<div class="operation"><a class="am-icon-info-circle am-margin-right" href="" title="完整信息" ng-click="showDetail(' + data.id + ')"></a><a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="am-icon-external-link am-fr"></a></div>';
@@ -91,7 +91,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             })
         };
     })
-    .controller("managerController", function ($scope, statusFilter, durationFilter, dtOptions, DTColumnBuilder) {
+    .controller("managerController", function ($scope, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
         $scope.dtOptions = dtOptions
             .withSource("/ajax/video/manager")
             .withOption("pageLength", 12);
@@ -122,7 +122,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             DTColumnBuilder.newColumn("pubDate", "发布/更新 时间").withOption("width", 180),
             DTColumnBuilder.newColumn("recommend", "推荐度").withOption("width", 80),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
-                return statusFilter(data);
+                return videoStatusFilter(data);
             }),
             DTColumnBuilder.newColumn(null).withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
                 return '<div class="operation"><a class="am-icon-edit am-margin-right" href="#/video/edit/' + data.id + '"></a></div>';
@@ -163,7 +163,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             });
         };
     })
-    .controller("publishController", function ($scope, $resource, $compile, statusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller("publishController", function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
         $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });
@@ -180,7 +180,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
                 }
             }),
             DTColumnBuilder.newColumn("status", "状态").withOption("width", 70).renderWith(function (data) {
-                return statusFilter(data);
+                return videoStatusFilter(data);
             }),
             DTColumnBuilder.newColumn("id").withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
                 return '<div class="operation"><a class="am-icon-globe am-margin-right-xs" title="发布" href="javascript:void(0);" ng-click="publish(' + data + ')"></a><a title="批处理" class="am-icon-file-text-o" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="am-icon-remove am-fr" data-id="' + data + '"></a></div>';
