@@ -164,7 +164,7 @@ public final class MessageController extends MsgControllerAdapter {
                     final OutNewsMsg outNewsMsg = new OutNewsMsg(msg);
                     final List<Record> aritcles = Db.find("SELECT * FROM ARITCLE INNER JOIN WECHAT_NEWS_ARITCLE ON ARITCLE.ID = WECHAT_NEWS_ARITCLE.aritcles_ID AND WECHAT_NEWS_ARITCLE.WECHAT_NEWS_ID = ?", message.getLong("NEWS_ID"));
                     for (Record aritcle : aritcles) {
-                        outNewsMsg.addNews(aritcle.getStr("TITLE"), aritcle.getStr("DESCRIPTION"), aritcle.getStr("PICURL"), aritcle.getStr("URL"));
+                        outNewsMsg.addNews(aritcle.getStr("TITLE"), aritcle.getStr("DESCRIPTION"), "http://cms.yidumen.com/oss/wechat/images/"+aritcle.getStr("PICURL"), aritcle.getStr("URL"));
                     }
                     render(outNewsMsg);
                     break;
