@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>${title}</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <style>
+        .title {
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .dec {
+            font-size: 0.3em;
+            color: darkorange;
+        }
+
+        .dec td {
+
+            padding-right: 10px;
+        }
+
+        .hidden {
+            border: 1px;
+            height: 1px;
+            width: 1px;
+        }
+    </style>
+</head>
+<body style="font-size: 2em">
+<span class="title">${title}</span>
+<table class="dec">
+    <tbody>
+    <tr>
+        <td>创建时间：${createTime}</td>
+        <td>作者：${author} ${source}</td>
+    </tr>
+    </tbody>
+</table>
+
+<span style="font-size: 0.5em">${content}</span>
+
+<div style="display:none;">
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" === document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd4084c0861a59341d7c67ea3986da60b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</div>
+</body>
+</html>

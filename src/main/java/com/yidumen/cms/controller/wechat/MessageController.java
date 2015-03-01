@@ -15,6 +15,8 @@ import com.jfinal.weixin.sdk.msg.out.OutTextMsg;
 import com.yidumen.cms.constant.KeyType;
 import com.yidumen.cms.constant.WeChatMessageEnum;
 import com.yidumen.cms.controller.wechat.action.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -22,6 +24,20 @@ import java.util.List;
  * Created by cdm on 15/2/27.
  */
 public final class MessageController extends MsgControllerAdapter {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    public void writing() {
+        final Long id = getParaToLong(0);
+        Record record = Db.findById("writings", id);
+        LOG.debug("{}", record);
+        LOG.debug("{}", record.getStr("title"));
+        setAttr("title", record.getStr("TITLE"));
+        setAttr("createTime", record.getDate("CREATETIME"));
+        setAttr("author", record.getStr("AUTHOR"));
+        setAttr("source", record.getStr("SOURCE"));
+        setAttr("content", record.getStr("CONTENT"));
+        render("writing.html");
+    }
+    
     @Override
     protected void processInFollowEvent(InFollowEvent inFollowEvent) {
         final List<Record> rules = Db.find("SELECT * FROM MSGKEY WHERE REPLYKEY = 'subcsribe'");
