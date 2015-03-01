@@ -163,7 +163,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             });
         };
     })
-    .controller("publishController", function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller("publishController", function ($scope, $resource, $location, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
         $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
             $compile(angular.element(row).contents())($scope);
         });
