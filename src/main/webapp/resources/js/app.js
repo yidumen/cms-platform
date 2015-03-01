@@ -64,6 +64,15 @@ angular.module('component', ['datatables'])
         };
         return directiveDefinitionObject;
     });
+function showBusy() {
+    $('#modal-loading').modal({
+        closeViaDimmer: false
+    })
+}
+function hideBusy() {
+    $('#modal-loading').modal('close');
+}
+
 function setCookie(name, value) {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + 10 * 365);

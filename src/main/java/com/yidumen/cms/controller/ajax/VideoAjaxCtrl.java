@@ -85,7 +85,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         service.addVideo(video);
         setAttr("code", 0);
         setAttr("message", "视频 "+video.get("file")+" 信息已添加");
-        redirect("/video/publish");
+        renderJson();
     }
 
     public void max() {

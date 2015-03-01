@@ -190,9 +190,11 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             $scope.dtInstance = dtInstance;
         });
         $scope.publish = function (id) {
+            showBusy();
             $resource("/ajax/video/pub/:id", {id: id}).get().$promise.then(function (data) {
                 $scope.$parent.$broadcast('serverResponsed', data);
                 $scope.dtInstance.reloadData();
+                hideBusy();
             });
         };
     })
@@ -237,14 +239,9 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
                 return;
             }
             $resource("/ajax/video/create").save($scope.model).$promise.then(function () {
-                $.Notify({
-                    caption: "成功",
-                    content: "视频信息创建完成",
-                    style: {background: "blue", color: "white"},
-                    timeout: 5000
-                });
+                $scope.$parent.$broadcast('serverResponsed', data);
+                $location.path("/video/publish").replace();
             });
-            window.location.href = "/video/publish"
         }
         $scope.setSort = function () {
             $scope.model.sort = maxSort + 1;
