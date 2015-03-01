@@ -23,9 +23,9 @@ public final class Video extends BaseModel<Video> {
     public List<Video> getNew(int limit) {
         return this.find("SELECT * FROM Video ORDER BY pubDate DESC LIMIT ?", limit);
     }
-    
+
     public Video extInfo() {
-        final List<Record> extInfos = Db.find("select * from VideoInfo where video_id = ? order by resolution", this.get("id"));
+        final List<Record> extInfos = Db.find("SELECT * FROM VideoInfo WHERE video_id = ? ORDER BY resolution", this.get("id"));
         return this.put("extInfo", extInfos);
     }
 
@@ -39,7 +39,11 @@ public final class Video extends BaseModel<Video> {
         final List<Record> extInfos = this.get("extInfo");
         if (extInfos != null) {
             for (Record extInfo : extInfos) {
-                Db.update("VideoInfo", new Record().setColumns(extInfo));
+                if (extInfo.get("id") == null) {
+                    Db.save("videoinfo", extInfo);
+                } else {
+                    Db.update("VideoInfo", new Record().setColumns(extInfo));
+                }
             }
         }
         /*
@@ -51,7 +55,7 @@ public final class Video extends BaseModel<Video> {
             final List<Record> tempRecords = new ArrayList<>();
             final List<Record> tempTags = new ArrayList<>();
             //1.筛选出不需要更新的记录，排除掉
-            final List<Record> videoTags = Db.find("select * from Tag_Video where videos_id = ?", this.get("id"));
+            final List<Record> videoTags = Db.find("SELECT * FROM Tag_Video WHERE videos_id = ?", this.get("id"));
             for (Record videoTag : videoTags) {
                 LOG.debug("videoTag:{}->{}", videoTag.toJson(), videoTag.get("tags_id").getClass().getName());
                 for (Record tag : tags) {
