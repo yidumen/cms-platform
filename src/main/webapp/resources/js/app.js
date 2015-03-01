@@ -34,7 +34,8 @@ angular.module('component', ['datatables'])
 
                 ngModel.$render = function () {
                     // Use the AngularJS internal 'binding-specific' variable
-                    element.datepicker('setValue', ngModel.$viewValue || '');
+                    element.datepicker('setValue', "");
+                    ngModel.$setViewValue(element.val());
                 };
                 element.datepicker().on('changeDate.datepicker.amui', function (event) {
                     updateModel($(event.target).val());
@@ -53,7 +54,7 @@ angular.module('component', ['datatables'])
                 $scope.iconClass = ['am-icon-info', 'am-icon-exclamation', 'am-icon-times-circle'];
                 $scope.$on('serverResponsed', function (event, response) {
                     var box = $('<div class="am-alert am-center" data-am-alert><button type="button" class="am-close">&times;</button></div>').addClass($scope.stateClass[response.code])
-                        .append('<p class="' + $scope.iconClass[response.code] + '">' + response.message + '</p>').css('max-width', '500px').width(response.message.length * 24 + 34).hide().appendTo(element).slideDown();
+                        .append('<p><span class="am-margin-right-xs ' + $scope.iconClass[response.code] + '"></span> ' + response.message + '</p>').css('max-width', '800px').hide().appendTo(element).slideDown();
                     if (response.code == 0) {
                         setTimeout(function () {
                             box.alert('close');
@@ -66,7 +67,8 @@ angular.module('component', ['datatables'])
     });
 function showBusy() {
     $('#modal-loading').modal({
-        closeViaDimmer: false
+        closeViaDimmer: false,
+        width: 200
     })
 }
 function hideBusy() {

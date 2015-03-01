@@ -234,11 +234,10 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             maxRecommend = data.max;
         })
         $scope.submit = function () {
-            $scope.model.shootTime = $('#shootTime').val();
             if (!$scope.model.shootTime) {
                 return;
             }
-            $resource("/ajax/video/create").save($scope.model).$promise.then(function () {
+            $resource("/ajax/video/create").save($scope.model).$promise.then(function (data) {
                 $scope.$parent.$broadcast('serverResponsed', data);
                 $location.path("/video/publish").replace();
             });
