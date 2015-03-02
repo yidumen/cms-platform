@@ -34,7 +34,7 @@ angular.module('component', ['datatables'])
 
                 ngModel.$render = function () {
                     // Use the AngularJS internal 'binding-specific' variable
-                    element.datepicker('setValue', "");
+                    element.datepicker('setValue', ngModel.$viewValue || "");
                     ngModel.$setViewValue(element.val());
                 };
                 element.datepicker().on('changeDate.datepicker.amui', function (event) {
