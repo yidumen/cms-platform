@@ -1,7 +1,6 @@
 package com.yidumen.cms.controller.ajax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Model;
@@ -19,7 +18,6 @@ public class BaseAjaxCtrl extends Controller {
     protected final Logger LOG = Logger.getLogger(this.getClass());
 
     protected <T extends Model> T getModelFromJsonRequest(T model) {
-        final Gson gson = new Gson();
         final ObjectMapper objectMapper = new ObjectMapper();
         try {
             final Map<String, Object> propertities = objectMapper.readValue(getRequest().getInputStream(), Map.class);

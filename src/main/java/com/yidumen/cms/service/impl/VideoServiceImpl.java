@@ -39,8 +39,8 @@ public final class VideoServiceImpl implements VideoService {
 
     @Override
     public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
-        if (video.getInt("sort") > 0) {
-            validateSort(video.getInt("sort"), video.getStr("file"));
+        if (Integer.valueOf(String.valueOf(video.get("sort"))) > 0) {
+            validateSort(Integer.valueOf(String.valueOf(video.get("sort"))), video.getStr("file"));
         }
         if (updateDate) {
             video.set("pubDate", new Date());
