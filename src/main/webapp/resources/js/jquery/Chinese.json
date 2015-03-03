@@ -1,5 +1,5 @@
 {
-    "sProcessing":   "<i class='am-icon-circle-o-notch am-spin'></i>处理中...",
+    "sProcessing":   "<i class='am-icon-circle-o-notch am-icon-spin'></i>处理中...",
     "sLengthMenu":   "每页显示 _MENU_ 项",
     "sZeroRecords":  "没有匹配结果",
     "sInfo":         "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
@@ -9,7 +9,7 @@
     "sSearch":       "搜索:",
     "sUrl":          "",
     "sEmptyTable":     "表中数据为空",
-    "sLoadingRecords": "<i class='am-icon-circle-o-notch am-spin'></i>正在向服务器请求数据...",
+    "sLoadingRecords": "<i class='am-icon-circle-o-notch am-icon-spin'></i>正在向服务器请求数据...",
     "sInfoThousands":  ",",
     "oPaginate": {
         "sFirst":    "<i class='icon-first-2'></i>",

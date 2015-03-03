@@ -38,6 +38,5 @@ public final class ResourceHandler extends Handler {
             isHandled[0] = true;
         } catch (IOException e) {
         }
-        return;
     }
 }
