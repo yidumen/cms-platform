@@ -82,6 +82,32 @@ public final class Video extends BaseModel<Video> {
 
     }
 
+    public void saveWithRelate() {
+        //1.保存video，拿到video id
+        this.save();
+        final Long videoId = Db.findFirst("SELECT last_insert_id() AS id").getBigInteger("id").longValue();
+        //2.保存extInfo
+        final List<Record> extInfos = this.get("extInfo");
+        if (extInfos != null) {
+            for (Record extInfo : extInfos) {
+                extInfo.set("video_id", videoId);
+                if (extInfo.get("id") == null) {
+                    Db.save("videoinfo", extInfo);
+                } else {
+                    Db.update("VideoInfo", new Record().setColumns(extInfo));
+                }
+            }
+        }
+        //3.保存tag关联
+        final List<Tag> tags = this.get("tags");
+        if (tags != null) {
+            for (Tag tag : tags) {
+                final Record record = new Record().set("tags_id", tag.get("id")).set("videos_id", videoId);
+                Db.save("tag_video", record);
+            }
+        }
+    }
+    
     private List<Tag> queryTags() {
         return Tag.dao.find("SELECT Tag.* FROM Tag INNER JOIN Tag_Video ON Tag_Video.tags_id = Tag.id INNER JOIN Video ON Tag_Video.videos_id = Video.id WHERE Video.id = ?", this.get("id"));
     }

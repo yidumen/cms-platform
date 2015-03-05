@@ -14,9 +14,12 @@ angular.module('component', ['datatables'])
             .withOption("pagingType", "full_numbers")
             .withOption("order", []);
     })
-    .service('pathVariable', function ($location) {
-        var result = $location.path().split("/");
-        return result;
+    .filter('path', function ($location) {
+        return function () {
+            console.log("pathVariable : " + $location.path())
+            var result = $location.path().split("/");
+            return result[result.length - 1];
+        }
     })
     .directive("datepicker", function () {
         return {

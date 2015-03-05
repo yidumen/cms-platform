@@ -71,7 +71,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         try {
             service.updateVideo(video, isUpdateDate);
             setAttr("code", 0);
-            setAttr("message", "视频 "+video.get("file")+" 信息已成功更新");
+            setAttr("message", "视频 " + video.get("file") + " 信息已成功更新");
             renderJson();
         } catch (IllDataException ex) {
             setAttr("code", 2);
@@ -82,10 +82,16 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
 
     public void create() {
         final Video video = getModelFromJsonRequest(new Video());
-        service.addVideo(video);
-        setAttr("code", 0);
-        setAttr("message", "视频 "+video.get("file")+" 信息已添加");
-        renderJson();
+        try {
+            service.addVideo(video);
+            setAttr("code", 0);
+            setAttr("message", "视频 " + video.get("file") + " 信息已添加");
+            renderJson();
+        } catch (IllDataException e) {
+            setAttr("code", 2);
+            setAttr("message", e.getLocalizedMessage());
+            renderJson();
+        }
     }
 
     public void max() {

@@ -91,7 +91,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             })
         };
     })
-    .controller("managerController", function ($scope, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
+    .controller("managerController", function ($scope, $templateCache, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
         $scope.dtOptions = dtOptions
             .withSource("/ajax/video/manager")
             .withOption("pageLength", 12);
@@ -129,8 +129,8 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             }).notSortable()
         ];
     })
-    .controller("editController", function ($scope, $resource, $location, pathVariable) {
-        $resource("/ajax/video/detail/:id", {id: pathVariable[pathVariable.length - 1]}).get().$promise.then(function (data) {
+    .controller("editController", function ($scope, $resource, pathFilter) {
+        $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {
             $scope.update = false;
             $scope.model = data;
             $scope.mTag = data.tags.map(function (item, index, array) {
