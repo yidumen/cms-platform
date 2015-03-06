@@ -23,6 +23,10 @@ import com.yidumen.cms.model.Video;
  * @author 蔡迪旻
  */
 public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
+    @Override
+    public void afterJFinalStart() {
+        this.loadPropertyFile("appengine-service.properties");
+    }
 
     @Override
     public void configConstant(Constants me) {
@@ -42,7 +46,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.add("/ajax/tag", TagAjaxCtrl.class);
         me.add("/ajax/goods", GoodsAjaxCtrl.class);
         
-        me.add("/wechat/message", MessageController.class);
+        me.add("/wechat/message", MessageController.class, "/wechat");
     }
 
     @Override
@@ -62,6 +66,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configHandler(Handlers me) {
+        me.add(new ResourceHandler());
         me.add(new SecurityHandler());
     }
     

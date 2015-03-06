@@ -1,6 +1,8 @@
 package com.yidumen.cms.model;
 
 import com.jfinal.plugin.activerecord.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class BaseModel<T extends Model> extends Model<T> {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final String table;
 
@@ -74,6 +77,7 @@ public class BaseModel<T extends Model> extends Model<T> {
             sql.append(attrName).append(" = ?").append(" and ");
         }
         sql.delete(sql.lastIndexOf(" and "), sql.length());
+        LOG.debug(sql.toString());
         return this.findFirst(sql.toString(), entity.getAttrValues());
     }
 

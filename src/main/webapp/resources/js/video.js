@@ -91,7 +91,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             })
         };
     })
-    .controller("managerController", function ($scope, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
+    .controller("managerController", function ($scope, $templateCache, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
         $scope.dtOptions = dtOptions
             .withSource("/ajax/video/manager")
             .withOption("pageLength", 12);
@@ -102,14 +102,14 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             DTColumnBuilder.newColumn("duration", "时长").withOption("width", 100).renderWith(function (data) {
                 return durationFilter(data);
             }),
-            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 70).renderWith(function (data) {
+            DTColumnBuilder.newColumn("tags", "栏目").withOption("width", 90).renderWith(function (data) {
                 var result = new String();
                 if (data.length > 0) {
                     for (var i = 0, max = data.length; i < max; i++) {
                         if (data[i].type === 2) {
                             if (data[i].tagname !== "") {
-                                result = result.concat(" ");
                                 result = result.concat(data[i].tagname);
+                                result = result.concat("<br>");
                             }
                         }
                     }
@@ -129,8 +129,8 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             }).notSortable()
         ];
     })
-    .controller("editController", function ($scope, $resource, $location, pathVariable) {
-        $resource("/ajax/video/detail/:id", {id: pathVariable[pathVariable.length - 1]}).get().$promise.then(function (data) {
+    .controller("editController", function ($scope, $resource, $location, pathFilter) {
+        $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {
             $scope.update = false;
             $scope.model = data;
             $scope.mTag = data.tags.map(function (item, index, array) {
@@ -190,13 +190,15 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             $scope.dtInstance = dtInstance;
         });
         $scope.publish = function (id) {
+            showBusy();
             $resource("/ajax/video/pub/:id", {id: id}).get().$promise.then(function (data) {
                 $scope.$parent.$broadcast('serverResponsed', data);
                 $scope.dtInstance.reloadData();
+                hideBusy();
             });
         };
     })
-    .controller("createController", function ($scope, $resource) {
+    .controller("createController", function ($scope, $resource, $location) {
         var maxSort, maxRecommend;
         $scope.model = {};
         $scope.model.tags = [];
@@ -232,19 +234,13 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             maxRecommend = data.max;
         })
         $scope.submit = function () {
-            $scope.model.shootTime = $('#shootTime').val();
             if (!$scope.model.shootTime) {
                 return;
             }
-            $resource("/ajax/video/create").save($scope.model).$promise.then(function () {
-                $.Notify({
-                    caption: "成功",
-                    content: "视频信息创建完成",
-                    style: {background: "blue", color: "white"},
-                    timeout: 5000
-                });
+            $resource("/ajax/video/create").save($scope.model).$promise.then(function (data) {
+                $scope.$parent.$broadcast('serverResponsed', data);
+                $location.path("/video/publish").replace();
             });
-            window.location.href = "/video/publish"
         }
         $scope.setSort = function () {
             $scope.model.sort = maxSort + 1;

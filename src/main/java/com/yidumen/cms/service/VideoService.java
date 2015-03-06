@@ -32,7 +32,7 @@ public interface VideoService {
 
     int getVideoCount(Map<String, Object[]> condition);
 
-    void addVideo(Video video);
+    void addVideo(Video video) throws IllDataException;
 
     Video publish(Long id) throws IOException, IllDataException, ParseException;
 

@@ -39,8 +39,8 @@ public final class VideoServiceImpl implements VideoService {
 
     @Override
     public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
-        if (video.getInt("sort") > 0) {
-            validateSort(video.getInt("sort"), video.getStr("file"));
+        if (Integer.valueOf(String.valueOf(video.get("sort"))) > 0) {
+            validate(Integer.valueOf(String.valueOf(video.get("sort"))), video.getStr("file"));
         }
         if (updateDate) {
             video.set("pubDate", new Date());
@@ -75,7 +75,7 @@ public final class VideoServiceImpl implements VideoService {
         return videoDAO.count();
     }
 
-    private void validateSort(final Integer sort, final String file) throws IllDataException {
+    private void validate(final Integer sort, final String file) throws IllDataException {
         final Video model = new Video();
         model.set("sort", sort);
         Video video = videoDAO.findUnique(model);
@@ -101,16 +101,18 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void addVideo(final Video video) {
+    public void addVideo(final Video video) throws IllDataException {
         video.set("duration", 0);
         if (video.get("sort") == null) {
             video.set("sort", 0);
+        } else {
+            validate(Integer.valueOf(String.valueOf(video.get("sort"))), video.getStr("file"));
         }
         if (video.get("recommend") == null) {
             video.set("recommend", 0);
         }
         video.set("status", VideoStatus.VERIFY.ordinal());
-        video.save();
+        video.saveWithRelate();
     }
 
     @Override

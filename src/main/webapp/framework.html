@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" href="resources/css/amazeui.min.css">
     <link rel="stylesheet" href="resources/css/app.css">
+    <base href="/platform">
 </head>
 <body ng-app="platform">
 <header class="am-topbar" ng-controller="navigateCtrl">
@@ -61,6 +62,13 @@
 </header>
 <am-alter-box></am-alter-box>
 <div class="am-text-sm" ng-view></div>
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="modal-loading">
+    <div class="am-modal-dialog">
+        <div class="am-modal-bd">
+            <span class="am-icon-spinner am-icon-spin"></span> 正在载入...
+        </div>
+    </div>
+</div>
 <hr>
 <div class="am-margin-bottom-lg">
     <div class="am-inline-block">
