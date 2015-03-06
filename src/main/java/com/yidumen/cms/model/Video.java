@@ -50,15 +50,15 @@ public final class Video extends BaseModel<Video> {
         Tag的更新（多对多关联的更新）是难点，需要区别2种不同的tag：
         1. 新增；2. 已删除；
          */
-        final List<Record> tags = this.get("tags");
+        final List<Tag> tags = this.get("tags");
         if (tags != null) {
             final List<Record> tempRecords = new ArrayList<>();
-            final List<Record> tempTags = new ArrayList<>();
+            final List<Tag> tempTags = new ArrayList<>();
             //1.筛选出不需要更新的记录，排除掉
             final List<Record> videoTags = Db.find("SELECT * FROM Tag_Video WHERE videos_id = ?", this.get("id"));
             for (Record videoTag : videoTags) {
                 LOG.debug("videoTag:{}->{}", videoTag.toJson(), videoTag.get("tags_id").getClass().getName());
-                for (Record tag : tags) {
+                for (Tag tag : tags) {
                     LOG.debug("tag:{}->{}", tag.toJson(), tag.get("id").getClass().getName());
                     if (tag.getInt("id").longValue() == videoTag.getLong("tags_id")) {
                         LOG.debug("add  videoTag to remove : {}", videoTag.toJson());
@@ -71,7 +71,7 @@ public final class Video extends BaseModel<Video> {
             tags.removeAll(tempTags);
             videoTags.removeAll(tempRecords);
             //2. 现在videoTags中如果还有的记录就是已删除的，tags中如果还有记录就是新增的
-            for (Record tag : tags) {
+            for (Tag tag : tags) {
                 LOG.debug("tag on saving : {}", tag.toJson());
                 Db.save("Tag_Video", new Record().set("videos_id", this.get("id")).set("tags_id", tag.get("id")));
             }

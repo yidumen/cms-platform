@@ -129,7 +129,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             }).notSortable()
         ];
     })
-    .controller("editController", function ($scope, $resource, pathFilter) {
+    .controller("editController", function ($scope, $resource, $location, pathFilter) {
         $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {
             $scope.update = false;
             $scope.model = data;
