@@ -1,7 +1,6 @@
 package com.yidumen.cms.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.jfinal.plugin.activerecord.Record;
 import com.yidumen.cms.constant.VideoResolution;
 import com.yidumen.cms.constant.VideoStatus;
@@ -120,10 +119,11 @@ public final class VideoServiceImpl implements VideoService {
         final Video video = videoDAO.findById(id);
         final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
-        final Gson gson = new Gson();
         final ObjectMapper objectMapper = new ObjectMapper();
         final Map<String, Object> map = objectMapper.readValue(json, Map.class);
+        //设置时长
         video.set("duration", Float.valueOf(map.get("Duration").toString()).longValue());
+        //解析文件信息
         List<Record> videoInfos = video.extInfo().get("extInfo");
         if (videoInfos == null || videoInfos.isEmpty()) {
             videoInfos = new ArrayList<>();
@@ -138,15 +138,17 @@ public final class VideoServiceImpl implements VideoService {
         log.debug("videoInfo has {} item", videoInfos.size());
         final List<Map<String, Object>> extInfo = (List<Map<String, Object>>) map.get("extInfo");
         log.debug("extInfo has {}", extInfo.size());
-        for (final Map<String, Object> infos : extInfo) {
-            final String info = infos.get("Resolution").toString();
-            log.debug(info);
-            for (final Record videoInfo : videoInfos) {
+        for (final Record videoInfo : videoInfos) {
+            for (final Map<String, Object> infos : extInfo) {
+                final String info = infos.get("Resolution").toString();
                 if (info.equals(VideoResolution.getByOrdinal(videoInfo.getInt("resolution")).getResolution())) {
                     videoInfo.set("height", Integer.parseInt(info));
                     videoInfo.set("width", Integer.parseInt(info));
                     videoInfo.set("fileSize", infos.get("FileSizeString").toString());
                 }
+            }
+            if (videoInfo.get("fileSize") == null) {
+                throw new IllDataException("视频发布失败，原因是 " + VideoResolution.getByOrdinal(videoInfo.getNumber("resolution").intValue()).getResolution() + "P 视频未上传至中转服务器。");
             }
         }
         video.set("pubDate", new Date());
