@@ -5,10 +5,13 @@ import com.jfinal.kit.JsonKit;
 import com.yidumen.cms.framework.JFinalTestConfig;
 import com.yidumen.cms.model.Video;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
 public class VideoAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     @Test
     public void testValidator() throws Exception {
         final Video video = new Video();
@@ -25,6 +28,11 @@ public class VideoAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
         video.set("sort", 1);
         video.set("shootTime", new Date());
         doRequest(video);
+    }
+
+    @Test
+    public void testQuery() throws Exception {
+        LOG.info("sort : {}", use("/ajax/video/sort").invoke());
     }
 
     private void doRequest(Video video) {

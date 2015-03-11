@@ -1,6 +1,11 @@
 (function (angular, $) {
     "use strict";
     angular.module("platform", ['video', 'goods'])
+        .config(function ($routeProvider) {
+            $routeProvider.otherwise({
+                templateUrl: "/home"
+            });
+        })
         .controller('navigateCtrl', function ($scope) {
             $scope.$on('$routeChangeStart', function () {
                 $('.am-dropdown').dropdown('close');
@@ -70,6 +75,7 @@
             };
             return directiveDefinitionObject;
         });
+    $('#container').css("min-height", $(window).height() - 50 - 1 - 19.2 * 3 - 1 - 25 - 28.8);
 })(angular, $);
 function showBusy() {
     $('#modal-loading').modal({

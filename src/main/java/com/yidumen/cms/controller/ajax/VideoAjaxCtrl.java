@@ -68,7 +68,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
     @Before(VideoValidator.class)
     public void update() {
         final boolean isUpdateDate = getParaToBoolean(0);
-        final Video video = getModelFromJsonRequest(new Video());
+        final Video video = getAttr("video");
         try {
             service.updateVideo(video, isUpdateDate);
             setAttr("code", 0);
@@ -83,7 +83,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
 
     @Before(VideoValidator.class)
     public void create() {
-        final Video video = getModelFromJsonRequest(new Video());
+        final Video video = getAttr("video");
         try {
             service.addVideo(video);
             setAttr("code", 0);
@@ -99,6 +99,10 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
     public void max() {
         final String property = getPara(0);
         setAttr("max", service.findMax(property));
+        renderJson();
+    }
+    public void sort() {
+        setAttr("sort", service.getSort());
         renderJson();
     }
 }

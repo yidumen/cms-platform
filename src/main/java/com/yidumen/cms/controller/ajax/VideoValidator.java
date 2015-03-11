@@ -61,12 +61,13 @@ public class VideoValidator extends Validator {
                     addError("message", "发布序号 " + video.get("sort") + " 已被编号为 " + validateVideo.get("file") + " 的视频使用");
                 }
             }
+            c.setAttr("video", video);
         }
     }
 
     @Override
     protected void handleError(Controller c) {
-        c.setAttr("code", 3);
+        c.setAttr("code", 2);
         c.renderJson();
     }
 }

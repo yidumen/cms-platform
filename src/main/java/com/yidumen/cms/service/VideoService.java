@@ -41,4 +41,6 @@ public interface VideoService {
     List<Video> getNewVideos(int limit);
 
     Video findVideo(Video video);
+
+    int getSort();
 }

@@ -83,7 +83,6 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         $scope.showDetail = function (id) {
             $resource('/ajax/video/detail/:id', {id: id}).get().$promise.then(function (data) {
                 $scope.video = data;
-                console.log(data.exInfo);
                 $('#detail-dialog').modal({
                     width: 560,
                     height: 530
@@ -199,7 +198,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         };
     })
     .controller("createController", function ($scope, $resource, $location) {
-        var maxSort, maxRecommend;
+        var maxSort, newSort, maxRecommend;
         $scope.model = {};
         $scope.model.tags = [];
         $resource('/ajax/tag/tags').query().$promise.then(function (data) {
@@ -229,7 +228,10 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         };
         $resource("/ajax/video/max/sort").get().$promise.then(function (data) {
             maxSort = data.max;
-        })
+        });
+        $resource("/ajax/video/sort").get().$promise.then(function (data) {
+            newSort = data.sort;
+        });
         $resource("/ajax/video/max/recommend").get().$promise.then(function (data) {
             maxRecommend = data.max;
         })
@@ -239,12 +241,19 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
             }
             $resource("/ajax/video/create").save($scope.model).$promise.then(function (data) {
                 $scope.$parent.$broadcast('serverResponsed', data);
-                $location.path("/video/publish").replace();
+                console.log(data.code);
+                if (data.code == 0) {
+                    $location.path("/video/publish").replace();
+                }
             });
         }
-        $scope.setSort = function () {
+        $scope.setSortMax = function () {
             $scope.model.sort = maxSort + 1;
         }
+        $scope.setSortNew = function () {
+            $scope.model.sort = newSort + 1;
+        };
+
         $scope.setRecommend = function () {
             $scope.model.recommend = maxRecommend + 1;
         }

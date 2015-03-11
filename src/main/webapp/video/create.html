@@ -35,12 +35,14 @@
         <div class="am-panel-bd">
 
             <div class="am-form-group">
-                <label>发布序号</label><a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setSort()">自动生成</a>
+                <label>发布序号</label>
+                <a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setSortMax()">最大</a>
+                <a class="am-btn am-btn-xs am-btn-success am-fr am-margin-right-xs" ng-click="setSortNew()">最新</a>
                 <input class="am-form-field" ng-model="model.sort">
             </div>
 
             <div class="am-form-group">
-                <label>推荐度</label><a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setRecommend()">自动生成</a>
+                <label>推荐度</label><a class="am-btn am-btn-xs am-btn-success am-fr" ng-click="setRecommend()">最大</a>
                 <input class="am-form-field" ng-model="model.recommend">
             </div>
 

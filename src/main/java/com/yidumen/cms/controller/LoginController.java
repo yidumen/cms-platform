@@ -75,5 +75,9 @@ public final class LoginController extends Controller {
         setAttr("group",AccountGroup.getNameByOrdinal((int) user.get("userGroup")));
         render("framework.html");
     }
+    
+    public void home() {
+        render("home.html");
+    }
 
 }

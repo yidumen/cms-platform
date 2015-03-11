@@ -30,7 +30,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configConstant(Constants me) {
-        me.setDevMode(false);
+        me.setDevMode(true);
         me.setEncoding("UTF-8");
         me.setLoggerFactory(new Log4jLoggerFactory());
 

@@ -152,5 +152,10 @@ public final class VideoServiceImpl implements VideoService {
         return videoDAO.findUnique(video);
     }
 
+    @Override
+    public int getSort() {
+        return videoDAO.findSort();
+    }
+
 
 }

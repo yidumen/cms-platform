@@ -112,4 +112,7 @@ public final class Video extends BaseModel<Video> {
         return Tag.dao.find("SELECT Tag.* FROM Tag INNER JOIN Tag_Video ON Tag_Video.tags_id = Tag.id INNER JOIN Video ON Tag_Video.videos_id = Video.id WHERE Video.id = ?", this.get("id"));
     }
 
+    public int findSort() {
+        return findFirst("SELECT sort FROM video ORDER BY pubDate DESC LIMIT 1").getNumber("sort").intValue();
+    }
 }
