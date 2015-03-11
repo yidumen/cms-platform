@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.aliyun.openservices</groupId>
             <artifactId>aliyun-openservices</artifactId>
-            <version>1.2.3</version>
+            <version>OTS-2.0.4</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
