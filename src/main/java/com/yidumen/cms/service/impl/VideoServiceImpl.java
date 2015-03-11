@@ -39,9 +39,6 @@ public final class VideoServiceImpl implements VideoService {
 
     @Override
     public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
-        if (Integer.valueOf(String.valueOf(video.get("sort"))) > 0) {
-            validate(Integer.valueOf(String.valueOf(video.get("sort"))), video.getStr("file"));
-        }
         if (updateDate) {
             video.set("pubDate", new Date());
         }
@@ -75,26 +72,6 @@ public final class VideoServiceImpl implements VideoService {
         return videoDAO.count();
     }
 
-    private void validate(final Integer sort, final String file) throws IllDataException {
-        final Video model = new Video();
-        model.set("sort", sort);
-        Video video = videoDAO.findUnique(model);
-        if (video != null) {
-            final String file2 = video.getStr("file");
-            if (!file.equals(file2)) {
-                throw new IllDataException("发布序号 " + sort + " 已被 " + file2 + " 使用");
-            }
-        }
-        model.clear().set("file", file);
-        video = videoDAO.findUnique(model);
-        if (video != null) {
-            final String file2 = video.getStr("file");
-            if (!file.equals(file2)) {
-                throw new IllDataException("视频编号已被占用");
-            }
-        }
-    }
-
     @Override
     public int getVideoCount(final Map<String, Object[]> condition) {
         return videoDAO.findBetween(condition).size();
@@ -105,8 +82,6 @@ public final class VideoServiceImpl implements VideoService {
         video.set("duration", 0);
         if (video.get("sort") == null) {
             video.set("sort", 0);
-        } else {
-            validate(Integer.valueOf(String.valueOf(video.get("sort"))), video.getStr("file"));
         }
         if (video.get("recommend") == null) {
             video.set("recommend", 0);
@@ -168,6 +143,11 @@ public final class VideoServiceImpl implements VideoService {
     @Override
     public List<Video> find(Video video) {
         return videoDAO.findByCondition(video);
+    }
+    
+    @Override
+    public Video findVideo(Video video) {
+        return videoDAO.findUnique(video);
     }
 
 

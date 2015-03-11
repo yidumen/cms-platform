@@ -13,12 +13,13 @@ import java.util.Map;
  * @version 1.0
  */
 public class BaseModel<T extends Model> extends Model<T> {
-    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+    protected final Logger LOG;
 
     private final String table;
 
     public BaseModel(String table) {
         this.table = table;
+        LOG = LoggerFactory.getLogger(this.getClass().getName());
     }
 
     /**
@@ -61,10 +62,11 @@ public class BaseModel<T extends Model> extends Model<T> {
         }
         StringBuilder sql = new StringBuilder("select * from ").append(table).append(" where ");
         for (String attrName : attrNames) {
-            sql.append(attrName).append(" = ?").append(" and ");
+            sql.append(attrName).append(" = ").append(entity.get(attrName)).append(" and ");
         }
         sql.delete(sql.lastIndexOf(" and "), sql.length());
-        return this.find(sql.toString(), entity.getAttrValues());
+        LOG.debug("sql->{}", sql.toString());
+        return this.find(sql.toString());
     }
 
     public T findUnique(T entity) {
@@ -74,11 +76,20 @@ public class BaseModel<T extends Model> extends Model<T> {
         }
         StringBuilder sql = new StringBuilder("select * from ").append(table).append(" where ");
         for (String attrName : attrNames) {
-            sql.append(attrName).append(" = ?").append(" and ");
+            sql.append(attrName).append(" = ");
+            final Object attr = entity.get(attrName);
+            if (attr instanceof String) {
+                sql.append("'");
+                sql.append(attr);
+                sql.append("'");
+            } else {
+                sql.append(attr);
+            }
+            sql.append(" and ");
         }
         sql.delete(sql.lastIndexOf(" and "), sql.length());
-        LOG.debug(sql.toString());
-        return this.findFirst(sql.toString(), entity.getAttrValues());
+        LOG.debug("sql->{}", sql.toString());
+        return this.findFirst(sql.toString());
     }
 
     public List<T> findAll() {
@@ -86,7 +97,7 @@ public class BaseModel<T extends Model> extends Model<T> {
     }
 
     public Long count() {
-        return this.findFirst("select count(id) as count from "+ table).getLong("count");
+        return this.findFirst("select count(id) as count from " + table).getLong("count");
     }
 
     public Object max(String property) {

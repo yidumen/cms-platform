@@ -79,7 +79,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
             renderJson();
         }
     }
-
+    @Before(VideoValidator.class)
     public void create() {
         final Video video = getModelFromJsonRequest(new Video());
         try {

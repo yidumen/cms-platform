@@ -39,4 +39,6 @@ public interface VideoService {
     Object findMax(String property);
     
     List<Video> getNewVideos(int limit);
+
+    Video findVideo(Video video);
 }

@@ -85,7 +85,7 @@ public final class Video extends BaseModel<Video> {
     public void saveWithRelate() {
         //1.保存video，拿到video id
         this.save();
-        final Long videoId = Db.findFirst("SELECT last_insert_id() AS id").getLong("id");
+        final Long videoId = Db.findFirst("SELECT last_insert_id() AS id").getNumber("id").longValue();
         //2.保存extInfo
         final List<Record> extInfos = this.get("extInfo");
         if (extInfos != null) {
