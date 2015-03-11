@@ -5,12 +5,15 @@ import com.jfinal.validate.Validator;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author 蔡迪旻
  *         2015年03月11日
  */
 public class VideoValidator extends Validator {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     private final VideoService videoService;
 
     public VideoValidator() {
@@ -27,17 +30,23 @@ public class VideoValidator extends Validator {
                 return;
             } else {
                 final Video validateVideo = videoService.find(video.getStr("file"));
-                if (video.get("id") == null) {
-                    addError("message", "视频编号已被占用");
-                    return;
-                } else {
-                    if (video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue()) {
-                        addError("message", "视频编号 " + video.get("file") + " 已被 " + validateVideo.get("title") + " 使用");
+                LOG.debug("validate video : {}", validateVideo);
+                if (validateVideo != null) {
+                    LOG.debug("id = {}->{}", video.get("id"), video.get("id") == null ? null : video.get("id").getClass().getName());
+                    if (video.get("id") == null) {
+                        addError("message", "视频编号已被占用");
+                        return;
+                    } else {
+                        LOG.debug("id compare->{} = {}->{} ", video.getNumber("id").longValue(), validateVideo.getNumber("id").longValue(), video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue());
+                        if (video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue()) {
+                            addError("message", "视频编号 " + video.get("file") + " 已被 " + validateVideo.get("title") + " 使用");
+                            return;
+                        }
                     }
                 }
             }
             if (video.get("title") == null) {
-                addError("message", "文件标题 不能省略");
+                addError("message", "视频标题 不能省略");
                 return;
             }
             if (video.get("shootTime") == null) {

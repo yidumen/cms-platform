@@ -65,6 +65,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         }
     }
 
+    @Before(VideoValidator.class)
     public void update() {
         final boolean isUpdateDate = getParaToBoolean(0);
         final Video video = getModelFromJsonRequest(new Video());
@@ -79,6 +80,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
             renderJson();
         }
     }
+
     @Before(VideoValidator.class)
     public void create() {
         final Video video = getModelFromJsonRequest(new Video());
