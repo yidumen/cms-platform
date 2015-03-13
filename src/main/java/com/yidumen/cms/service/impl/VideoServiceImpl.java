@@ -157,5 +157,13 @@ public final class VideoServiceImpl implements VideoService {
         return videoDAO.findSort();
     }
 
+    @Override
+    public Video archive(Long id) {
+        final Video video = videoDAO.findById(id);
+        video.set("status", VideoStatus.ARCHIVE.ordinal());
+        video.update();
+        return video;
+    }
+
 
 }

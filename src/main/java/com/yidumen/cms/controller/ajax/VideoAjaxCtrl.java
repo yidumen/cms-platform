@@ -105,4 +105,12 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         setAttr("sort", service.getSort());
         renderJson();
     }
+    
+    public void archive() {
+        final Long id = getParaToLong(0);
+        final Video video = service.archive(id);
+        setAttr("code", 0);
+        setAttr("message", "视频 " + video.get("file") + " 信息已归档");
+        renderJson();
+    }
 }

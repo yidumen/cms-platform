@@ -43,4 +43,6 @@ public interface VideoService {
     Video findVideo(Video video);
 
     int getSort();
+
+    Video archive(Long id);
 }
