@@ -1,12 +1,8 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.service.impl.GoodsServiceImpl;
-import com.yidumen.cms.service.impl.TagServiceImpl;
-import com.yidumen.cms.service.impl.UserServiceImpl;
-import com.yidumen.cms.service.impl.VideoServiceImpl;
+import com.yidumen.cms.service.impl.*;
 
 /**
- *
  * @author 蔡迪旻
  */
 public final class ServiceFactory {
@@ -15,6 +11,7 @@ public final class ServiceFactory {
     private static final UserService USER_SERVICE = new UserServiceImpl();
     private static final TagService TAG_SERVICE = new TagServiceImpl();
     private static final GoodsService GOODS_SERVICE = new GoodsServiceImpl();
+    private static final RecordingService SOURCE_VIDEO_SERVICE = new RecordingServiceImpl();
 
     public static VideoService generateVideoService() {
         return VIDEO_SERVICE;
@@ -27,8 +24,12 @@ public final class ServiceFactory {
     public static TagService generateTagService() {
         return TAG_SERVICE;
     }
-    
+
     public static GoodsService generateGoodsService() {
         return GOODS_SERVICE;
+    }
+
+    public static RecordingService generateRecordingService() {
+        return SOURCE_VIDEO_SERVICE;
     }
 }

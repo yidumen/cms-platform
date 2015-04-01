@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * @author 蔡迪旻
  *         2015年03月11日
  */
-public class VideoValidator extends Validator {
+public final class VideoValidator extends Validator {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     private final VideoService videoService;
 
@@ -53,7 +53,7 @@ public class VideoValidator extends Validator {
                 addError("message", "必须设置 拍摄日期");
                 return;
             }
-            if (video.get("sort") != null && Integer.valueOf(video.getStr("sort")) > 0) {
+            if (video.get("sort") != null && video.getNumber("sort").intValue() > 0) {
                 final Video model = new Video();
                 model.set("sort", video.get("sort"));
                 final Video validateVideo = videoService.findVideo(model);

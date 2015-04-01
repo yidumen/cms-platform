@@ -1,3 +1,32 @@
+<div class="toolbar am-btn-toolbar">
+    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-success" ng-click="clearSearch()">全部视频</button>
+    </div>
+    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '已发布', false)">已发布</button>
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '已归档', false)">已归档</button>
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '待审核', false)">待审核</button>
+    </div>
+    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(6, 'am-icon-check-square-o', false)">推荐</button>
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(6, 'am-icon-square-o', false)">未推荐</button>
+    </div>
+    <div class="help-info">
+        <i class="am-icon-question-circle"></i>
+        <div class="am-margin-left-lg am-inline">
+            <span class="am-icon-info-circle am-margin-right-xs"></span>
+            <span class="am-text-xs">详细信息</span>
+        </div>
+        <div class="am-margin-left-sm am-inline">
+            <span class="am-icon-film am-margin-right-xs"></span>
+            <span class="am-text-xs">来源信息</span>
+        </div>
+        <div class="am-margin-left-sm am-inline">
+            <span class="am-icon-external-link am-margin-right-xs"></span>
+            <span class="am-text-xs">网站预览</span>
+        </div>
+    </div>
+</div>
 <table id="video-table" class="am-table am-table-striped am-table-hover" frame="below" datatable=""
        dt-options="dtOptions" dt-disable-deep-watchers="true"
        dt-columns="dtColumns"></table>

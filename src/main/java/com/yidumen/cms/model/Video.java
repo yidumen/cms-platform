@@ -107,12 +107,16 @@ public final class Video extends BaseModel<Video> {
             }
         }
     }
-    
+
     private List<Tag> queryTags() {
         return Tag.dao.find("SELECT Tag.* FROM Tag INNER JOIN Tag_Video ON Tag_Video.tags_id = Tag.id INNER JOIN Video ON Tag_Video.videos_id = Video.id WHERE Video.id = ?", this.get("id"));
     }
 
     public int findSort() {
         return findFirst("SELECT sort FROM video ORDER BY pubDate DESC LIMIT 1").getNumber("sort").intValue();
+    }
+
+    public List<Record> findClips(Long videoId) {
+        return Db.find("SELECT recording.id, recording.file, video_recording.`in`, video_recording.`out`, video_recording.start, video_recording.end FROM recording, video_recording WHERE video_recording.video_id = ? AND recording.id = video_recording.recording_id ORDER BY id;", videoId);
     }
 }

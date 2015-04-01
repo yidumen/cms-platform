@@ -1,0 +1,177 @@
+@import (reference) "../../lib/amazeui/less/variables";
+
+//@import (reference) "../../lib/amazeui/less/mixins";
+//@import (reference) "../../lib/amazeui/less/utility";
+//@import (reference) "../../lib/amazeui/less/form";
+//@import (reference) "../../lib/amazeui/less/pagination";
+
+//dataTables 样式
+.dataTables_length, .dataTables_filter, .dataTables_paginate, .dataTables_info {
+  display: inline-block;
+}
+
+.dataTables_filter, .dataTables_paginate {
+  float: right
+}
+
+.dataTables_length label, .dataTables_filter label {
+  font-weight: normal;
+}
+
+.dataTables_wrapper input, .dataTables_wrapper select {
+  margin: 0px 5px;
+  padding: .3em;
+  line-height: 1.2;
+  color: #555;
+  vertical-align: middle;
+  background: #fff none;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  -webkit-appearance: none;
+  -webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+}
+
+.paginate_button {
+  cursor: pointer
+}
+
+.dataTables_paginate {
+  margin-left: 0;
+  margin-right: 0;
+  position: relative;
+  padding-left: 0;
+  list-style: none;
+  color: #999;
+  box-sizing: border-box;
+}
+
+.dataTables_paginate > a.disabled {
+  color: #999;
+  background-color: #fff;
+  border-color: #ddd;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dataTables_paginate a {
+  position: relative;
+  padding: .5em .8em;
+  text-decoration: none;
+  line-height: 1.2;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 1.4rem;
+
+}
+
+.current, .current:hover {
+  z-index: 2;
+  color: #fff;
+  background-color: #0e90d2;
+  border-color: #0e90d2;
+  cursor: default;
+
+}
+
+.dataTables_paginate [class*=icon-]:before, .sorting:after {
+  display: inline-block;
+  font-family: FontAwesome, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  vertical-align: baseline;
+  line-height: 1;
+  font-size: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.sorting:after, .sorting_asc:after, .sorting_desc:after {
+  float: right;
+}
+
+.sorting:after {
+  content: "\f0dc";
+  color: gainsboro;
+  margin-top: 5px;
+}
+
+.sorting_asc:after {
+  content: "\f0de";
+}
+
+.sorting_desc:after {
+  content: "\f0dd";
+}
+
+.icon-first-2:before {
+  content: "\f100";
+
+}
+
+.icon-arrow-left-4:before {
+  content: "\f104";
+}
+
+.icon-last-2:before {
+  content: "\f101";
+}
+
+.icon-arrow-right-4:before {
+  content: "\f105";
+}
+
+//dataTable end
+
+.static-input {
+  min-height: 41px;
+  cursor: pointer;
+  &:hover {
+    border-color: #3bb4f2;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 5px rgba(59, 180, 242, .3);
+  }
+}
+
+.am-list, .list-tags {
+  li.active {
+    background-color: #0e90d2
+  }
+}
+
+.am-list > li.active > a, .list-tags > li.active > a {
+  color: #ffffff
+}
+
+.list-tags {
+  li {
+    border: solid gainsboro 1px;
+    padding: 10px 0;
+    cursor: pointer;
+  }
+}
+
+#tag-container {
+  min-height: 41px;
+  padding-bottom: 4px;
+}
+
+.toolbar {
+  margin-top: -20px;
+  margin-bottom: 1.6rem;
+  padding: 5px 20px 0;
+  .help-info {
+    position: absolute;
+    right: 20px;
+  }
+}

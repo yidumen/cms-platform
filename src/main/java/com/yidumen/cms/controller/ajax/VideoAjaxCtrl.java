@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -58,7 +57,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
             setAttr("code", 0);
             setAttr("message", "视频" + video.get("file") + "已发布！");
             renderJson();
-        } catch (IOException | IllDataException | ParseException ex) {
+        } catch (IOException | IllDataException ex) {
             setAttr("code", 2);
             setAttr("message", ex.getLocalizedMessage());
             renderJson();
@@ -69,16 +68,10 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
     public void update() {
         final boolean isUpdateDate = getParaToBoolean(0);
         final Video video = getAttr("video");
-        try {
-            service.updateVideo(video, isUpdateDate);
-            setAttr("code", 0);
-            setAttr("message", "视频 " + video.get("file") + " 信息已成功更新");
-            renderJson();
-        } catch (IllDataException ex) {
-            setAttr("code", 2);
-            setAttr("message", ex.getLocalizedMessage());
-            renderJson();
-        }
+        service.updateVideo(video, isUpdateDate);
+        setAttr("code", 0);
+        setAttr("message", "视频 " + video.get("file") + " 信息已成功更新");
+        renderJson();
     }
 
     @Before(VideoValidator.class)
@@ -101,16 +94,16 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         setAttr("max", service.findMax(property));
         renderJson();
     }
+
     public void sort() {
         setAttr("sort", service.getSort());
         renderJson();
     }
-    
-    public void archive() {
-        final Long id = getParaToLong(0);
-        final Video video = service.archive(id);
-        setAttr("code", 0);
-        setAttr("message", "视频 " + video.get("file") + " 信息已归档");
+
+    public void clipInfo() {
+        final Long videoId = getParaToLong(0);
+        setAttr("clips", service.findClip(videoId));
+        setAttr("video", service.find(videoId));
         renderJson();
     }
 }

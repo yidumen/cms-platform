@@ -13,3 +13,7 @@ hs_err_pid*
 /target/
 .idea/
 cms-platform.iml
+node_modules
+#webapp目录由gulp生成但项目配置需要管理
+src/main/webapp/resources
+src/frontend/lib

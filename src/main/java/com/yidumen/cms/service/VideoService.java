@@ -1,10 +1,10 @@
 package com.yidumen.cms.service;
 
+import com.jfinal.plugin.activerecord.Record;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.exception.IllDataException;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface VideoService {
 
     void removeVideo(Video video);
 
-    void updateVideo(Video video, boolean updateDate) throws IllDataException;
+    void updateVideo(final Video video, boolean updateDate);
 
     List<Video> find(Map<String, Object[]> condition);
 
@@ -34,7 +34,7 @@ public interface VideoService {
 
     void addVideo(Video video) throws IllDataException;
 
-    Video publish(Long id) throws IOException, IllDataException, ParseException;
+    Video publish(final Long id) throws IOException, IllDataException;
 
     Object findMax(String property);
     
@@ -44,5 +44,5 @@ public interface VideoService {
 
     int getSort();
 
-    Video archive(Long id);
+    List<Record> findClip(Long videoId);
 }

@@ -101,7 +101,10 @@ public final class VideoController extends Controller {
     }
 
     public void edit() {
-        setAttr("video", service.find(getParaToLong(0)));
         render("edit.html");
+    }
+
+    public void clipInfo() {
+        render("clip_info.html");
     }
 }

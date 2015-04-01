@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +36,7 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void updateVideo(final Video video, boolean updateDate) throws IllDataException {
+    public void updateVideo(final Video video, boolean updateDate) {
         if (updateDate) {
             video.set("pubDate", new Date());
         }
@@ -90,7 +89,7 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video publish(final Long id) throws IOException, IllDataException, ParseException {
+    public Video publish(final Long id) throws IOException, IllDataException {
         final Video video = videoDAO.findById(id);
         final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
@@ -158,11 +157,8 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video archive(Long id) {
-        final Video video = videoDAO.findById(id);
-        video.set("status", VideoStatus.ARCHIVE.ordinal());
-        video.update();
-        return video;
+    public List<Record> findClip(Long videoId) {
+        return videoDAO.findClips(videoId);
     }
 
 
