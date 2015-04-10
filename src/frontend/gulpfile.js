@@ -97,7 +97,7 @@ gulp.task('build:styles', function () {
 
 // 洗刷刷
 gulp.task('build:clean', function (cb) {
-  del(path.source + 'resources/**/*', {dot: false, force: true}, cb);
+  del(path.source + 'resources', {dot: false, force: true}, cb);
 });
 
 // 默认任务
