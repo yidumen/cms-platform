@@ -176,9 +176,23 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
     };
   })
   .controller('infoController', function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
-    $scope.dtOptions = dtOptions.withSource("/ajax/video/info").withOption("createdRow", function (row, data, dataIndex) {
+    $scope.dtOptions = dtOptions.withSource("/ajax/video/info")
+      .withOption("createdRow", function (row, data, dataIndex) {
       $compile(angular.element(row).contents())($scope);
-    });
+    })
+      .withOption('initComplete', function () {
+        DTInstances.getLast().then(function (lastDTInstance) {
+          var table = lastDTInstance.DataTable;
+          $scope.clearSearch = function () {
+            table.columns().search('').draw();
+          };
+          $scope.search = function (col, input, regx) {
+            table.columns().search('');
+            table.columns(col).search(input, regx).draw();
+          };
+
+        });
+      });
     $scope.dtColumns = [
       DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
       DTColumnBuilder.newColumn("title", "视频标题"),
@@ -202,17 +216,6 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         return '<div class="operation"><a class="am-icon-info-circle" href="" title="完整信息" ng-click="showDetail(' + data.id + ')"></a><a class="am-icon-film am-margin-left-xs" href="#/video/clipInfo/' + data.id + '"></a><a target="_blank" href="http://yidumen.aliapp.com/video/' + row.file + '" class="am-icon-external-link am-fr"></a></div>';
       }).notSortable()
     ];
-    DTInstances.getLast().then(function (lastDTInstance) {
-      var table = lastDTInstance.DataTable;
-      $scope.clearSearch = function () {
-        table.columns().search('').draw();
-      };
-      $scope.search = function (col, input, regx) {
-        table.search('');
-        table.columns(col).search(input, regx).draw();
-      };
-
-    });
     $scope.showDetail = function (id) {
       $resource('/ajax/video/detail/:id', {id: id}).get().$promise.then(function (data) {
         $scope.video = data;
@@ -223,10 +226,24 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       })
     };
   })
-  .controller("managerController", function ($scope, $templateCache, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder) {
-    $scope.dtOptions = dtOptions
-      .withSource("/ajax/video/manager")
-      .withOption("pageLength", 12);
+  .controller("managerController", function ($scope, $templateCache, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    $scope.dtOptions = dtOptions.withSource("/ajax/video/manager")
+      .withOption("createdRow", function (row, data, dataIndex) {
+        $compile(angular.element(row).contents())($scope);
+      })
+      .withOption('initComplete', function () {
+        DTInstances.getLast().then(function (lastDTInstance) {
+          var table = lastDTInstance.DataTable;
+          $scope.clearSearch = function () {
+            table.columns().search('').draw();
+          };
+          $scope.search = function (col, input, regx) {
+            table.columns().search('');
+            table.columns(col).search(input, regx).draw();
+          };
+
+        });
+      });
     $scope.dtColumns = [
       DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
       DTColumnBuilder.newColumn("title", "视频标题"),
@@ -257,9 +274,19 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         return videoStatusFilter(data);
       }),
       DTColumnBuilder.newColumn(null).withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
-        return '<div class="operation"><a class="am-icon-edit am-margin-right" href="#/video/edit/' + data.id + '"></a></div>';
+        var el = $('<div class="operation"><a class="am-icon-edit am-margin-right-xs" href="#/video/edit/' + data.id + '"></a></div>');
+        if (data.status !== 2) {
+          el.append('<a class="am-icon-archive am-margin-right-xs" href="javascript:;" ng-click="archive(' + data.id + ')"></a>');
+        }
+        return el.html();
       }).notSortable()
     ];
+    $scope.archive = function (id) {
+      $resource('/ajax/video/archive/:id', {id: id}).get().$promise.then(function (data) {
+        $scope.$parent.$broadcast('serverResponsed', data);
+        $scope.dtInstance.reloadData();
+      });
+    };
   })
   .controller("editController", function ($scope, $resource, $location, pathFilter) {
     $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {

@@ -45,4 +45,6 @@ public interface VideoService {
     int getSort();
 
     List<Record> findClip(Long videoId);
+
+    Video archive(Long videoId);
 }

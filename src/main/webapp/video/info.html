@@ -11,23 +11,32 @@
         <button type="button" class="am-btn am-btn-primary" ng-click="search(6, 'am-icon-check-square-o', false)">推荐</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(6, 'am-icon-square-o', false)">未推荐</button>
     </div>
+    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^[^-]\\d*$', true)">有序号</button>
+        <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^-$', true)">无序号</button>
+    </div>
+    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-primary" ng-click='search(5,"^$",true)'>新增信息</button>
+    </div>
     <div class="help-info">
-        <i class="am-icon-question-circle"></i>
-        <div class="am-margin-left-lg am-inline">
-            <span class="am-icon-info-circle am-margin-right-xs"></span>
-            <span class="am-text-xs">详细信息</span>
-        </div>
-        <div class="am-margin-left-sm am-inline">
-            <span class="am-icon-film am-margin-right-xs"></span>
-            <span class="am-text-xs">来源信息</span>
-        </div>
-        <div class="am-margin-left-sm am-inline">
-            <span class="am-icon-external-link am-margin-right-xs"></span>
-            <span class="am-text-xs">网站预览</span>
+        <div class="help-title"><i class="am-icon-question-circle"></i></div>
+        <div class="help-body">
+            <div class="help-item">
+                <span class="am-icon-info-circle"></span>
+                <span class="am-text-xs">详细信息</span>
+            </div>
+            <div class="help-item">
+                <span class="am-icon-film"></span>
+                <span class="am-text-xs">来源信息</span>
+            </div>
+            <div class="help-item">
+                <span class="am-icon-external-link"></span>
+                <span class="am-text-xs">网站预览</span>
+            </div>
         </div>
     </div>
 </div>
-<table id="video-table" class="am-table am-table-striped am-table-hover" frame="below" datatable=""
+<table id="video-info" class="am-table am-table-striped am-table-hover" frame="below" datatable=""
        dt-options="dtOptions" dt-disable-deep-watchers="true"
        dt-columns="dtColumns"></table>
 <div class="am-modal am-modal-no-btn" tabindex="-1" id="detail-dialog">
