@@ -1,6 +1,7 @@
 package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.render.excel.PoiRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.model.Video;
@@ -106,12 +107,22 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         setAttr("video", service.find(videoId));
         renderJson();
     }
-    
+
     public void archive() {
         final Long videoId = getParaToLong(0);
         final Video video = service.archive(videoId);
         setAttr("code", 0);
         setAttr("message", "视频 " + video.get("file") + " 已归档");
         renderJson();
+    }
+
+    public void exportExcel() {
+        final List<Video> videos = service.getVideosAndClips();
+        final String[] header = {"编号", "标题", "剪辑来源"};
+        render(PoiRender.me(videos)
+                .fileName("clips.xlsx")
+                .headers(header)
+                .columns("file", "title", "clips")
+                .sheetName("视频信息"));
     }
 }

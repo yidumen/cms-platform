@@ -29,9 +29,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       return result;
     };
   })
-  .service("videoStatusEnum", function () {
-    return ["已发布", "待审核", "已归档"];
-  })
+  .value("videoStatusEnum", ["已发布", "待审核", "已归档"])
   .filter("videoStatus", function (videoStatusEnum) {
     return function (input) {
       return videoStatusEnum[input];
@@ -178,8 +176,8 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
   .controller('infoController', function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
     $scope.dtOptions = dtOptions.withSource("/ajax/video/info")
       .withOption("createdRow", function (row, data, dataIndex) {
-      $compile(angular.element(row).contents())($scope);
-    })
+        $compile(angular.element(row).contents())($scope);
+      })
       .withOption('initComplete', function () {
         DTInstances.getLast().then(function (lastDTInstance) {
           var table = lastDTInstance.DataTable;
@@ -196,7 +194,9 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
     $scope.dtColumns = [
       DTColumnBuilder.newColumn("file", "编号").withOption("width", 80),
       DTColumnBuilder.newColumn("title", "视频标题"),
-      DTColumnBuilder.newColumn("sort", "序号").withOption("width", 64),
+      DTColumnBuilder.newColumn("sort", "序号").withOption("width", 64).renderWith(function (data) {
+        return data > 0 ? data : '-';
+      }),
       DTColumnBuilder.newColumn("duration", "时长").withOption("width", 100).renderWith(function (data) {
         return durationFilter(data);
       }),
@@ -226,9 +226,9 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       })
     };
   })
-  .controller("managerController", function ($scope, $templateCache, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
+  .controller("managerController", function ($scope, $compile, $templateCache, $http, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
     $scope.dtOptions = dtOptions.withSource("/ajax/video/manager")
-      .withOption("createdRow", function (row, data, dataIndex) {
+      .withOption("createdRow", function (row) {
         $compile(angular.element(row).contents())($scope);
       })
       .withOption('initComplete', function () {
@@ -287,6 +287,20 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         $scope.dtInstance.reloadData();
       });
     };
+    $scope.upload = function () {
+      console.log($scope.file);
+      //$http({
+      //  method: 'POST',
+      //  url: '/ajax/recording/parseXML',
+      //  headers: {
+      //    'Content-Type': 'multipart/form-data'
+      //  },
+      //  data: function () {
+      //    console.log(el.file);
+      //  }
+      //})
+    };
+
   })
   .controller("editController", function ($scope, $resource, $location, pathFilter) {
     $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {

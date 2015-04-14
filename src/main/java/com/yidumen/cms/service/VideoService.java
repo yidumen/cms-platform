@@ -47,4 +47,6 @@ public interface VideoService {
     List<Record> findClip(Long videoId);
 
     Video archive(Long videoId);
+
+    List<Video> getVideosAndClips();
 }

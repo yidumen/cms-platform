@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfinal.plugin.activerecord.Record;
 import com.yidumen.cms.constant.VideoResolution;
 import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.model.Recording;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
@@ -145,7 +146,7 @@ public final class VideoServiceImpl implements VideoService {
     public List<Video> find(Video video) {
         return videoDAO.findByCondition(video);
     }
-    
+
     @Override
     public Video findVideo(Video video) {
         return videoDAO.findUnique(video);
@@ -166,6 +167,25 @@ public final class VideoServiceImpl implements VideoService {
         final Video video = videoDAO.findById(videoId);
         video.set("status", VideoStatus.ARCHIVE.ordinal()).update();
         return video;
+    }
+
+    @Override
+    public List<Video> getVideosAndClips() {
+        final List<Video> result = videoDAO.findAll();
+        for (Video video : result) {
+            final List<Recording> clips = videoDAO.findRecording(video.get("id"));
+            final StringBuilder str = new StringBuilder();
+            for (Recording clip : clips) {
+                str.append(clip.getStr("file")).append(",");
+            }
+            if (str.length() > 0) {
+                str.deleteCharAt(str.length() - 1);
+                video.put("clips", str.toString());
+            } else {
+                video.put("clips", "未提供剪辑来源信息");
+            }
+        }
+        return result;
     }
 
 

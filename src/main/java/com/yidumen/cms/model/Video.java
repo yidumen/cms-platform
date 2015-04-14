@@ -12,6 +12,7 @@ import java.util.List;
  * @author 蔡迪旻
  */
 public final class Video extends BaseModel<Video> {
+
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     public static final Video dao = new Video();
@@ -118,5 +119,9 @@ public final class Video extends BaseModel<Video> {
 
     public List<Record> findClips(Long videoId) {
         return Db.find("SELECT recording.id, recording.file, video_recording.`in`, video_recording.`out`, video_recording.start, video_recording.end FROM recording, video_recording WHERE video_recording.video_id = ? AND recording.id = video_recording.recording_id ORDER BY id;", videoId);
+    }
+
+    public List<Recording> findRecording(Object id) {
+        return Recording.dao.find("SELECT recording.file FROM recording JOIN video_recording ON video_recording.video_id = ? AND recording.id = video_recording.recording_id GROUP BY recording.file", id);
     }
 }

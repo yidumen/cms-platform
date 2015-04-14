@@ -14,10 +14,7 @@ import com.yidumen.cms.controller.ajax.RecordingAjaxCtrl;
 import com.yidumen.cms.controller.ajax.TagAjaxCtrl;
 import com.yidumen.cms.controller.ajax.VideoAjaxCtrl;
 import com.yidumen.cms.controller.wechat.MessageController;
-import com.yidumen.cms.model.Account;
-import com.yidumen.cms.model.Goods;
-import com.yidumen.cms.model.Tag;
-import com.yidumen.cms.model.Video;
+import com.yidumen.cms.model.*;
 
 /**
  * 配置JFinal
@@ -65,7 +62,7 @@ public final class JFinalTestConfig extends com.jfinal.config.JFinalConfig {
         arp.addMapping("Account", Account.class);
         arp.addMapping("Tag", Tag.class);
         arp.addMapping("Goods", Goods.class);
-//        arp.addMapping("recording", Recording.class);
+        arp.addMapping("recording", Recording.class);
     }
 
     @Override

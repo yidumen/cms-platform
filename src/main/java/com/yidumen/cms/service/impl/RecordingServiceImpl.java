@@ -42,7 +42,7 @@ public final class RecordingServiceImpl implements RecordingService {
         final Video video = videoDao.findUnique(new Video().set("file", title));
         Object videoId;
         if (video == null) {
-            new Video().set("file", title).set("title", "待定").set("recommend", 0).set("duration", 0).set("shootTime", new Date()).set("sort", 0).set("status", VideoStatus.ARCHIVE.ordinal()).save();
+            new Video().set("file", title).set("title", "未命名").set("recommend", 0).set("duration", 0).set("shootTime", new Date()).set("sort", 0).set("status", VideoStatus.ARCHIVE.ordinal()).save();
             videoId = Db.findFirst("SELECT last_insert_id() AS id").get("id");
             LOG.info("不存在视频 {}，已创建视频", title);
         } else {
@@ -54,16 +54,20 @@ public final class RecordingServiceImpl implements RecordingService {
         final Iterator<Element> clipitems = rootElement.selectNodes("//sequence/media/video/track[1]/*").iterator();
         long lastStart = 0;
         int i = 0;
-        while (clipitems.hasNext()) {//todo 只有A开头的才记录
+        while (clipitems.hasNext()) {
             final Element clipitem = clipitems.next();
             switch (clipitem.getName()) {
                 case "clipitem":
                     final Element file = clipitem.element("file");
-                    //有的剪辑并非来自源视频，可能是一段特效片段，必须忽略
+                    //有的剪辑并非来自源视频，可能是一段特效片段，必须忽略。这种信息的特征是有一个mediaSource的子节点
                     if (rootElement.selectSingleNode("//file[@id='" + file.attributeValue("id") + "']/mediaSource") != null) {
                         break;
                     }
                     final String clipName = rootElement.selectSingleNode("//file[@id='" + file.attributeValue("id") + "']/name").getText();
+                    //源视频都是AA+编号（以后可能会变化）
+                    if (!clipName.startsWith("AA")) {
+                        break;
+                    }
                     final String recordingFile = clipName.substring(0, clipName.indexOf("."));
                     final Recording recording = recordingDao.findUnique(new Recording().set("file", recordingFile));
                     Object recordingId;

@@ -1,41 +1,31 @@
 <div class="toolbar am-btn-toolbar">
     <div class="am-btn-group am-btn-group-xs">
-        <button type="button" class="am-btn am-btn-success" ng-click="clearSearch()">全部视频</button>
-    </div>
-    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-success am-round" ng-click="clearSearch()">全部视频</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(8, '已发布', false)">已发布</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(8, '已归档', false)">已归档</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(8, '待审核', false)">待审核</button>
-    </div>
-    <div class="am-btn-group am-btn-group-xs">
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '^[^0]\\d*$', true)">推荐</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '^0$', true)">未推荐</button>
-    </div>
-    <div class="am-btn-group am-btn-group-xs">
+        <button type="button" class="am-btn am-btn-secondary" ng-click="search(7, '^[^0]\\d*$', true)">推荐</button>
+        <button type="button" class="am-btn am-btn-secondary" ng-click="search(7, '^0$', true)">未推荐</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^[^0]\\d*$', true)">有序号</button>
         <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^0$', true)">无序号</button>
+        <button type="button" class="am-btn am-btn-secondary" ng-click="search(4, '聊天室', false)">聊天室</button>
+        <button type="button" class="am-btn am-btn-secondary" ng-click="search(4, '[^(聊天室)]', true)">其它栏目</button>
+        <button type="button" class="am-btn am-btn-primary am-radius" ng-click='search(6,"^$",true)'>新增信息</button>
     </div>
-    <div class="am-btn-group am-btn-group-xs">
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(4, '聊天室', false)">聊天室</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(4, '[^(聊天室)]', true)">其它栏目</button>
-    </div>
-    <div class="am-btn-group am-btn-group-xs">
-        <button type="button" class="am-btn am-btn-primary" ng-click='search(6,"^$",true)'>新增信息</button>
-    </div>
+    <form id="doc-form" class="am-btn-group am-btn-group-xs am-form-file" enctype="multipart/form-data">
+        <button class="am-btn am-btn-primary am-radius"><span class="am-icon-cloud-upload"> 上传剪辑信息</span></button>
+        <input id="doc-form-file" type="file" upload ng-model="file" ng-change="upload">
+    </form>
     <div class="help-info">
         <div class="help-title"><i class="am-icon-question-circle"></i></div>
         <div class="help-body">
             <div class="help-item">
-                <span class="am-icon-info-circle"></span>
-                <span class="am-text-xs">详细信息</span>
+                <span class="am-icon-edit"></span>
+                <span class="am-text-xs">编辑</span>
             </div>
             <div class="help-item">
-                <span class="am-icon-film"></span>
-                <span class="am-text-xs">来源信息</span>
-            </div>
-            <div class="help-item">
-                <span class="am-icon-external-link"></span>
-                <span class="am-text-xs">网站预览</span>
+                <span class="am-icon-archive"></span>
+                <span class="am-text-xs">归档</span>
             </div>
         </div>
     </div>

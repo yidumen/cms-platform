@@ -10,13 +10,11 @@ import com.yidumen.cms.controller.GoodsController;
 import com.yidumen.cms.controller.LoginController;
 import com.yidumen.cms.controller.VideoController;
 import com.yidumen.cms.controller.ajax.GoodsAjaxCtrl;
+import com.yidumen.cms.controller.ajax.RecordingAjaxCtrl;
 import com.yidumen.cms.controller.ajax.TagAjaxCtrl;
 import com.yidumen.cms.controller.ajax.VideoAjaxCtrl;
 import com.yidumen.cms.controller.wechat.MessageController;
-import com.yidumen.cms.model.Account;
-import com.yidumen.cms.model.Goods;
-import com.yidumen.cms.model.Tag;
-import com.yidumen.cms.model.Video;
+import com.yidumen.cms.model.*;
 
 /**
  * 配置JFinal
@@ -45,6 +43,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.add("/ajax/video", VideoAjaxCtrl.class);
         me.add("/ajax/tag", TagAjaxCtrl.class);
         me.add("/ajax/goods", GoodsAjaxCtrl.class);
+        me.add("/ajax/recording", RecordingAjaxCtrl.class);
         
         me.add("/wechat/message", MessageController.class, "/wechat");
     }
@@ -58,6 +57,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         arp.addMapping("Account", Account.class);
         arp.addMapping("Tag", Tag.class);
         arp.addMapping("Goods", Goods.class);
+        arp.addMapping("recording", Recording.class);
     }
 
     @Override

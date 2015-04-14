@@ -75,6 +75,22 @@ angular.module('component', ['datatables'])
         });
       }
     };
+  })
+  .directive('upload', function () {
+    return {
+      require: '?ngModel',
+      link: function (scope, element, attrs, ngModel) {
+        if (!ngModel) {
+          return;
+        }
+        element.change(function () {
+          ngModel.$setViewValue(element.get().files);
+          if (attrs.ngChange) {
+            scope[attrs.ngChange].apply();
+          }
+        })
+      }
+    }
   });
 
 function showBusy() {

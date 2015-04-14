@@ -94,6 +94,11 @@
             <version>0.9.1.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.11</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -157,8 +162,8 @@
                 <configuration>
                     <workingDirectory>src/main/frontend</workingDirectory>
                 </configuration>
-                <executions></executions>
-            </plugin></plugins>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
