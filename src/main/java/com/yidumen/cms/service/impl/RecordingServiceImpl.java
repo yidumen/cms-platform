@@ -48,6 +48,7 @@ public final class RecordingServiceImpl implements RecordingService {
         } else {
             videoId = video.get("id");
         }
+        LOG.info("--------------------------------------------------------------");
         LOG.info("开始解析视频 {} 的源信息", title);
         LOG.info("--------------------------------------------------------------");
         //剪辑片断及特效都归在sequence元素下

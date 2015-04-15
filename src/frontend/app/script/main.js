@@ -76,18 +76,22 @@ angular.module('component', ['datatables'])
       }
     };
   })
-  .directive('upload', function () {
+  .directive('upload', function ($http) {
     return {
-      require: '?ngModel',
-      link: function (scope, element, attrs, ngModel) {
-        if (!ngModel) {
-          return;
-        }
+      link: function (scope, element, attrs) {
         element.change(function () {
-          ngModel.$setViewValue(element.get().files);
-          if (attrs.ngChange) {
-            scope[attrs.ngChange].apply();
-          }
+          var formData = new FormData();
+          formData.append('file', element[0].files[0]);
+          $http({
+            method: 'POST',
+            url: attrs.upload,
+            data: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }).success(function (data) {
+            console.log(data)
+          })
         })
       }
     }
