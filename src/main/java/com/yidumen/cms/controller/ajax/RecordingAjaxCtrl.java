@@ -2,6 +2,7 @@ package com.yidumen.cms.controller.ajax;
 
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.render.DwzRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.service.RecordingService;
 import com.yidumen.cms.service.ServiceFactory;
@@ -35,16 +36,12 @@ public final class RecordingAjaxCtrl extends BaseAjaxCtrl {
             for (int i = 4; i < lines.size() - 2; i++) {
                 xml.append(lines.get(i).trim());
             }
-            System.out.println(xml);
             final SAXReader reader = new SAXReader();
             final Document document = reader.read(IOUtils.toInputStream(xml));
             recordingService.parseXML(document);
-            renderText("ok");
+            render(DwzRender.success());
         } catch (IOException | DocumentException e) {
-            e.printStackTrace();
-            setAttr("code", 1);
-            setAttr("message", e.getLocalizedMessage());
-            renderJson();
+            render(DwzRender.error(e.getLocalizedMessage()));
         }
     }
 }
