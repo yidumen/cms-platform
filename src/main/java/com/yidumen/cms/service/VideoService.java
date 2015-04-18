@@ -49,4 +49,8 @@ public interface VideoService {
     Video archive(Long videoId);
 
     List<Video> getVideosAndClips();
+
+    void updateAndVerify(Video video, boolean isUpdateDate);
+
+    void updateAndArchive(Video video, boolean isUpdateDate);
 }

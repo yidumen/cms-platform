@@ -35,6 +35,8 @@ public final class Video extends BaseModel<Video> {
     }
 
     public void updateWithRelate() {
+        final String file = this.getStr("file").toUpperCase();
+        this.set("file", file);
         this.update();
         LOG.debug("{}", this.get("extInfo"));
         final List<Record> extInfos = this.get("extInfo");
@@ -84,6 +86,8 @@ public final class Video extends BaseModel<Video> {
     }
 
     public void saveWithRelate() {
+        final String file = this.getStr("file").toUpperCase();
+        this.set("file", file);
         //1.保存video，拿到video id
         this.save();
         final Long videoId = Db.findFirst("SELECT last_insert_id() AS id").getNumber("id").longValue();

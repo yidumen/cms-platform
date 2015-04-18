@@ -4,8 +4,10 @@ package com.yidumen.cms.controller.ajax;
 import com.jfinal.aop.Before;
 import com.jfinal.ext.render.DwzRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.RecordingService;
 import com.yidumen.cms.service.ServiceFactory;
+import com.yidumen.cms.service.exception.IllDataException;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -20,7 +22,7 @@ import java.util.List;
  *         2015年03月12日
  */
 public final class RecordingAjaxCtrl extends BaseAjaxCtrl {
-    
+
     private final RecordingService recordingService;
 
     public RecordingAjaxCtrl() {
@@ -38,9 +40,9 @@ public final class RecordingAjaxCtrl extends BaseAjaxCtrl {
             }
             final SAXReader reader = new SAXReader();
             final Document document = reader.read(IOUtils.toInputStream(xml));
-            recordingService.parseXML(document);
-            render(DwzRender.success());
-        } catch (IOException | DocumentException e) {
+            final Video video = recordingService.parseXML(document);
+            render(DwzRender.success("XML 文件解析完成。").forwardUrl("/video/clipInfo/" + video.get("id")));
+        } catch (IOException | DocumentException | IllDataException e) {
             render(DwzRender.error(e.getLocalizedMessage()));
         }
     }

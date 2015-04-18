@@ -188,5 +188,21 @@ public final class VideoServiceImpl implements VideoService {
         return result;
     }
 
+    @Override
+    public void updateAndVerify(Video video, boolean isUpdateDate) {
+        if (isUpdateDate) {
+            video.set("pubDate", new Date());
+        }
+        video.set("status", VideoStatus.VERIFY.ordinal());
+        video.updateWithRelate();
+    }
 
+    @Override
+    public void updateAndArchive(Video video, boolean isUpdateDate) {
+        if (isUpdateDate) {
+            video.set("pubDate", new Date());
+        }
+        video.set("status", VideoStatus.ARCHIVE.ordinal());
+        video.updateWithRelate();
+    }
 }

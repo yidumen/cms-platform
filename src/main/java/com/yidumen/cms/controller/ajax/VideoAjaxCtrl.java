@@ -1,6 +1,7 @@
 package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.render.DwzRender;
 import com.jfinal.ext.render.excel.PoiRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.constant.VideoStatus;
@@ -55,13 +56,9 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         Long id = getParaToLong(0);
         try {
             final Video video = service.publish(id);
-            setAttr("code", 0);
-            setAttr("message", "视频" + video.get("file") + "已发布！");
-            renderJson();
+            render(DwzRender.success("视频" + video.get("file") + "已发布！"));
         } catch (IOException | IllDataException ex) {
-            setAttr("code", 2);
-            setAttr("message", ex.getLocalizedMessage());
-            renderJson();
+            render(DwzRender.error(ex.getLocalizedMessage()));
         }
     }
 
@@ -70,9 +67,23 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         final boolean isUpdateDate = getParaToBoolean(0);
         final Video video = getAttr("video");
         service.updateVideo(video, isUpdateDate);
-        setAttr("code", 0);
-        setAttr("message", "视频 " + video.get("file") + " 信息已成功更新");
-        renderJson();
+        render(DwzRender.success("视频 " + video.get("file") + " 信息已成功更新").forwardUrl("/video/manager"));
+    }
+    
+    @Before(VideoValidator.class)
+    public void updateAndVerify() {
+        final boolean isUpdateDate = getParaToBoolean(0);
+        final Video video = getAttr("video");
+        service.updateAndVerify(video, isUpdateDate);
+        render(DwzRender.success("视频 " + video.get("file") + " 信息已更新并准备发布").forwardUrl("/video/publish"));
+    }
+
+    @Before(VideoValidator.class)
+    public void updateAndArchive() {
+        final boolean isUpdateDate = getParaToBoolean(0);
+        final Video video = getAttr("video");
+        service.updateAndArchive(video, isUpdateDate);
+        render(DwzRender.success("视频 " + video.get("file") + " 信息已更新并归档").forwardUrl("/video/manager"));
     }
 
     @Before(VideoValidator.class)
@@ -80,13 +91,9 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
         final Video video = getAttr("video");
         try {
             service.addVideo(video);
-            setAttr("code", 0);
-            setAttr("message", "视频 " + video.get("file") + " 信息已添加");
-            renderJson();
+            render(DwzRender.success("视频 " + video.get("file") + " 信息已添加").forwardUrl("/video/publish"));
         } catch (IllDataException e) {
-            setAttr("code", 2);
-            setAttr("message", e.getLocalizedMessage());
-            renderJson();
+            render(DwzRender.error(e.getLocalizedMessage()));
         }
     }
 
@@ -111,9 +118,7 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
     public void archive() {
         final Long videoId = getParaToLong(0);
         final Video video = service.archive(videoId);
-        setAttr("code", 0);
-        setAttr("message", "视频 " + video.get("file") + " 已归档");
-        renderJson();
+        render(DwzRender.success("视频 " + video.get("file") + " 已归档"));
     }
 
     public void exportExcel() {

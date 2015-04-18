@@ -1,6 +1,7 @@
 package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.render.DwzRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yidumen.cms.service.GoodsService;
 import com.yidumen.cms.service.ServiceFactory;
@@ -30,22 +31,16 @@ public final class GoodsAjaxCtrl extends BaseAjaxCtrl {
 
     public void process() {
         service.process(this.getParaToLong(0));
-        this.setAttr("code", 0);
-        this.setAttr("message", "结缘信息已处理。");
-        renderJson();
+        this.render(DwzRender.success("结缘信息已处理。"));
     }
     
     public void trash() {
         service.trash(this.getParaToLong(0));
-        this.setAttr("code", 0);
-        this.setAttr("message", "结缘信息已放入回收站。");
-        renderJson();
+        render(DwzRender.success("结缘信息已放入回收站。"));
     }
     
     public void recover() {
         service.recover(this.getParaToLong(0));
-        this.setAttr("code", 0);
-        this.setAttr("message", "结缘信息已恢复。");
-        renderJson();
+        render(DwzRender.success("结缘信息已恢复。"));
     }
 }

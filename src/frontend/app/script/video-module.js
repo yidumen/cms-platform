@@ -35,7 +35,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       return videoStatusEnum[input];
     };
   })
-  .service('resolutionEnum', function () {
+  .value('resolutionEnum', function () {
     return ['超清', '高清', '标清', '流畅'];
   })
   .filter('resolution', function (resolutionEnum) {
@@ -287,20 +287,6 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         $scope.dtInstance.reloadData();
       });
     };
-    $scope.upload = function () {
-      console.log($scope.file);
-      //$http({
-      //  method: 'POST',
-      //  url: '/ajax/recording/parseXML',
-      //  headers: {
-      //    'Content-Type': 'multipart/form-data'
-      //  },
-      //  data: function () {
-      //    console.log(el.file);
-      //  }
-      //})
-    };
-
   })
   .controller("editController", function ($scope, $resource, $location, pathFilter) {
     $resource("/ajax/video/detail/:id", {id: pathFilter}).get().$promise.then(function (data) {
@@ -329,10 +315,18 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       }
     };
     $scope.submit = function () {
-      //console.log($scope.model.sort);
       $resource("/ajax/video/update/:pubDate", {pubDate: $scope.update}).save($scope.model).$promise.then(function (data) {
         $scope.$parent.$broadcast('serverResponsed', data);
-        $location.path("/video/manager").replace();
+      });
+    };
+    $scope.submitAndVerify = function () {
+      $resource("/ajax/video/updateAndVerify/:pubDate", {pubDate: $scope.update}).save($scope.model).$promise.then(function (data) {
+        $scope.$parent.$broadcast('serverResponsed', data);
+      });
+    };
+    $scope.submitAndArchive = function () {
+      $resource("/ajax/video/updateAndArchive/:pubDate", {pubDate: $scope.update}).save($scope.model).$promise.then(function (data) {
+        $scope.$parent.$broadcast('serverResponsed', data);
       });
     };
   })
@@ -415,9 +409,6 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       }
       $resource("/ajax/video/create").save($scope.model).$promise.then(function (data) {
         $scope.$parent.$broadcast('serverResponsed', data);
-        if (data.code == 0) {
-          $location.path("/video/publish").replace();
-        }
       });
     };
     $scope.setSortMax = function () {

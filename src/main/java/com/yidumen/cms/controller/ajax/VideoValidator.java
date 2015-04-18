@@ -1,6 +1,7 @@
 package com.yidumen.cms.controller.ajax;
 
 import com.jfinal.core.Controller;
+import com.jfinal.ext.render.DwzRender;
 import com.jfinal.validate.Validator;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.ServiceFactory;
@@ -53,7 +54,7 @@ public final class VideoValidator extends Validator {
                 addError("message", "必须设置 拍摄日期");
                 return;
             }
-            if (video.get("sort") != null && video.getNumber("sort").intValue() > 0) {
+            if (video.get("sort") != null && Integer.parseInt(video.get("sort").toString()) > 0) {
                 final Video model = new Video();
                 model.set("sort", video.get("sort"));
                 final Video validateVideo = videoService.findVideo(model);
@@ -67,7 +68,6 @@ public final class VideoValidator extends Validator {
 
     @Override
     protected void handleError(Controller c) {
-        c.setAttr("code", 2);
-        c.renderJson();
+        c.render(DwzRender.error(c.getAttrForStr("message")));
     }
 }

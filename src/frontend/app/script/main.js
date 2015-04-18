@@ -55,7 +55,7 @@ angular.module('component', ['datatables'])
       }
     };
   })
-  .directive('amAlterBox', function () {
+  .directive('amAlterBox', function ($location) {
     return {
       scope: {},
       restrict: 'AE',
@@ -65,21 +65,40 @@ angular.module('component', ['datatables'])
         $scope.stateClass = ['am-alert-success ', 'am-alert-warning', 'am-alert-danger'];
         $scope.iconClass = ['am-icon-info', 'am-icon-exclamation', 'am-icon-times-circle'];
         $scope.$on('serverResponsed', function (event, response) {
-          var box = $('<div class="am-alert am-center" data-am-alert><button type="button" class="am-close">&times;</button></div>').addClass($scope.stateClass[response.code])
-            .append('<p><span class="am-margin-right-xs ' + $scope.iconClass[response.code] + '"></span> ' + response.message + '</p>').css('max-width', '800px').hide().appendTo(element).slideDown();
-          if (response.code == 0) {
+          var iconClass, stateClass;
+          switch (response.statusCode) {
+            case '200':
+              iconClass = 'am-icon-info';
+              stateClass = 'am-alert-success';
+              break;
+            case '301':
+              iconClass = 'am-icon-exclamation';
+              stateClass = 'am-alert-warning';
+              break;
+            case '300':
+              iconClass = 'am-icon-times-circle';
+              stateClass = 'am-alert-danger';
+              break;
+          }
+          var box = $('<div class="am-alert am-center" data-am-alert><button type="button" class="am-close">&times;</button></div>').addClass(stateClass)
+            .append('<p><span class="am-margin-right-xs ' + iconClass + '"></span> ' + response.message + '</p>').css('max-width', '800px').hide().appendTo(element).slideDown();
+          if (response.statusCode == 200) {
             setTimeout(function () {
               box.alert('close');
             }, 5000);
+          }
+          if (response.forwardUrl) {
+            $location.url(response.forwardUrl).replace();
           }
         });
       }
     };
   })
-  .directive('upload', function ($http) {
+  .directive('upload', function ($http, $rootScope) {
     return {
       link: function (scope, element, attrs) {
         element.change(function () {
+          showBusy();
           var formData = new FormData();
           formData.append('file', element[0].files[0]);
           $http({
@@ -90,8 +109,9 @@ angular.module('component', ['datatables'])
               'Content-Type': 'multipart/form-data'
             }
           }).success(function (data) {
-            console.log(data)
-          })
+            $rootScope.$broadcast('serverResponsed', data);
+            hideBusy();
+          });
         })
       }
     }

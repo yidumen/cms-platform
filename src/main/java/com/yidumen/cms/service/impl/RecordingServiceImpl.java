@@ -6,6 +6,7 @@ import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.model.Recording;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.RecordingService;
+import com.yidumen.cms.service.exception.IllDataException;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.slf4j.Logger;
@@ -36,15 +37,21 @@ public final class RecordingServiceImpl implements RecordingService {
     }
 
     @Override
-    public void parseXML(Document document) {
+    public Video parseXML(Document document) throws IllDataException {
         final Element rootElement = document.getRootElement();
         final String title = rootElement.selectSingleNode("/xmeml/project/name").getText().substring(0, 5);
-        final Video video = videoDao.findUnique(new Video().set("file", title));
-        Object videoId;
+        if (title.isEmpty()) {
+            throw new IllDataException("XML 文件格式不正确，请上传Final Cut Pro项目文件");
+        }
+        Video video = videoDao.findUnique(new Video().set("file", title));
+        Object videoId = null;
         if (video == null) {
-            new Video().set("file", title).set("title", "未命名").set("recommend", 0).set("duration", 0).set("shootTime", new Date()).set("sort", 0).set("status", VideoStatus.ARCHIVE.ordinal()).save();
-            videoId = Db.findFirst("SELECT last_insert_id() AS id").get("id");
-            LOG.info("不存在视频 {}，已创建视频", title);
+            video = new Video().set("file", title).set("title", "未命名").set("recommend", 0).set("duration", 0).set("shootTime", new Date()).set("sort", 0).set("status", VideoStatus.ARCHIVE.ordinal());
+            if (video.save()) {
+                video.set("id", Db.findFirst("SELECT last_insert_id() AS id").get("id"));
+                videoId = video.get("id");
+                LOG.info("不存在视频 {}，已创建视频", title);
+            }
         } else {
             videoId = video.get("id");
         }
@@ -100,7 +107,7 @@ public final class RecordingServiceImpl implements RecordingService {
                     lastStart = Long.parseLong(clipitem.selectSingleNode("start").getText());
             }
         }
-        i = 0;
+        return video;
     }
 
     @Override
