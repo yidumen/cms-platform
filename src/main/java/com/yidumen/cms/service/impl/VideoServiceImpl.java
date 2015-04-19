@@ -90,7 +90,7 @@ public final class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video publish(final Long id) throws IOException, IllDataException {
+    public Video publish(final Long id, Integer sort) throws IOException, IllDataException {
         final Video video = videoDAO.findById(id);
         final HttpResponse response = Util.httpRequest("http://mo01.yidumen.com/service/video/info/" + video.get("file"));
         final String json = EntityUtils.toString(response.getEntity());
@@ -128,6 +128,9 @@ public final class VideoServiceImpl implements VideoService {
         }
         video.set("pubDate", new Date());
         video.set("status", VideoStatus.PUBLISH.ordinal());
+        if (sort != null) {
+            video.set("sort", sort);
+        }
         video.updateWithRelate();
         return video;
     }
@@ -204,5 +207,10 @@ public final class VideoServiceImpl implements VideoService {
         }
         video.set("status", VideoStatus.ARCHIVE.ordinal());
         video.updateWithRelate();
+    }
+
+    @Override
+    public void delete(Long videoid) {
+        videoDAO.findById(videoid).deleteWithRelate();
     }
 }

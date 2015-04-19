@@ -35,9 +35,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       return videoStatusEnum[input];
     };
   })
-  .value('resolutionEnum', function () {
-    return ['超清', '高清', '标清', '流畅'];
-  })
+  .value('resolutionEnum', ['超清', '高清', '标清', '流畅'])
   .filter('resolution', function (resolutionEnum) {
     return function (input) {
       return resolutionEnum[input];
@@ -294,7 +292,7 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       $scope.model = data;
       $scope.mTag = data.tags.map(function (item, index, array) {
         return item.id;
-      })
+      });
     });
     $resource('/ajax/tag/tags').query().$promise.then(function (data) {
       $scope.cols = data.filter(function (item, index, array) {
@@ -330,8 +328,8 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
       });
     };
   })
-  .controller("publishController", function ($scope, $resource, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
-    $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("pageLength", 12).withOption("createdRow", function (row, data, dataIndex) {
+  .controller("publishController", function ($scope, $resource, $http, $compile, videoStatusFilter, durationFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    $scope.dtOptions = dtOptions.withSource("/ajax/video/publish").withOption("createdRow", function (row, data, dataIndex) {
       $compile(angular.element(row).contents())($scope);
     });
     $scope.dtColumns = [
@@ -350,20 +348,67 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
         return videoStatusFilter(data);
       }),
       DTColumnBuilder.newColumn("id").withTitle("操作").withOption("width", 100).renderWith(function (data, type, row, meta) {
-        return '<div class="operation"><a class="am-icon-globe am-margin-right-xs" title="发布" href="javascript:void(0);" ng-click="publish(' + data + ')"></a><a title="批处理" class="am-icon-file-text-o" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="am-icon-remove am-fr" data-id="' + data + '"></a></div>';
+        return '<div class="operation"><a class="am-icon-globe am-margin-right-xs" title="发布" href="javascript:void(0);" ng-click="publish(' + data + ','+ row.sort + ')"></a><a title="批处理" class="am-icon-file-text-o" href="/video/bat/' + data + '"></a><a href="javascript:void(0)" class="am-icon-remove am-fr" ng-click="remove(' + data + ')"></a></div>';
       }).notSortable()
     ];
     DTInstances.getLast().then(function (dtInstance) {
       $scope.dtInstance = dtInstance;
     });
-    $scope.publish = function (id) {
-      showBusy();
-      $resource("/ajax/video/pub/:id", {id: id}).get().$promise.then(function (data) {
-        $scope.$parent.$broadcast('serverResponsed', data);
-        $scope.dtInstance.reloadData();
-        hideBusy();
+    var maxSort, newSort;
+    $resource("/ajax/video/max/sort").get().$promise.then(function (data) {
+      maxSort = data.max;
+    });
+    $resource("/ajax/video/sort").get().$promise.then(function (data) {
+      newSort = data.sort;
+    });
+    $scope.update = true;
+    $scope.setSortMax = function () {
+      $scope.sort = maxSort + 1;
+    };
+    $scope.setSortNew = function () {
+      $scope.sort = newSort + 1;
+    };
+    $scope.publish = function (id, sort) {
+      if ($scope.update) {
+        $scope.sort = sort;
+        $('#prompt-dialog').modal({
+          relatedTarget: this,
+          onConfirm: function () {
+            showBusy();
+            $http({
+              method: 'GET',
+              url: '/ajax/video/pub/'+id,
+              params: {sort: $scope.sort}
+            }).success(function (data) {
+              $scope.$parent.$broadcast('serverResponsed', data);
+              $scope.dtInstance.reloadData();
+              hideBusy();
+            })
+          }
+        });
+      } else {
+        showBusy();
+        $resource('/ajax/video/pub/:id', {id: id}).get().$promise.then(function (data) {
+          $scope.$parent.$broadcast('serverResponsed', data);
+          $scope.dtInstance.reloadData();
+          hideBusy();
+        });
+      }
+    };
+    $scope.remove = function (id) {
+      $('#confirm-dialog').modal({
+        onConfirm: function () {
+          $resource("/ajax/video/delete/:id", {id: id}).get().$promise.then(function (data) {
+            showBusy();
+            $scope.$parent.$broadcast('serverResponsed', data);
+            $('#confirm-dialog').removeData('amui.modal');
+            $scope.dtInstance.reloadData();
+            hideBusy();
+          });
+        }
       });
     };
+
   })
   .controller("createController", function ($scope, $resource, $location) {
     var maxSort, newSort, maxRecommend;
@@ -402,12 +447,13 @@ angular.module("video", ['ngResource', 'ngRoute', 'component'])
     });
     $resource("/ajax/video/max/recommend").get().$promise.then(function (data) {
       maxRecommend = data.max;
-    })
+    });
     $scope.submit = function () {
       if (!$scope.model.shootTime) {
         return;
       }
       $resource("/ajax/video/create").save($scope.model).$promise.then(function (data) {
+        console.log(data)
         $scope.$parent.$broadcast('serverResponsed', data);
       });
     };

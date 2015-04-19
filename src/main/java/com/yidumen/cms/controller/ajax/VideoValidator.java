@@ -38,7 +38,7 @@ public final class VideoValidator extends Validator {
                         addError("message", "视频编号已被占用");
                         return;
                     } else {
-                        LOG.debug("id compare->{} = {}->{} ", video.getNumber("id").longValue(), validateVideo.getNumber("id").longValue(), video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue());
+                        LOG.debug("id compare->{} = {}->{}", video.getNumber("id").longValue(), validateVideo.getNumber("id").longValue(), video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue());
                         if (video.getNumber("id").longValue() != validateVideo.getNumber("id").longValue()) {
                             addError("message", "视频编号 " + video.get("file") + " 已被 " + validateVideo.get("title") + " 使用");
                             return;

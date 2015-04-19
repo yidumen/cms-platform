@@ -6,7 +6,7 @@
                 <button class="am-btn am-btn-warning" ng-if="model.status === 2" ng-click="submitAndVerify()">提交并审核</button>
                 <button class="am-btn am-btn-primary" ng-if="model.status < 2" ng-click="submitAndArchive()">提交并归档</button>
             </div>
-            <div class="am-checkbox-inline am-margin-left"><label><input type="checkbox" ng-model="update">更新发布时间：{{::model.pubDate}}</label></div>
+            <div class="am-checkbox am-checkbox-inline am-margin-left"><label><input type="checkbox" ng-model="update">更新发布时间：{{::model.pubDate}}</label></div>
         </div>
         <hr>
         <div class="am-form-group">

@@ -54,8 +54,9 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
 
     public void pub() {
         Long id = getParaToLong(0);
+        final Integer sort = getParaToInt("sort");
         try {
-            final Video video = service.publish(id);
+            final Video video = service.publish(id, sort);
             render(DwzRender.success("视频" + video.get("file") + "已发布！"));
         } catch (IOException | IllDataException ex) {
             render(DwzRender.error(ex.getLocalizedMessage()));
@@ -129,5 +130,12 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
                 .headers(header)
                 .columns("file", "title", "clips")
                 .sheetName("视频信息"));
+    }
+    
+    @Before(Tx.class)
+    public void delete() {
+        final Long videoid = getParaToLong();
+        service.delete(videoid);
+        render(DwzRender.success("视频信息已删除。"));
     }
 }

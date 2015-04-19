@@ -34,7 +34,7 @@ public interface VideoService {
 
     void addVideo(Video video) throws IllDataException;
 
-    Video publish(final Long id) throws IOException, IllDataException;
+    Video publish(final Long id, Integer sort) throws IOException, IllDataException;
 
     Object findMax(String property);
     
@@ -53,4 +53,6 @@ public interface VideoService {
     void updateAndVerify(Video video, boolean isUpdateDate);
 
     void updateAndArchive(Video video, boolean isUpdateDate);
+
+    void delete(Long videoid);
 }

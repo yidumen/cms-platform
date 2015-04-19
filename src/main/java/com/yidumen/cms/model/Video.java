@@ -79,7 +79,7 @@ public final class Video extends BaseModel<Video> {
                 Db.save("Tag_Video", new Record().set("videos_id", this.get("id")).set("tags_id", tag.get("id")));
             }
             for (Record videoTag : videoTags) {
-                Db.update("delete from `Tag_Video` where `videos_id` = ? and `tags_id` = ?", videoTag.get("videos_id"), videoTag.get("tags_id"));
+                Db.update("DELETE FROM `Tag_Video` WHERE `videos_id` = ? AND `tags_id` = ?", videoTag.get("videos_id"), videoTag.get("tags_id"));
             }
         }
 
@@ -113,12 +113,23 @@ public final class Video extends BaseModel<Video> {
         }
     }
 
+    public void deleteWithRelate() {
+        //1. 删除extInfo
+        Db.update("DELETE FROM VideoInfo WHERE video_id = ?", this.get("id"));
+        //2. 删除tag
+        Db.update("DELETE FROM Tag_Video WHERE videos_id = ?", this.get("id"));
+        //3. 删除recording
+        Db.update("DELETE FROM video_recording WHERE video_id = ?", this.get("id"));
+        //4. 删除自己
+        this.delete();
+    }
+
     private List<Tag> queryTags() {
         return Tag.dao.find("SELECT Tag.* FROM Tag INNER JOIN Tag_Video ON Tag_Video.tags_id = Tag.id INNER JOIN Video ON Tag_Video.videos_id = Video.id WHERE Video.id = ?", this.get("id"));
     }
 
     public int findSort() {
-        return findFirst("SELECT sort FROM video ORDER BY pubDate DESC LIMIT 1").getNumber("sort").intValue();
+        return findFirst("SELECT max(video.sort) as sort FROM video JOIN tag_video ON video.id = tag_video.videos_id JOIN tag ON tag.id = tag_video.tags_id AND tagname = '聊天室' WHERE video.status = 0").getNumber("sort").intValue();
     }
 
     public List<Record> findClips(Long videoId) {
