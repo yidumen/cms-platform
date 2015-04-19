@@ -6,14 +6,14 @@ import com.yidumen.cms.framework.JFinalTestConfig;
 import com.yidumen.cms.service.RecordingService;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;
-import org.dom4j.DocumentException;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-
-import static org.junit.Assert.assertEquals;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class RecordingAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
@@ -21,7 +21,7 @@ public class RecordingAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> 
     private final RecordingService recordingService = ServiceFactory.generateRecordingService();
 
     @Test
-    public void parseEDL() throws DocumentException {
+    public void parseEDL() throws IOException {
         Db.update("DROP TABLE IF EXISTS `video_recording`;");
         Db.update("DROP TABLE IF EXISTS `recording`;");
         Db.update("CREATE TABLE IF NOT EXISTS `recording` (`id` BIGINT NOT NULL AUTO_INCREMENT, `file` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
@@ -35,7 +35,9 @@ public class RecordingAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> 
                     if (!xml.getName().endsWith("xml")) {
                         continue;
                     }
-                    assertEquals(use("/ajax/recording/parseXML").post(xml).invoke(), "ok");
+                    String s = IOUtils.toString(new FileInputStream(xml));
+                    s = "test\ntest\ntest\n" + s + "test\ntest\n";
+                    use("/ajax/recording/parseXML").post(s).invoke();
                 }
             }
         }

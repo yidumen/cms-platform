@@ -4,6 +4,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.model.Recording;
+import com.yidumen.cms.model.Tag;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.RecordingService;
 import com.yidumen.cms.service.exception.IllDataException;
@@ -25,10 +26,12 @@ public final class RecordingServiceImpl implements RecordingService {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     private final Recording recordingDao;
     private final Video videoDao;
+    private final Tag tagDao;
 
     public RecordingServiceImpl() {
         recordingDao = new Recording();
         videoDao = new Video();
+        tagDao = new Tag();
     }
 
     @Override
@@ -38,6 +41,8 @@ public final class RecordingServiceImpl implements RecordingService {
 
     @Override
     public Video parseXML(Document document) throws IllDataException {
+        final Tag tag = tagDao.findUnique(new Tag().set("tagname", "聊天室"));
+        final Long tagId = tag.getLong("id");
         final Element rootElement = document.getRootElement();
         final String title = rootElement.selectSingleNode("/xmeml/project/name").getText().substring(0, 5);
         if (title.isEmpty()) {
@@ -50,6 +55,7 @@ public final class RecordingServiceImpl implements RecordingService {
             if (video.save()) {
                 video.set("id", Db.findFirst("SELECT last_insert_id() AS id").get("id"));
                 videoId = video.get("id");
+                Db.save("tag_video", new Record().set("videos_id", videoId).set("tags_id", tagId));
                 LOG.info("不存在视频 {}，已创建视频", title);
             }
         } else {
