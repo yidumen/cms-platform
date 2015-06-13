@@ -1,5 +1,11 @@
 package com.yidumen.cms.service.impl;
 
+import com.aliyun.openservices.ClientException;
+import com.aliyun.openservices.oss.OSSClient;
+import com.aliyun.openservices.oss.OSSException;
+import com.aliyun.openservices.oss.model.OSSObject;
+import com.aliyun.openservices.oss.model.ObjectMetadata;
+import com.jfinal.kit.PropKit;
 import com.yidumen.cms.service.exception.IllDataException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -19,22 +25,23 @@ import java.io.IOException;
  */
 public final class Util {
 
-    public static HttpResponse httpRequest(final String url) throws IOException, IllDataException {
-        final CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope("10.242.175.127", 3128), new UsernamePasswordCredentials("1336663694481251_default_57", "rad2yu5i2s"));
-        final DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.setCredentialsProvider(credsProvider);
-        final HttpHost proxy = new HttpHost("10.242.175.127", 3128);
-        httpClient.getParams().setParameter(ConnRouteParams.DEFAULT_PROXY, proxy);
-        final HttpGet httpGet = new HttpGet(url);
-        final HttpResponse response = httpClient.execute(httpGet);
-        final int statusCode = response.getStatusLine().getStatusCode();
-        if (statusCode == 404) {
-            throw new IllDataException("视频未部署");
+    private final static OSSClient client = new OSSClient(PropKit.get("oss.ydm.endpoint"),
+            PropKit.get("oss.ydm.accessKeyId"),
+            PropKit.get("oss.ydm.accessKeySecret"));
+    private final static String bucketName = PropKit.get("oss.ydm.bucketName");
+
+    public static boolean isOSSFileExist(String key) throws ClientException {
+        try {
+            final OSSObject object = client.getObject(bucketName, key);
+            if (object != null) {
+                return true;
+            }
+        } catch (OSSException e) {
+            return false;
+        } catch (ClientException e) {
+           throw e;
         }
-        if (statusCode == 500) {
-            throw new IllDataException("请检查文件服务器是否在线");
-        }
-        return response;
+        return false;
     }
+
 }

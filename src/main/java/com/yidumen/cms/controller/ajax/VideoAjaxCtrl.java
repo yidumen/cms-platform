@@ -132,7 +132,6 @@ public final class VideoAjaxCtrl extends BaseAjaxCtrl {
                 .sheetName("视频信息"));
     }
     
-    @Before(Tx.class)
     public void delete() {
         final Long videoid = getParaToLong();
         service.delete(videoid);
