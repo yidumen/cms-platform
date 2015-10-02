@@ -16,6 +16,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>fluent-hc</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.31</version>
@@ -40,11 +50,6 @@
             <artifactId>services-api</artifactId>
             <version>1.4.24</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun.openservices</groupId>
-            <artifactId>aliyun-openservices</artifactId>
-            <version>OTS-2.0.4</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

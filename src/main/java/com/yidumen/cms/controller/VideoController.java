@@ -1,7 +1,7 @@
 package com.yidumen.cms.controller;
 
-import com.aliyun.openservices.oss.OSSClient;
-import com.aliyun.openservices.oss.model.OSSObject;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.OSSObject;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PropKit;

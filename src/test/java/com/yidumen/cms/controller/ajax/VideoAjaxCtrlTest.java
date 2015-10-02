@@ -15,6 +15,7 @@ import java.util.List;
 
 public class VideoAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
+
     @Test
     public void fixUrl() {
         final String url = "http://yimg.yidumen.com/yidumen";
@@ -27,7 +28,7 @@ public class VideoAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
             }
         }
     }
-    
+
     @Test
     public void testValidator() throws Exception {
         final Video video = new Video();
@@ -46,11 +47,15 @@ public class VideoAjaxCtrlTest extends ControllerTestCase<JFinalTestConfig> {
         doRequest(video);
     }
 
-    
-    
+
     @Test
     public void testQuery() throws Exception {
         LOG.info("sort : {}", use("/ajax/video/sort").invoke());
+    }
+
+    @Test
+    public void testPublish() {
+        LOG.info("publish: {}", use("/ajax/video/pub/30").invoke());
     }
 
     private void doRequest(Video video) {

@@ -1,22 +1,18 @@
 package com.yidumen.cms.service.impl;
 
-import com.alibaba.appengine.api.store.StoreService;
-import com.alibaba.appengine.api.store.StoreServiceFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfinal.plugin.activerecord.Record;
-import com.yidumen.cms.constant.VideoResolution;
 import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.model.Recording;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.VideoService;
 import com.yidumen.cms.service.exception.IllDataException;
 import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -98,13 +94,18 @@ public final class VideoServiceImpl implements VideoService {
         boolean deployError = false;
         final StringBuilder errorMessage = new StringBuilder();
         for (String resolution : resolutions) {
-            final String key = "video/" + resolution + "/" + video.getStr("file") + "_" + resolution + ".mp4";
-            if (!Util.isOSSFileExist(key)) {
+            final String url = "http://v3.yidumen.com/video/" + resolution + "/" + video.getStr("file") + "_" + resolution + ".mp4";
+            final Response response = Request.Head(url).connectTimeout(5000).execute();
+            final HttpResponse httpResponse = response.returnResponse();
+            final int statusCode = httpResponse.getStatusLine().getStatusCode();
+            log.debug("v3 response code: {}", statusCode);
+            if (statusCode != 200) {
                 if (!deployError) {
                     deployError = true;
                 }
                 errorMessage.append(resolution).append("p ");
             }
+            response.discardContent();
         }
         if (deployError) {
             throw new IllDataException(errorMessage + "视频文件尚未部署，发布操作被拒绝！");
