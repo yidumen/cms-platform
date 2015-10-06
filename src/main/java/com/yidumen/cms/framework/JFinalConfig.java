@@ -1,7 +1,11 @@
 package com.yidumen.cms.framework;
 
 import com.alibaba.appengine.api.ds.DataSourceFactory;
-import com.jfinal.config.*;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.log.Log4jLoggerFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
@@ -14,10 +18,19 @@ import com.yidumen.cms.controller.ajax.RecordingAjaxCtrl;
 import com.yidumen.cms.controller.ajax.TagAjaxCtrl;
 import com.yidumen.cms.controller.ajax.VideoAjaxCtrl;
 import com.yidumen.cms.controller.wechat.MessageController;
-import com.yidumen.cms.model.*;
+import com.yidumen.cms.model.Account;
+import com.yidumen.cms.model.Goods;
+import com.yidumen.cms.model.Recording;
+import com.yidumen.cms.model.Tag;
+import com.yidumen.cms.model.Video;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 /**
  * 配置JFinal
+ *
  * @author 蔡迪旻
  */
 public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
@@ -28,7 +41,7 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
 
     @Override
     public void configConstant(Constants me) {
-        me.setDevMode(false);
+        me.setDevMode(true);
         me.setEncoding("UTF-8");
         me.setLoggerFactory(new Log4jLoggerFactory());
 
@@ -44,13 +57,19 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.add("/ajax/tag", TagAjaxCtrl.class);
         me.add("/ajax/goods", GoodsAjaxCtrl.class);
         me.add("/ajax/recording", RecordingAjaxCtrl.class);
-        
+
         me.add("/wechat/message", MessageController.class, "/wechat");
     }
 
     @Override
     public void configPlugin(Plugins me) {
-        final ActiveRecordPlugin arp = new ActiveRecordPlugin(DataSourceFactory.getDataSource("ydm"));
+        DataSource ds = null;
+        try {
+            ds = (DataSource) new InitialContext().lookup("jdbc/yidumen");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+        final ActiveRecordPlugin arp = new ActiveRecordPlugin(ds);
         me.add(arp);
         arp.setDialect(new MysqlDialect());
         arp.addMapping("Video", Video.class);
@@ -69,5 +88,5 @@ public final class JFinalConfig extends com.jfinal.config.JFinalConfig {
         me.add(new ResourceHandler());
         me.add(new SecurityHandler());
     }
-    
+
 }
