@@ -37,7 +37,7 @@ public final class GetNewestVideo implements Action {
                     .append(video.getStr("title"))
                     .append("</a>\n");
         }
-        restr.append("\n更多视频请点击：<a href=\"http://m.yidumen.com/video/list\">聊天室频道</a>");
+        restr.append("\n更多视频请点击：<a href=\"http://m.yidumen.com/video\">聊天室频道</a>");
 
         reply.setContent(restr.toString());
         return reply;
