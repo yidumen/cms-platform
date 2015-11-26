@@ -1,7 +1,7 @@
 package com.yidumen.cms.controller;
 
 import com.jfinal.core.Controller;
-import com.yidumen.cms.constant.AccountGroup;
+import com.yidumen.cms.AccountGroup;
 import com.yidumen.cms.model.Account;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.UserService;

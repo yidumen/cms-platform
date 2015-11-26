@@ -2,7 +2,7 @@ package com.yidumen.cms.service.impl;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.yidumen.cms.constant.AccountGroup;
+import com.yidumen.cms.AccountGroup;
 import com.yidumen.cms.model.Account;
 import com.yidumen.cms.service.UserService;
 import com.yidumen.cms.service.exception.IllDataException;

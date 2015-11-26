@@ -1,0 +1,87 @@
+<div class="bg-light lter b-b wrapper-sm">
+    <h4>视频素材管理</h4>
+    <ol class="breadcrumb">
+        <li>素材管理</li>
+        <li class="active">视频素材管理</li>
+    </ol>
+</div>
+<div class="wrapper-md">
+    <h4>视频素材列表</h4>
+
+    <div class="well b bg-light lter wrapper-sm m-t">
+        <div class="text-muted" ng-show="videos.length === 0">还没有视频</div>
+        <div class="row">
+            <div ng-repeat="video in ::videos">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading" ng-bind="video.title"></h4>
+
+                            <p class="text-muted">创建日期: {{video.createDate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4>上传视频素材</h4>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="modal-body wrapper-lg">
+                <div class="row">
+                    <div class="col-sm-4 b-r">
+                        <form role="form" ng-submit="uploadVideo()">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="素材标题，最大20字" ng-model="title"
+                                       required>
+                                <span>对视频的简短描述，便于辨识。</span>
+                            </div>
+                            <div class="m-t-lg">
+                                <button type="submit" class="btn btn-addon btn-info pull-right text-uc m-t-n-xs"><i
+                                        class="fa fa-check"></i><strong>提交素材</strong></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-8">
+                        <table class="table bg-white-only b-a">
+                            <thead>
+                            <tr>
+                                <th width="50%">名称</th>
+                                <th ng-show="uploader.isHTML5">大小</th>
+                                <th ng-show="uploader.isHTML5">进度</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td><strong>{{ item.file.name }}</strong></td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress progress-sm m-b-none m-t-xs">
+                                        <div class="progress-bar bg-info" role="progressbar"
+                                             ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-show="item.isSuccess" class="text-success"><i
+                                            class="glyphicon glyphicon-ok"></i></span>
+                                    <span ng-show="item.isCancel" class="text-warning"><i
+                                            class="glyphicon glyphicon-ban-circle"></i></span>
+                                    <span ng-show="item.isError" class="text-danger"><i
+                                            class="glyphicon glyphicon-remove"></i></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-file">
+                            <input type="file" nv-file-select uploader="uploader">
+                            <button class="btn btn-addon btn-primary"><i class="glyphicon glyphicon-plus"></i>选择视频
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 package com.yidumen.cms.service.impl;
 
-import com.yidumen.cms.constant.GoodsStatus;
+import com.yidumen.cms.GoodsStatus;
 import com.yidumen.cms.model.Goods;
 import com.yidumen.cms.service.GoodsService;
 

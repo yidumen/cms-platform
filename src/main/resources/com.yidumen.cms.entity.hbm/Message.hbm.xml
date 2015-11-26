@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.yidumen.cms.entity">
+    <class name="Message" table="wechat_message">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="createTime" column="create_time" type="java.util.Date"/>
+    </class>
+    <joined-subclass name="ActionMessage" table="wechat_message_action" extends="Message">
+        <key column="id"/>
+        <property name="name" column="name" type="string" length="20"/>
+        <property name="classname" column="classname" type="string" length="100"/>
+        <property name="description" column="description" type="string" length="255"/>
+    </joined-subclass>
+    <joined-subclass name="TextMessage" table="wechat_message_text" extends="Message">
+        <key column="id"/>
+        <property name="content" column="content" type="string" length="600"/>
+    </joined-subclass>
+    <joined-subclass name="MusicMessage" table="wechat_message_music" extends="Message">
+        <key column="id"/>
+        <property name="description" column="description" type="string" length="255"/>
+        <many-to-one name="audio" column="resource_id"/>
+        <property name="thumbMediaId" column="thumbMediaId" type="string" length="64"/>
+    </joined-subclass>
+    <joined-subclass name="VoiceMessage" table="wechat_message_voice" extends="Message">
+        <key column="id"/>
+        <property name="mediaId" column="media_id" length="64" type="string"/>
+        <property name="format" column="fomat" length="5" type="string"/>
+    </joined-subclass>
+    <joined-subclass name="ImageMessage" table="wechat_message_image" extends="Message">
+        <key column="id"/>
+        <property name="picUrl" column="picUrl" length="100" type="string"/>
+        <property name="mediaId" column="mediaId" length="64" type="string"/>
+    </joined-subclass>
+    <joined-subclass name="LinkMessage" table="wechat_message_link" extends="Message">
+        <key column="id"/>
+        <property name="title" column="title" type="string" length="50"/>
+        <property name="description" column="description" type="string" length="100"/>
+        <property name="url" column="link_url" type="string" length="100"/>
+    </joined-subclass>
+    <joined-subclass name="EventMessage" table="wechat_message_event" extends="Message">
+        <key column="id"/>
+        <property name="event" column="event_type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yuntaisi.wechat.EventType</param>
+            </type>
+        </property>
+        <property name="eventKey" column="event_key" type="string" length="50"/>
+        <property name="commonCode" column="common_info_1" type="string" length="32"/>
+        <property name="commonInfo" column="common_info_2" type="string" length="64"/>
+        <property name="poiname" column="poi_name" type="string" length="20"/>
+    </joined-subclass>
+    <joined-subclass name="LocationMessage" table="wechat_message_location" extends="Message">
+        <key column="id"/>
+        <property name="locationX" type="java.lang.Double"/>
+        <property name="locationY" type="java.lang.Double"/>
+        <property name="scale" type="java.lang.Integer" length="2"/>
+        <property name="label" type="java.lang.String" length="255"/>
+    </joined-subclass>
+    <class name="Aritcle" table="wechat_message_news_aritcle">
+        <id name="id" column="id" type="java.lang.Long"/>
+        <property name="seq" column="seq" type="java.lang.Integer"/>
+        <property name="title" column="title" type="string"/>
+        <property name="description" column="description" type="string" length="100"/>
+        <property name="picUrl" column="pic_url" type="string" length="100"/>
+        <property name="url" column="link_url" type="string" length="100"/>
+    </class>
+    <joined-subclass name="NewsMessage" table="wechat_message_news" extends="Message">
+        <key column="id"/>
+        <set name="aritcles">
+            <key column="news_id"/>
+            <many-to-many column="aritcle_id" class="Aritcle"/>
+        </set>
+    </joined-subclass>
+</hibernate-mapping>

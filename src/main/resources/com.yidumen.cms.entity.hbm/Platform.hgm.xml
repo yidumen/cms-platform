@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.yidumen.cms.entity">
+    <class name="Fans" table="wechat_fans">
+        <id name="id">
+            <generator class="identity"/>
+        </id>
+        <property name="openId" column="openid" length="32"/>
+        <property name="nickName" column="nickname" length="20"/>
+        <property name="sex" column="sex">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yuntaisi.common.constant.Sex</param>
+            </type>
+        </property>
+        <property name="country" column="country" type="string" length="10"/>
+        <property name="province" column="province" type="string" length="10"/>
+        <property name="city" column="city" type="string" length="6"/>
+        <property name="remark" column="remark" type="string" length="50"/>
+        <many-to-one name="group" column="group_id" class="FansGroup"/>
+    </class>
+    <class name="FansGroup" table="wechat_fansgroup">
+        <id name="id" type="java.lang.Long" column="id"/>
+        <property name="name" type="string" column="name"/>
+    </class>
+    <class name="ReplyMessage" table="wechat_replyMessage">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="name" type="string" length="32"/>
+        <property name="type" column="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yuntaisi.wechat.MessageType</param>
+            </type>
+        </property>
+        <many-to-one name="message" column="message_id" class="Message" unique="true"/>
+    </class>
+    <class name="ReplyKey" table="wechat_replykey">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="name" type="string" length="20"/>
+        <property name="key" column="keyword" type="string" length="64"/>
+        <property name="type" column="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yuntaisi.wechat.KeyType</param>
+            </type>
+        </property>
+        <one-to-one name="message" class="ReplyMessage"/>
+    </class>
+    <class name="Record" table="wechat_record">
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="owner" column="fans_id" class="Fans"/>
+        <many-to-one name="message" column="message_id" class="Message" unique="true"/>
+        <property name="msgId" column="msgId" type="java.lang.String" length="64"/>
+        <property name="readed" column="isReaded" type="java.lang.Boolean"/>
+        <property name="msgType" column="msgType">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yuntaisi.wechat.MessageType</param>
+            </type>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,6 +1,6 @@
 package com.yidumen.cms.service.impl;
 
-import com.yidumen.cms.constant.TagType;
+import com.yidumen.cms.TagType;
 import com.yidumen.cms.model.Tag;
 import com.yidumen.cms.service.TagService;
 

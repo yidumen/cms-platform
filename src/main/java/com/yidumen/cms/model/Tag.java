@@ -1,6 +1,6 @@
 package com.yidumen.cms.model;
 
-import com.yidumen.cms.constant.TagType;
+import com.yidumen.cms.TagType;
 
 import java.util.List;
 

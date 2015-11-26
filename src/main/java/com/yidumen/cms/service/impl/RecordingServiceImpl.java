@@ -2,7 +2,7 @@ package com.yidumen.cms.service.impl;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.VideoStatus;
 import com.yidumen.cms.model.Recording;
 import com.yidumen.cms.model.Tag;
 import com.yidumen.cms.model.Video;

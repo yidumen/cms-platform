@@ -4,7 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.ext.render.DwzRender;
 import com.jfinal.ext.render.excel.PoiRender;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.VideoStatus;
 import com.yidumen.cms.model.Video;
 import com.yidumen.cms.service.ServiceFactory;
 import com.yidumen.cms.service.VideoService;

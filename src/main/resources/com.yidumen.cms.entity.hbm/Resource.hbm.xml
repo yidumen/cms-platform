@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.yidumen.cms.entity">
+    <class name="Resource" table="resource">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <discriminator column="table_name" type="string" not-null="true" />
+        <property name="title" column="title" type="string"/>
+        <property name="createDate" column="createDate" type="java.util.Date"/>
+        <many-to-one name="group" column="group_id"/>
+    </class>
+    <joined-subclass name="Image" table="picture" extends="Resource">
+        <key column="id"/>
+        <property name="file" column="file"/>
+    </joined-subclass>
+    <joined-subclass name="Audio" table="audio" extends="Resource">
+        <key column="id"/>
+        <property name="file" column="file"/>
+        <property name="HQFile" column="hq_file"/>
+    </joined-subclass>
+    <joined-subclass name="Page" table="page" extends="Resource">
+        <key column="id"/>
+        <property name="content" column="content"/>
+    </joined-subclass>
+    <joined-subclass name="Video" table="video" extends="Resource">
+        <key column="id"/>
+        <property name="file" column="file"/>
+    </joined-subclass>
+    <class name="ResourceGroup" table="resource_group">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="name" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,14 @@
+<div ng-switch="view">
+    <div ng-switch-default>
+        <div class="picture-editor" ng-click="toView(1)">
+            <h1 class="glyphicons glyphicon-plus"></h1>
+            从素材库中选择
+        </div>
+        <div class="picture-editor" ng-click="toView(2)">
+            <h1 class="glyphicons glyphicon-plus"></h1>
+            上传素材
+        </div>
+    </div>
+    <div picture-view ng-switch-when="1"></div>
+    <div image-uploader ng-switch-when="2"></div>
+</div>
