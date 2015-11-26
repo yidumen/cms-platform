@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.yidumen.cms.entity">
+    <class name="Goods" table="web_goods">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="name" column="name" type="java.lang.String" length="16"/>
+        <property name="address" column="address" type="java.lang.String"/>
+        <property name="phone" column="phone_number" type="java.lang.String" length="15"/>
+        <property name="postCode" column="post_code" type="java.lang.String" length="10"/>
+        <property name="postNumber" column="post_number" type="java.lang.String" length="50"/>
+        <property name="createdate" column="create_date" type="java.util.Date"/>
+        <property name="status" column="status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yidumen.cms.GoodsStatus</param>
+            </type>
+        </property>
+    </class>
+    <query name="findValidate">
+        from Goods goods where goods.status=com.yidumen.cms.GoodsStatus.SUCCESS or goods.status=com.yidumen.cms.GoodsStatus.WAIT
+    </query>
+</hibernate-mapping>

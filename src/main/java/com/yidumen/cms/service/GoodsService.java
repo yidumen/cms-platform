@@ -1,24 +1,50 @@
 package com.yidumen.cms.service;
 
+import com.yidumen.cms.GoodsStatus;
 import com.yidumen.cms.model.Goods;
+import com.yidumen.cms.repository.GoodsHibernateRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by cdm on 15/2/25.
+ * @author 蔡迪旻
+ * 2015年11月26日
  */
-public interface GoodsService {
-    List<Goods> findAll();
+@Service
+public final class GoodsService {
+    @Autowired
+    private GoodsHibernateRepository goodsDao;
 
-    List<Goods> findValidate();
+    public List<Goods> findAll() {
+        return goodsDao.findAll();
+    }
 
-    List<Goods> findUnProcess();
+    public List<Goods> findValidate() {
+        return goodsDao.findValidate();
+    }
 
-    List<Goods> findTrash();
+    public List<Goods> findUnProcess() {
+        return goods.findByCondition(new Goods().set("status", 1));
+    }
 
-    void process(Long id);
+    public List<Goods> findTrash() {
+        return goods.findByCondition(new Goods().set("status", 2));
+    }
 
-    void trash(Long id);
+    public void process(Long id) {
+        goods.findById(id).set("status", GoodsStatus.SUCCESS.ordinal()).update();
+    }
 
-    void recover(Long id);
+    public void trash(Long id) {
+        goods.findById(id).set("status", GoodsStatus.ERROR.ordinal()).update();
+    }
+
+    public void recover(Long id) {
+        goods.findById(id).set("status", GoodsStatus.WAIT.ordinal()).update();
+    }
+
 }

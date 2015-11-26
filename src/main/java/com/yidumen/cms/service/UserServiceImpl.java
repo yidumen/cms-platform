@@ -1,4 +1,4 @@
-package com.yidumen.cms.service.impl;
+package com.yidumen.cms.service;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;

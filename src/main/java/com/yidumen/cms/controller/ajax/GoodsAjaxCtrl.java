@@ -1,46 +1,52 @@
 package com.yidumen.cms.controller.ajax;
 
-import com.jfinal.aop.Before;
-import com.jfinal.ext.render.DwzRender;
-import com.jfinal.plugin.activerecord.tx.Tx;
+import com.yidumen.cms.model.Goods;
 import com.yidumen.cms.service.GoodsService;
-import com.yidumen.cms.service.ServiceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
- * Created by cdm on 15/2/25.
+ * @author 蔡迪旻
+ *         2015年11月26日
  */
-@Before(Tx.class)
-public final class GoodsAjaxCtrl extends BaseAjaxCtrl {
-    private final GoodsService service;
+@RestController
+@RequestMapping("goods")
+public final class GoodsAjaxCtrl {
+    @Autowired
+    private GoodsService service;
 
-    public GoodsAjaxCtrl() {
-        this.service = ServiceFactory.generateGoodsService();
-    }
-
-    public void info() {
-        renderJson(service.findValidate());
-    }
-
-    public void unprocess() {
-        renderJson(service.findUnProcess());
+    @RequestMapping("info")
+    public List<Goods> info() {
+        return service.findValidate();
     }
 
-    public void trashed() {
-        renderJson(service.findTrash());
+    @RequestMapping("unprocess")
+    public List<Goods> unprocess() {
+        return service.findUnProcess();
     }
 
-    public void process() {
-        service.process(this.getParaToLong(0));
-        this.render(DwzRender.success("结缘信息已处理。"));
+    @RequestMapping("trashed")
+    public List<Goods> trashed() {
+        return service.findTrash();
     }
-    
-    public void trash() {
-        service.trash(this.getParaToLong(0));
-        render(DwzRender.success("结缘信息已放入回收站。"));
+
+    @RequestMapping(value = "process/{id}", method = RequestMethod.POST)
+    public void process(@PathVariable Long id) {
+        service.process(id);
     }
-    
-    public void recover() {
-        service.recover(this.getParaToLong(0));
-        render(DwzRender.success("结缘信息已恢复。"));
+
+    @RequestMapping(value = "trash/{id}")
+    public void trash(@PathVariable Long id) {
+        service.trash(id);
+    }
+
+    @RequestMapping(value = "recover/{id}")
+    public void recover(@PathVariable Long id) {
+        service.recover(id);
     }
 }

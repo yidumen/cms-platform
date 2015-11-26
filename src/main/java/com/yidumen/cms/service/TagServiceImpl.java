@@ -1,4 +1,4 @@
-package com.yidumen.cms.service.impl;
+package com.yidumen.cms.service;
 
 import com.yidumen.cms.TagType;
 import com.yidumen.cms.model.Tag;

@@ -21,9 +21,9 @@ import java.util.List;
  * @author 蔡迪旻
  *         2015年03月12日
  */
-public final class RecordingAjaxCtrl extends BaseAjaxCtrl {
+public final class RecordingAjaxCtrl{
 
-    private final RecordingService recordingService;
+    private RecordingService recordingService;
 
     public RecordingAjaxCtrl() {
         this.recordingService = ServiceFactory.generateRecordingService();
