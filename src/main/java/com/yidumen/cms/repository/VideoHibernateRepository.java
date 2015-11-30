@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 蔡迪旻
@@ -23,5 +24,14 @@ public class VideoHibernateRepository extends HibernateRepository<Video> {
         entity.setFile(file);
         entity.setCreateDate(new Date());
         create(entity);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Video> getNew(int limit) {
+        return getSessionFactory().getCurrentSession().getNamedQuery("com.yidumen.cms.entity.Video.newVideos").setMaxResults(limit).list();
+    }
+
+    public int findSort() {
+        return (int) getSessionFactory().getCurrentSession().getNamedQuery("com.yidumen.cms.entity.Video.maxSort").uniqueResult();
     }
 }

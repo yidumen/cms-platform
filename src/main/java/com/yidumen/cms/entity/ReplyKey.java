@@ -1,6 +1,7 @@
 package com.yidumen.cms.entity;
 
-import com.yuntaisi.wechat.KeyType;
+
+import com.yidumen.cms.KeyType;
 
 import java.io.Serializable;
 

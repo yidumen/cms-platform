@@ -45,19 +45,21 @@
         <key column="id"/>
         <property name="event" column="event_type">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.yuntaisi.wechat.EventType</param>
+                <param name="enumClass">com.yidumen.cms.EventType</param>
             </type>
         </property>
         <property name="eventKey" column="event_key" type="string" length="50"/>
         <property name="commonCode" column="common_info_1" type="string" length="32"/>
         <property name="commonInfo" column="common_info_2" type="string" length="64"/>
-        <property name="poiname" column="poi_name" type="string" length="20"/>
+        <property name="precision" column="precision" type="java.lang.Double"/>
+        <property name="latitude" column="latitude" type="java.lang.Double"/>
+        <property name="longitude" column="longitude" type="java.lang.Double"/>
     </joined-subclass>
     <joined-subclass name="LocationMessage" table="wechat_message_location" extends="Message">
         <key column="id"/>
         <property name="locationX" type="java.lang.Double"/>
         <property name="locationY" type="java.lang.Double"/>
-        <property name="scale" type="java.lang.Integer" length="2"/>
+        <property name="scale" type="java.lang.Double"/>
         <property name="label" type="java.lang.String" length="255"/>
     </joined-subclass>
     <class name="Aritcle" table="wechat_message_news_aritcle">

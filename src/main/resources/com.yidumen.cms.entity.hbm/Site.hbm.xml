@@ -18,8 +18,61 @@
                 <param name="enumClass">com.yidumen.cms.GoodsStatus</param>
             </type>
         </property>
+        <query name="findValidate">
+            <![CDATA[
+            from Goods goods where goods.status=com.yidumen.cms.GoodsStatus.SUCCESS or goods.status=com.yidumen.cms.GoodsStatus.WAIT
+         ]]>
+        </query>
     </class>
-    <query name="findValidate">
-        from Goods goods where goods.status=com.yidumen.cms.GoodsStatus.SUCCESS or goods.status=com.yidumen.cms.GoodsStatus.WAIT
-    </query>
+    <class name="Recording" table="web_recording">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="file" column="name" type="java.lang.String" length="20"/>
+        <query name="findFile">
+            from Recording r where r.file=:file
+        </query>
+    </class>
+    <class name="VideoClipInfo" table="video_recording">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="video" column="video_id" class="Video"/>
+        <many-to-one name="recording" column="recording_id" class="Recording"/>
+        <property name="in" column="in" type="java.lang.Long"/>
+        <property name="out" column="out" type="java.lang.Long"/>
+        <property name="start" column="start" type="java.lang.Long"/>
+        <property name="end" column="end" type="java.lang.Long"/>
+    </class>
+    <class name="Tag" table="web_tag">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="tagname" column="tagname" type="java.lang.String" length="30"/>
+        <property name="hits" column="hits" type="java.lang.Integer"/>
+        <set name="videos">
+            <key column="tag_id"/>
+            <many-to-many column="video_id" class="Video"/>
+        </set>
+        <set name="sutras">
+            <key column="tag_id"/>
+            <many-to-many column="sutra_id" class="Sutra"/>
+        </set>
+    </class>
+    <class name="Sutra" table="web_sutra">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="partIdentifier" column="part_identifier" type="java.lang.String" length="16"/>
+        <property name="title" column="title" type="java.lang.String" length="50"/>
+        <property name="leftValue" column="left_value" type="java.lang.Long" not-null="true"/>
+        <property name="rightValue" column="right_value" type="java.lang.Long" not-null="true"/>
+        <set name="tags">
+            <key column="sutra_id"/>
+            <many-to-many column="tag_id" class="Tag"/>
+        </set>
+        <property name="content" type="java.lang.String">
+            <column name="content" sql-type="clob" length="3000"/>
+        </property>
+    </class>
 </hibernate-mapping>

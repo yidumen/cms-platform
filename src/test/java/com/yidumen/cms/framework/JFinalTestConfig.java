@@ -9,11 +9,11 @@ import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.yidumen.cms.controller.GoodsController;
 import com.yidumen.cms.controller.LoginController;
 import com.yidumen.cms.controller.VideoController;
-import com.yidumen.cms.controller.ajax.GoodsAjaxCtrl;
-import com.yidumen.cms.controller.ajax.RecordingAjaxCtrl;
-import com.yidumen.cms.controller.ajax.TagAjaxCtrl;
-import com.yidumen.cms.controller.ajax.VideoAjaxCtrl;
-import com.yidumen.cms.controller.wechat.MessageController;
+import com.yidumen.cms.view.ajax.GoodsAjaxCtrl;
+import com.yidumen.cms.view.ajax.RecordingAjaxCtrl;
+import com.yidumen.cms.view.ajax.TagAjaxCtrl;
+import com.yidumen.cms.view.ajax.VideoAjaxCtrl;
+import com.yidumen.cms.view.wechat.MessageController;
 import com.yidumen.cms.model.*;
 
 /**

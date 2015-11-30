@@ -8,21 +8,22 @@
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/blocks/**" location="/blocks/"/>
     <mvc:resources mapping="/oss/**" location="http://yuntaisi.oss-cn-hangzhou.aliyuncs.com"/>
-       <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-           <property name="templateLoaderPath" value="/"/>
-           <property name="defaultEncoding" value="utf-8"/>
-       </bean>
-       <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-           <!--<property name="cache" value="false"/>-->
-           <property name="cache" value="true"/>
-           <property name="contentType" value="text/html;charset=UTF-8"/>
-           <property name="prefix" value=""/>
-           <property name="suffix" value=".html"/>
-       </bean>
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/"/>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <!--<property name="cache" value="false"/>-->
+        <property name="cache" value="true"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".html"/>
+    </bean>
+    <bean id="excelViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver"/>
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="5242880000"/>
     </bean>
-    <jee:jndi-lookup jndi-name="jdbc/yidu" id="dataSource"/>
+    <jee:jndi-lookup jndi-name="jdbc/yidumen" id="dataSource"/>
     <!--hibernate configure and dao-->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
@@ -39,7 +40,7 @@
                 <value>com.yidumen.cms.entity.hbm/Resource.hbm.xml</value>
                 <value>com.yidumen.cms.entity.hbm/Message.hbm.xml</value>
                 <value>com.yidumen.cms.entity.hbm/Platform.hgm.xml</value>
-                <value>classpath:com.yidumen.cms.entity.hbm/Site.hbm.xml</value>
+                <value>com.yidumen.cms.entity.hbm/Site.hbm.xml</value>
             </list>
         </property>
     </bean>
@@ -56,6 +57,20 @@
     <bean id="bucket" class="java.lang.String">
         <constructor-arg index="0" type="java.lang.String" value="ydmqd"/>
     </bean>
+    <!--oss end-->
     <mvc:annotation-driven/>
     <context:component-scan base-package="com.yidumen.cms"/>
+    <!--define wechat framework-->
+    <bean id="wxConfig" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
+        <property name="appId" value=""/>
+        <property name="token" value=""/>
+        <property name="secret" value=""/>
+        <property name="aesKey" value=""/>
+    </bean>
+    <bean id="wxService" class="me.chanjar.weixin.mp.api.WxMpServiceImpl">
+        <property name="wxMpConfigStorage" ref="wxConfig"/>
+    </bean>
+    <bean id="baseUrl" class="java.lang.String">
+        <constructor-arg index="0" type="java.lang.String" value="http://ydmqd.oss-cn-qingdao.aliyuncs.com/wechat/"/>
+    </bean>
 </beans>

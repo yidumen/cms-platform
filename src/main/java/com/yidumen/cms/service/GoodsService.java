@@ -1,14 +1,12 @@
 package com.yidumen.cms.service;
 
 import com.yidumen.cms.GoodsStatus;
-import com.yidumen.cms.model.Goods;
+import com.yidumen.cms.entity.Goods;
 import com.yidumen.cms.repository.GoodsHibernateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 蔡迪旻
@@ -27,24 +25,36 @@ public final class GoodsService {
         return goodsDao.findValidate();
     }
 
+    @SuppressWarnings("unchecked")
     public List<Goods> findUnProcess() {
-        return goods.findByCondition(new Goods().set("status", 1));
+        final Goods model = new Goods();
+        model.setStatus(GoodsStatus.WAIT);
+        return goodsDao.find(model);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Goods> findTrash() {
-        return goods.findByCondition(new Goods().set("status", 2));
+        final Goods model = new Goods();
+        model.setStatus(GoodsStatus.ERROR);
+        return goodsDao.find(model);
     }
 
     public void process(Long id) {
-        goods.findById(id).set("status", GoodsStatus.SUCCESS.ordinal()).update();
+        final Goods entity = goodsDao.find(id);
+        entity.setStatus(GoodsStatus.SUCCESS);
+        goodsDao.edit(entity);
     }
 
     public void trash(Long id) {
-        goods.findById(id).set("status", GoodsStatus.ERROR.ordinal()).update();
+        final Goods entity = goodsDao.find(id);
+        entity.setStatus(GoodsStatus.ERROR);
+        goodsDao.edit(entity);
     }
 
     public void recover(Long id) {
-        goods.findById(id).set("status", GoodsStatus.WAIT.ordinal()).update();
+        final Goods entity = goodsDao.find(id);
+        entity.setStatus(GoodsStatus.WAIT);
+        goodsDao.edit(entity);
     }
 
 }

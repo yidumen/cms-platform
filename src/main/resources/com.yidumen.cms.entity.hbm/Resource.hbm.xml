@@ -27,7 +27,37 @@
     </joined-subclass>
     <joined-subclass name="Video" table="video" extends="Resource">
         <key column="id"/>
-        <property name="file" column="file"/>
+        <property name="sort" column="sort" type="java.lang.Long"/>
+        <property name="file" column="file" type="java.lang.String" length="50"/>
+        <set name="extInfo">
+            <key column="video_id"/>
+            <one-to-many class="VideoInfo"/>
+        </set>
+        <set name="tags">
+            <key column="video_id"/>
+            <many-to-many column="tag_id" class="Tag"/>
+        </set>
+        <set name="clipInfos">
+            <key column="video_id"/>
+            <one-to-many class="VideoClipInfo"/>
+        </set>
+        <property name="description" column="description" type="java.lang.String"/>
+        <property name="note" column="note" type="java.lang.String"/>
+        <property name="grade" column="grade" type="java.lang.String" length="5"/>
+        <property name="duration" column="duration" type="java.lang.Long"/>
+        <property name="shootTime" column="shoot_time" type="java.sql.Date"/>
+        <property name="status" column="status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yidumen.cms.VideoStatus</param>
+            </type>
+        </property>
+        <property name="recommend" column="recommend" type="java.lang.Integer"/>
+        <query name="newVideos">
+            <![CDATA[from Video v where v.status=com.yidumen.cms.VideoStatus.PUBLISH order by v.pubDate desc]]>
+        </query>
+        <query name="maxSort">
+            <![CDATA[select max(v.sort) from Video v join v.tags as tag where tag.tagname="聊天室"]]>
+        </query>
     </joined-subclass>
     <class name="ResourceGroup" table="resource_group">
         <id name="id" column="id">

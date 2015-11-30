@@ -1,49 +1,25 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.dao.constant.TagType;
+import com.yidumen.cms.TagType;
+
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Entity
-@NamedQueries({
-    @NamedQuery(name = "Tag.findByname", query = "SELECT t FROM Tag t WHERE t.tagname = :tagname"),
-    @NamedQuery(name = "Tag.OrderByHints", query = "SELECT t FROM Tag t WHERE t.type = com.yidumen.dao.constant.TagType.CONTENT ORDER BY t.hits DESC")
-})
 public class Tag implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     private Long id;
 
-    @Basic(optional = false)
-    @Column(length = 30, nullable = false)
     private String tagname;
-    
-    private int hits;
 
-    @ManyToMany
+    private Integer hits;
+
     private Set<Video> videos;
 
-    @ManyToMany
     private Set<Sutra> sutras;
-    
-    @Enumerated(EnumType.ORDINAL)
+
     private TagType type;
 
     public Long getId() {
@@ -62,11 +38,11 @@ public class Tag implements Serializable {
         this.tagname = tagname;
     }
 
-    public int getHits() {
+    public Integer getHits() {
         return hits;
     }
 
-    public void setHits(int hits) {
+    public void setHits(Integer hits) {
         this.hits = hits;
     }
 

@@ -1,7 +1,8 @@
 package com.yidumen.cms.entity;
 
 /**
- * Created by cdm on 2015/10/17.
+ * @author 蔡迪旻
+ * 2015年11月29日
  */
 public class VoiceMessage extends Message {
     private String mediaId;

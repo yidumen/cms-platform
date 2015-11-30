@@ -4,7 +4,7 @@ public class LocationMessage extends Message {
 
     private Double locationX;
     private Double locationY;
-    private Integer scale;
+    private Double scale;
     private String label;
 
     public Double getLocationX() {
@@ -23,11 +23,11 @@ public class LocationMessage extends Message {
         this.locationY = locationY;
     }
 
-    public int getScale() {
+    public Double getScale() {
         return scale;
     }
 
-    public void setScale(int scale) {
+    public void setScale(Double scale) {
         this.scale = scale;
     }
 

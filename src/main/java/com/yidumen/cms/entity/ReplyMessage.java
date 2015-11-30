@@ -1,6 +1,7 @@
 package com.yidumen.cms.entity;
 
-import com.yuntaisi.wechat.MessageType;
+
+import com.yidumen.cms.MessageType;
 
 import java.io.Serializable;
 

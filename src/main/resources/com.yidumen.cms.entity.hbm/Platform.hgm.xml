@@ -31,7 +31,7 @@
         <property name="name" column="name" type="string" length="32"/>
         <property name="type" column="type">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.yuntaisi.wechat.MessageType</param>
+                <param name="enumClass">com.yidumen.cms.MessageType</param>
             </type>
         </property>
         <many-to-one name="message" column="message_id" class="Message" unique="true"/>
@@ -44,7 +44,7 @@
         <property name="key" column="keyword" type="string" length="64"/>
         <property name="type" column="type">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.yuntaisi.wechat.KeyType</param>
+                <param name="enumClass">com.yidumen.cms.KeyType</param>
             </type>
         </property>
         <one-to-one name="message" class="ReplyMessage"/>
@@ -59,7 +59,7 @@
         <property name="readed" column="isReaded" type="java.lang.Boolean"/>
         <property name="msgType" column="msgType">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.yuntaisi.wechat.MessageType</param>
+                <param name="enumClass">com.yidumen.cms.MessageType</param>
             </type>
         </property>
     </class>

@@ -1,6 +1,7 @@
 package com.yidumen.cms.entity;
 
-import com.yuntaisi.wechat.EventType;
+
+import com.yidumen.cms.EventType;
 
 public class EventMessage extends Message {
 
@@ -8,9 +9,9 @@ public class EventMessage extends Message {
     private String eventKey;
     private String commonCode;
     private String commonInfo;
-    private Double locationX;
-    private Double locationY;
-    private String poiname;
+    private Double latitude;
+    private Double longitude;
+    private Double precision;
 
     public EventType getEvent() {
         return event;
@@ -40,28 +41,28 @@ public class EventMessage extends Message {
         this.commonInfo = commonInfo;
     }
 
-    public Double getLocationX() {
-        return locationX;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLocationX(Double locationX) {
-        this.locationX = locationX;
+    public void setLatitude(Double locationX) {
+        this.latitude = locationX;
     }
 
-    public Double getLocationY() {
-        return locationY;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setLocationY(Double locationY) {
-        this.locationY = locationY;
+    public void setLongitude(Double locationY) {
+        this.longitude = locationY;
     }
 
-    public String getPoiname() {
-        return poiname;
+    public Double getPrecision() {
+        return precision;
     }
 
-    public void setPoiname(String poiname) {
-        this.poiname = poiname;
+    public void setPrecision(Double poiname) {
+        this.precision = poiname;
     }
 
     public void setEventKey(String eventKey) {
@@ -83,11 +84,11 @@ public class EventMessage extends Message {
             return false;
         if (getCommonInfo() != null ? !getCommonInfo().equals(that.getCommonInfo()) : that.getCommonInfo() != null)
             return false;
-        if (getLocationX() != null ? !getLocationX().equals(that.getLocationX()) : that.getLocationX() != null)
+        if (getLatitude() != null ? !getLatitude().equals(that.getLatitude()) : that.getLatitude() != null)
             return false;
-        if (getLocationY() != null ? !getLocationY().equals(that.getLocationY()) : that.getLocationY() != null)
+        if (getLongitude() != null ? !getLongitude().equals(that.getLongitude()) : that.getLongitude() != null)
             return false;
-        return !(getPoiname() != null ? !getPoiname().equals(that.getPoiname()) : that.getPoiname() != null);
+        return !(getPrecision() != null ? !getPrecision().equals(that.getPrecision()) : that.getPrecision() != null);
 
     }
 
@@ -98,9 +99,9 @@ public class EventMessage extends Message {
         result = 31 * result + (getEventKey() != null ? getEventKey().hashCode() : 0);
         result = 31 * result + (getCommonCode() != null ? getCommonCode().hashCode() : 0);
         result = 31 * result + (getCommonInfo() != null ? getCommonInfo().hashCode() : 0);
-        result = 31 * result + (getLocationX() != null ? getLocationX().hashCode() : 0);
-        result = 31 * result + (getLocationY() != null ? getLocationY().hashCode() : 0);
-        result = 31 * result + (getPoiname() != null ? getPoiname().hashCode() : 0);
+        result = 31 * result + (getLatitude() != null ? getLatitude().hashCode() : 0);
+        result = 31 * result + (getLongitude() != null ? getLongitude().hashCode() : 0);
+        result = 31 * result + (getPrecision() != null ? getPrecision().hashCode() : 0);
         return result;
     }
 }

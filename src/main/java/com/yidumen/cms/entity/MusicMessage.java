@@ -1,9 +1,7 @@
 package com.yidumen.cms.entity;
 
-import com.yuntaisi.cms.dao.entity.Audio;
-
 public class MusicMessage extends Message {
-   
+
     private String description;
     private Audio audio;
     private String thumbMediaId;
