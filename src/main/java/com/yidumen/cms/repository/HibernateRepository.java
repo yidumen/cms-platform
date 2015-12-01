@@ -49,7 +49,7 @@ public class HibernateRepository<T> {
 
     @Transactional(readOnly = true)
     public T find(Long id) {
-        return getSessionFactory().getCurrentSession().load(entityClass, id);
+        return (T) getSessionFactory().getCurrentSession().load(entityClass, id);
     }
 
     @Transactional(readOnly = true)

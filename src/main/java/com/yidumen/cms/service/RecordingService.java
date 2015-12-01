@@ -56,7 +56,7 @@ public final class RecordingService {
             video.setRecommend(0);
             video.setDuration(0L);
             video.setShootTime(new java.sql.Date(System.currentTimeMillis()));
-            video.setSort(0);
+            video.setSort(0L);
             video.setStatus(VideoStatus.ARCHIVE);
             final Set<Tag> tags = new HashSet<>();
             tags.add(tag);

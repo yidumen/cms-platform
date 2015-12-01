@@ -51,9 +51,9 @@
         <property name="eventKey" column="event_key" type="string" length="50"/>
         <property name="commonCode" column="common_info_1" type="string" length="32"/>
         <property name="commonInfo" column="common_info_2" type="string" length="64"/>
-        <property name="precision" column="precision" type="java.lang.Double"/>
         <property name="latitude" column="latitude" type="java.lang.Double"/>
         <property name="longitude" column="longitude" type="java.lang.Double"/>
+        <property name="precision" column="poi" type="java.lang.Double"/>
     </joined-subclass>
     <joined-subclass name="LocationMessage" table="wechat_message_location" extends="Message">
         <key column="id"/>

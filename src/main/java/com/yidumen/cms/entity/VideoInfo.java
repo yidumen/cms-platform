@@ -3,9 +3,10 @@ package com.yidumen.cms.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yidumen.dao.constant.VideoResolution;
-import com.yidumen.dao.framework.jackson.VideoResolutionDeserializer;
-import com.yidumen.dao.framework.jackson.VideoResolutionSerializer;
+import com.yidumen.cms.VideoResolution;
+import com.yidumen.cms.VideoResolutionDeserializer;
+import com.yidumen.cms.VideoResolutionSerializer;
+
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,29 +22,21 @@ import javax.persistence.ManyToOne;
  *
  * @author 蔡迪旻<yidumen.com>
  */
-@Entity
 public class VideoInfo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonIgnore
-    @ManyToOne
     private Video video;
 
     @JsonSerialize(using = VideoResolutionSerializer.class)
     @JsonDeserialize(using = VideoResolutionDeserializer.class)
-    @Basic(optional = false)
-    @Enumerated(EnumType.ORDINAL)
     private VideoResolution resolution;
 
     private int width;
 
     private int height;
 
-    @Basic(optional = false)
-    @Column(length = 10)
     private String fileSize;
 
     public Long getId() {

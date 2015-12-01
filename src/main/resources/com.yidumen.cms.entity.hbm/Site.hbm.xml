@@ -20,7 +20,7 @@
         </property>
         <query name="findValidate">
             <![CDATA[
-            from Goods goods where goods.status=com.yidumen.cms.GoodsStatus.SUCCESS or goods.status=com.yidumen.cms.GoodsStatus.WAIT
+            from Goods goods where goods.status=0 or goods.status=1
          ]]>
         </query>
     </class>
@@ -33,16 +33,16 @@
             from Recording r where r.file=:file
         </query>
     </class>
-    <class name="VideoClipInfo" table="video_recording">
+    <class name="VideoClipInfo" table="resource_video_clip_info">
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
         <many-to-one name="video" column="video_id" class="Video"/>
         <many-to-one name="recording" column="recording_id" class="Recording"/>
-        <property name="in" column="in" type="java.lang.Long"/>
-        <property name="out" column="out" type="java.lang.Long"/>
-        <property name="start" column="start" type="java.lang.Long"/>
-        <property name="end" column="end" type="java.lang.Long"/>
+        <property name="in" column="in_time" type="java.lang.Long"/>
+        <property name="out" column="out_time" type="java.lang.Long"/>
+        <property name="start" column="start_time" type="java.lang.Long"/>
+        <property name="end" column="end_time" type="java.lang.Long"/>
     </class>
     <class name="Tag" table="web_tag">
         <id name="id" column="id">
@@ -51,11 +51,11 @@
         <property name="tagname" column="tagname" type="java.lang.String" length="30"/>
         <property name="hits" column="hits" type="java.lang.Integer"/>
         <set name="videos">
-            <key column="tag_id"/>
+            <key/>
             <many-to-many column="video_id" class="Video"/>
         </set>
         <set name="sutras">
-            <key column="tag_id"/>
+            <key/>
             <many-to-many column="sutra_id" class="Sutra"/>
         </set>
     </class>
@@ -72,7 +72,83 @@
             <many-to-many column="tag_id" class="Tag"/>
         </set>
         <property name="content" type="java.lang.String">
-            <column name="content" sql-type="clob" length="3000"/>
+            <column name="content" sql-type="MEDIUMTEXT"/>
         </property>
+    </class>
+    <class name="Account" table="web_account">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="email" column="email" type="java.lang.String" length="50"/>
+        <property name="phone" column="phone" type="java.lang.String" length="13"/>
+        <property name="password" column="password" type="java.lang.String" length="64" not-null="true"/>
+        <property name="nickname" column="nick_name" type="java.lang.String" length="16"/>
+        <property name="buddhismname" column="buddhism_name" type="java.lang.String" length="16"/>
+        <property name="realname" column="real_name" type="java.lang.String" length="16"/>
+        <property name="sex" column="sex">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yidumen.cms.Sex</param>
+            </type>
+        </property>
+        <property name="born" column="birthday" type="java.sql.Date"/>
+        <property name="headpic" column="head_pic" type="java.lang.String"/>
+        <property name="province" column="province" type="java.lang.String" length="10"/>
+        <property name="city" column="city" type="java.lang.String" length="20"/>
+        <property name="area" column="area" type="java.lang.String" length="20"/>
+        <property name="status" column="status" type="java.lang.Boolean"/>
+        <property name="createdate" column="create_date" type="java.util.Date"/>
+        <property name="lastlogintime" column="last_login_time" type="java.util.Date"/>
+        <set name="sendedMessages">
+            <key column="account_id"/>
+            <one-to-many class="UserMessage"/>
+        </set>
+        <set name="receivedMessages">
+            <key column="account_id"/>
+            <one-to-many class="UserMessage"/>
+        </set>
+        <set name="accessInfo">
+            <key column="account_id"/>
+            <one-to-many class="AccessInfo"/>
+        </set>
+        <one-to-one name="verifyInfo" class="VerifyInfo"/>
+        <property name="userGroup" column="group">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yidumen.cms.AccountGroup</param>
+            </type>
+        </property>
+    </class>
+    <class name="UserMessage" table="web_account_message">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <property name="content" column="content" type="string"/>
+        <property name="sendTime" column="send_time" type="java.util.Date"/>
+        <many-to-one name="sender" column="account_id" class="Account"/>
+    </class>
+    <class name="AccessInfo" table="web_account_band_info">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="account" column="account_id" class="Account"/>
+        <property name="authId" column="auth_id" type="string" length="64"/>
+        <property name="authKey" column="auth_key" type="string" length="64"/>
+        <property name="name" column="name" type="string" length="30" not-null="true"/>
+        <property name="token" column="token" type="string" length="64"/>
+        <property name="refreshKey" column="refresh_key" type="string" length="64"/>
+        <property name="expiresTime" column="expires_time" type="java.util.Date"/>
+        <property name="target" column="target">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">com.yidumen.cms.SiteAccess</param>
+            </type>
+        </property>
+    </class>
+    <class name="VerifyInfo" table="web_account_verify_info">
+        <id name="id" column="id" type="long">
+            <generator class="identity"/>
+        </id>
+        <property name="emailCode" column="email_code" type="string" length="64"/>
+        <property name="emailVerified" column="email_verify_status" type="boolean"/>
+        <property name="mobileCode" column="mobile_code" type="string" length="64"/>
+        <property name="mobileVerified" column="mobile_verify_status" type="boolean"/>
     </class>
 </hibernate-mapping>

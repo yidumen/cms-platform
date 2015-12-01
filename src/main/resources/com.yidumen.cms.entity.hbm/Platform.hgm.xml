@@ -11,7 +11,7 @@
         <property name="nickName" column="nickname" length="20"/>
         <property name="sex" column="sex">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">com.yuntaisi.common.constant.Sex</param>
+                <param name="enumClass">com.yidumen.cms.Sex</param>
             </type>
         </property>
         <property name="country" column="country" type="string" length="10"/>

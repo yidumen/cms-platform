@@ -1,13 +1,10 @@
 package com.yidumen.cms.entity;
 
-import com.yuntaisi.common.constant.Sex;
+
+import com.yidumen.cms.Sex;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  * 微信订阅者列表

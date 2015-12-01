@@ -1,50 +1,33 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.dao.constant.SiteAccess;
+import com.yidumen.cms.SiteAccess;
+
 import java.io.Serializable;
 import java.sql.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * 封装用户的微博接入信息
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Entity
 public class AccessInfo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
     private Account account;
 
-    @Column(length = 64)
     private String authId;
 
-    @Column(length = 64)
     private String authKey;
 
-    @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false, length = 50)
     private String token;
 
-    @Column(length = 30)
     private String refreshKey;
 
-    @Column(nullable = false)
     private Date expiresTime;
 
-    @Column(nullable = false)
     private SiteAccess target;
 
     public Long getId() {

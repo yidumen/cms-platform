@@ -1,98 +1,56 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.dao.constant.AccountGroup;
+import com.yidumen.cms.AccountGroup;
+import com.yidumen.cms.Sex;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 /**
- *
  * @author 蔡迪旻<yidumen.com>
  */
-@Entity
-@NamedQueries({
-    @NamedQuery(name = "Account.findByName",
-                query = "SELECT a FROM Account a WHERE a.email = :username OR a.phone = :username")
-})
 public class Account implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
     private String email;
 
-    @Column(length = 13)
     private String phone;
 
-    @Basic(optional = false)
-    @Column(length = 64)
     private String password;
 
-    @Basic(optional = false)
-    @Column(length = 16)
     private String nickname;
 
-    @Column(length = 16)
     private String buddhismname;
 
-    @Column(length = 16)
     private String realname;
 
-    private boolean sex;
+    private Sex sex;
 
     private Date born;
 
     private String headpic;
 
-    @Column(length = 10)
     private String province;
 
-    @Column(length = 20)
     private String city;
 
-    @Column(length = 20)
     private String area;
 
-    @Basic(optional = false)
     private boolean status;
 
-    @Basic(optional = false)
-    private Date createdate;
+    private java.util.Date createdate;
 
-    @Basic(optional = false)
-    private Date lastlogintime;
+    private java.util.Date lastlogintime;
 
-    @OneToMany(mappedBy = "sender")
     private List<UserMessage> sendedMessages;
-    
-    @OneToMany(mappedBy = "target")
+
     private List<UserMessage> receivedMessages;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccessInfo> accessInfo;
 
-    @ManyToMany(mappedBy = "agreedAccount")
-    private List<Comment> agreed;
-
-    @OneToOne(cascade = CascadeType.ALL)
     private VerifyInfo verifyInfo;
-    @Enumerated(EnumType.ORDINAL)
     private AccountGroup userGroup;
 
     public Account() {
@@ -151,11 +109,11 @@ public class Account implements Serializable {
         return realname;
     }
 
-    public boolean isSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -221,19 +179,19 @@ public class Account implements Serializable {
         this.status = status;
     }
 
-    public Date getCreatedate() {
+    public java.util.Date getCreatedate() {
         return createdate;
     }
 
-    public void setCreatedate(Date createdate) {
+    public void setCreatedate(java.util.Date createdate) {
         this.createdate = createdate;
     }
 
-    public Date getLastlogintime() {
+    public java.util.Date getLastlogintime() {
         return lastlogintime;
     }
 
-    public void setLastlogintime(Date lastlogintime) {
+    public void setLastlogintime(java.util.Date lastlogintime) {
         this.lastlogintime = lastlogintime;
     }
 
@@ -261,14 +219,6 @@ public class Account implements Serializable {
         this.accessInfo = accessInfo;
     }
 
-    public List<Comment> getAgreed() {
-        return agreed;
-    }
-
-    public void setAgreed(List<Comment> agreed) {
-        this.agreed = agreed;
-    }
-
     public VerifyInfo getVerifyInfo() {
         return verifyInfo;
     }
@@ -284,5 +234,5 @@ public class Account implements Serializable {
     public void setUserGroup(AccountGroup userGroup) {
         this.userGroup = userGroup;
     }
-    
+
 }

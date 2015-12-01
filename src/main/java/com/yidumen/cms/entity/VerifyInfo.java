@@ -12,19 +12,14 @@ import javax.persistence.Id;
  *
  * @author 蔡迪旻 <yidumen.com>
  */
-@Entity
 public class VerifyInfo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 10)
     private String emailCode;
 
     private boolean emailVerified;
 
-    @Column(length = 50)
     private String mobileCode;
 
     private boolean mobileVerified;
