@@ -72,9 +72,9 @@
     </class>
     <joined-subclass name="NewsMessage" table="wechat_message_news" extends="Message">
         <key column="id"/>
-        <set name="aritcles">
+        <set name="aritcles" table="related_news_aritcle">
             <key column="news_id"/>
-            <many-to-many column="aritcle_id" class="Aritcle"/>
+            <many-to-many column="aritcle_id" order-by="seq" class="Aritcle"/>
         </set>
     </joined-subclass>
 </hibernate-mapping>

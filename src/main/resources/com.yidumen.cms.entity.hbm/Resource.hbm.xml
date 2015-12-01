@@ -33,7 +33,7 @@
             <key column="video_id"/>
             <one-to-many class="VideoInfo"/>
         </set>
-        <set name="tags">
+        <set name="tags" table="related_video_tag">
             <key column="video_id"/>
             <many-to-many column="tag_id" class="Tag"/>
         </set>

@@ -47,12 +47,12 @@
         </id>
         <property name="tagname" column="tagname" type="java.lang.String" length="30"/>
         <property name="hits" column="hits" type="java.lang.Integer"/>
-        <set name="videos">
-            <key/>
+        <set name="videos" inverse="true" table="related_video_tag">
+            <key column="tag_id"/>
             <many-to-many column="video_id" class="Video"/>
         </set>
-        <set name="sutras">
-            <key/>
+        <set name="sutras" inverse="true" table="related_sutra_tag">
+            <key column="tag_id"/>
             <many-to-many column="sutra_id" class="Sutra"/>
         </set>
     </class>
@@ -64,7 +64,7 @@
         <property name="title" column="title" type="java.lang.String" length="50"/>
         <property name="leftValue" column="left_value" type="java.lang.Long" not-null="true"/>
         <property name="rightValue" column="right_value" type="java.lang.Long" not-null="true"/>
-        <set name="tags">
+        <set name="tags" table="related_sutra_tag">
             <key column="sutra_id"/>
             <many-to-many column="tag_id" class="Tag"/>
         </set>
@@ -122,7 +122,7 @@
         <property name="sendTime" column="send_time" type="java.util.Date"/>
         <many-to-one name="sender" column="account_id" class="Account"/>
     </class>
-    <class name="AccessInfo" table="web_account_band_info">
+    <class name="AccessInfo" table="web_account_bind_info">
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
