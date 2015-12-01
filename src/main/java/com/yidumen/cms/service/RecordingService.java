@@ -34,7 +34,9 @@ public final class RecordingService {
     private TagHibernateRepository tagDao;
 
     public Recording find(String file) {
-        return recordingDao.find(file);
+        final Recording model=new Recording();
+        model.setFile(file);
+        return recordingDao.findUnique(model);
     }
 
     public Video parseXML(Document document) throws IllDataException {

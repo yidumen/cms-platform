@@ -24,14 +24,11 @@
          ]]>
         </query>
     </class>
-    <class name="Recording" table="web_recording">
+    <class name="Recording" table="cms_recording">
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
         <property name="file" column="name" type="java.lang.String" length="20"/>
-        <query name="findFile">
-            from Recording r where r.file=:file
-        </query>
     </class>
     <class name="VideoClipInfo" table="resource_video_clip_info">
         <id name="id" column="id">
@@ -111,7 +108,7 @@
             <one-to-many class="AccessInfo"/>
         </set>
         <one-to-one name="verifyInfo" class="VerifyInfo"/>
-        <property name="userGroup" column="group">
+        <property name="userGroup" column="account_group">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">com.yidumen.cms.AccountGroup</param>
             </type>

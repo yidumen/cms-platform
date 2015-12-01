@@ -13,7 +13,4 @@ public class RecordingHibernateRepository extends HibernateRepository<Recording>
         super(Recording.class);
     }
 
-    public Recording find(String file) {
-        return (Recording) getSessionFactory().getCurrentSession().getNamedQuery("com.yidumen.cms.entity.Recording.findFile").setString("file", file).uniqueResult();
-    }
 }
