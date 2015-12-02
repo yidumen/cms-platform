@@ -7,36 +7,38 @@ import com.yidumen.cms.VideoResolution;
 import com.yidumen.cms.VideoResolutionDeserializer;
 import com.yidumen.cms.VideoResolutionSerializer;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
- *
  * @author 蔡迪旻<yidumen.com>
  */
+@Entity
+@Table(name = "resource_video_ext_info")
 public class VideoInfo implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JsonIgnore
+    @ManyToOne
     private Video video;
 
     @JsonSerialize(using = VideoResolutionSerializer.class)
     @JsonDeserialize(using = VideoResolutionDeserializer.class)
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "resolution")
     private VideoResolution resolution;
 
-    private int width;
+    @Column(name = "width")
+    private Integer width;
 
-    private int height;
+    @Column(name = "height")
+    private Integer height;
 
+    @Column(name = "file_size", length = 10)
     private String fileSize;
 
     public Long getId() {
@@ -63,19 +65,19 @@ public class VideoInfo implements Serializable {
         this.resolution = resolution;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 

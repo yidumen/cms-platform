@@ -1,11 +1,20 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
+
 /**
  * @author 蔡迪旻
  *         2015年11月03日
  */
+@Entity
+@Table(name = "resource_group")
 public class ResourceGroup {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name", length = 20)
     private String name;
 
     public Long getId() {

@@ -3,6 +3,7 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.Sex;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,25 +12,43 @@ import java.util.Date;
  *
  * @author 蔡迪旻
  */
+@Entity
+@Table(name = "wechat_fans")
 public class Fans implements Serializable {
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "openid")
     private String openId;
+    @Column(name = "nickname")
     private String nickName;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "sex")
     private Sex sex;
+    @Column(name = "country")
     private String country;
+    @Column(name = "city")
     private String city;
+    @Column(name = "province")
     private String province;
+    @Column(name = "head_pic")
     private String headImageUrl;
+    @Column(name = "subscribe_time")
     private Date subscribe_time;
+    @Column(name = "union_id")
     private String unionId;
+    @Column(name = "remark")
     private String remark;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
     private FansGroup group;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

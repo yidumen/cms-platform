@@ -1,10 +1,19 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "table_name")
+@Table(name = "wechat_message")
 public class Message implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "create_time")
     private Date createTime;
 
     public Long getId() {

@@ -1,34 +1,34 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
 @Entity
+@Table(name = "web_account_message")
 public class UserMessage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "content")
     private String content;
-    
+    @Column(name = "send_time")
     private Date sendTime;
-    
+
     @ManyToOne
+    @JoinColumn(name = "sender_account_id")
     private Account sender;
-    
+
     @ManyToOne
+    @JoinColumn(name = "target_account_id")
     private Account target;
-    
+
     public Long getId() {
         return id;
     }

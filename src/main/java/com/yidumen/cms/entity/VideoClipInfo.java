@@ -1,5 +1,6 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,13 +8,26 @@ import java.util.List;
  * @author 蔡迪旻
  *         2015年11月27日
  */
+@Entity
+@Table(name = "resource_video_clip_info")
 public class VideoClipInfo implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "video_id")
     private Video video;
+    @ManyToOne
+    @JoinColumn(name = "recording_id")
     private Recording recording;
+    @Column(name = "in_time")
     private Long in;
+    @Column(name = "out_time")
     private Long out;
+    @Column(name = "start_time")
     private Long start;
+    @Column(name = "end_time")
     private Long end;
 
     public Long getId() {

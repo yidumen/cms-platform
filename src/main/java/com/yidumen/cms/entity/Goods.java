@@ -2,28 +2,42 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.GoodsStatus;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author pholance
  */
+@Entity
+@Table(name = "web_goods")
 public class Goods implements Serializable {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "name", length = 100)
     private String name;
+    @Column(name = "phone_number")
     private String phone;
+    @Column(name = "address")
     private String address;
+    @Column(name = "create_date")
     private Date createdate;
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
     private GoodsStatus status;
+    @Column(name = "post_code")
     private String postCode;
+    @Column(name = "post_number")
     private String postNumber;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

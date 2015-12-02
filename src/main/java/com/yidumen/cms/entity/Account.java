@@ -3,6 +3,7 @@ package com.yidumen.cms.entity;
 import com.yidumen.cms.AccountGroup;
 import com.yidumen.cms.Sex;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
@@ -10,47 +11,79 @@ import java.util.List;
 /**
  * @author 蔡迪旻<yidumen.com>
  */
+@Entity
+@Table(name = "web_account")
 public class Account implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name="email",length = 50)
     private String email;
 
+    @Column(name="phone",length = 13)
     private String phone;
 
+    @Basic(optional = false)
+    @Column(name="password",length = 64)
     private String password;
 
+    @Basic(optional = false)
+    @Column(name="nick_name",length = 16)
     private String nickname;
 
+    @Column(name="buddhism_name",length = 16)
     private String buddhismname;
 
+    @Column(name="real_name",length = 16)
     private String realname;
 
+    @Column(name = "sex")
     private Sex sex;
 
+    @Column(name = "birthday")
     private Date born;
 
+    @Column(name = "head_pic")
     private String headpic;
 
+    @Column(name="province",length = 10)
     private String province;
 
+    @Column(name="city",length = 20)
     private String city;
 
+    @Column(name="area",length = 20)
     private String area;
 
+    @Basic(optional = false)
+    @Column(name = "status")
     private boolean status;
 
+    @Basic(optional = false)
+    @Column(name = "create_date")
     private java.util.Date createdate;
 
+    @Basic(optional = false)
+    @Column(name = "last_login_time")
     private java.util.Date lastlogintime;
 
+    @OneToMany(mappedBy = "sender")
     private List<UserMessage> sendedMessages;
 
+    @OneToMany(mappedBy = "target")
     private List<UserMessage> receivedMessages;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccessInfo> accessInfo;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "verify_id")
     private VerifyInfo verifyInfo;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "account_group")
     private AccountGroup userGroup;
 
     public Account() {

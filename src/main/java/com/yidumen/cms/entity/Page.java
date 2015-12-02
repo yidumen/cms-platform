@@ -1,10 +1,17 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
+
 /**
  * @author 蔡迪旻
- * 2015年11月15日
+ *         2015年11月15日
  */
+@Entity
+@Table(name = "resource_page")
 public class Page extends Resource {
+    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Column(name = "content", columnDefinition = "MEDIUMTEXT")
     private String content;
 
     public String getContent() {

@@ -47,7 +47,7 @@
                 <param name="enumClass">com.yidumen.cms.KeyType</param>
             </type>
         </property>
-        <one-to-one name="message" class="ReplyMessage"/>
+        <one-to-one name="message" constrained="true" class="ReplyMessage"/>
     </class>
     <class name="Record" table="wechat_record">
         <id name="id" column="id" type="java.lang.Long">

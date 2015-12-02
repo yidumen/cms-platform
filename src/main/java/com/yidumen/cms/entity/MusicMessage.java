@@ -1,9 +1,17 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "wechat_message_music")
 public class MusicMessage extends Message {
 
+    @Column(name = "description")
     private String description;
+    @ManyToOne
+    @JoinColumn(name = "resource_id")
     private Audio audio;
+    @Column(name = "thumb_Media_Id")
     private String thumbMediaId;
 
     public String getDescription() {

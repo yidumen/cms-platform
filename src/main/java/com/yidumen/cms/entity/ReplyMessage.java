@@ -3,16 +3,27 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.MessageType;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * @author 蔡迪旻
  */
+@Entity
+@Table(name = "wechat_replymessage")
 public class ReplyMessage implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "type")
     private MessageType type;
+    @ManyToOne
+    @JoinColumn(name = "message_id")
     private Message message;
 
     public Long getId() {

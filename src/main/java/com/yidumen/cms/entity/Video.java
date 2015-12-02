@@ -6,42 +6,54 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yidumen.cms.*;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author 蔡迪旻yidumen.com>
  */
+@Entity
+@Table(name = "resource_video")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Video extends Resource implements Serializable {
 
+    @Column(name = "sort")
     private Long sort;
 
     /**
      * 视频文件编号
      */
+    @Column(name = "file", length = 50)
     private String file;
 
     /**
      * 不同清晰度的视频信息
      */
-    private Set<VideoInfo> extInfo;
+    @OneToMany(mappedBy = "video")
+    private List<VideoInfo> extInfo;
 
-    private Set<Tag> tags;
+    @ManyToMany
+    @JoinTable(name = "related_video_tag", joinColumns = @JoinColumn(name = "video_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private List<Tag> tags;
 
+    @Column(name = "description")
     private String description;
+    @Column(name = "note")
     private String note;
+    @Column(name = "grade", length = 5)
     private String grade;
     @JsonSerialize(using = DurationSerializer.class)
     @JsonDeserialize(using = DurationDeserializer.class)
+    @Column(name = "duration")
     private Long duration;
 
     /**
      * 视频拍摄时间
      */
+    @Column(name = "shoot_time")
     private java.sql.Date shootTime;
 
     /**
@@ -49,15 +61,24 @@ public class Video extends Resource implements Serializable {
      */
     @JsonSerialize(using = VideoStatusSerializer.class)
     @JsonDeserialize(using = VideoStatusDeSerializer.class)
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
     private VideoStatus status;
 
+    @Column(name = "recommend")
     private Integer recommend;
 
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializer.class)
+    @Column(name = "pub_date")
     private Date pubDate;
 
+    @OneToMany
     private List<VideoClipInfo> clipInfos;
+
+    public void setSort(Long sort) {
+        this.sort = sort;
+    }
 
     /**
      * 视频发布顺序号，在页面中显示时它紧跟在名称后面为用户提示视频的索引号
@@ -69,7 +90,7 @@ public class Video extends Resource implements Serializable {
         return sort;
     }
 
-    public void setSort(Long sort) {
+    public void ListSort(Long sort) {
         this.sort = sort;
     }
 
@@ -110,20 +131,20 @@ public class Video extends Resource implements Serializable {
     }
 
     @JsonView(JacksonView.WithAssociations.class)
-    public Set<VideoInfo> getExtInfo() {
+    public List<VideoInfo> getExtInfo() {
         return extInfo;
     }
 
-    public void setExtInfo(Set<VideoInfo> extInfo) {
+    public void setExtInfo(List<VideoInfo> extInfo) {
         this.extInfo = extInfo;
     }
 
     @JsonView(JacksonView.WithAssociations.class)
-    public Set<Tag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 

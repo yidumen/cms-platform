@@ -3,14 +3,27 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.EventType;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "wechat_message_event")
 public class EventMessage extends Message {
 
+    @Column(name = "event_type")
+    @Enumerated(EnumType.ORDINAL)
     private EventType event;
+
+    @Column(name = "event_key")
     private String eventKey;
+    @Column(name = "common_info_1", length = 32)
     private String commonCode;
+    @Column(name = "common_info_2", length = 64)
     private String commonInfo;
+    @Column(name = "latitude")
     private Double latitude;
+    @Column(name = "longitude")
     private Double longitude;
+    @Column(name = "poi")
     private Double precision;
 
     public EventType getEvent() {

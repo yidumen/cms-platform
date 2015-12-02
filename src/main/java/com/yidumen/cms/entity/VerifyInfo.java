@@ -1,27 +1,32 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  * 用户验证信息
  *
  * @author 蔡迪旻 <yidumen.com>
  */
+@Entity
+@Table(name = "web_account_verify_info")
 public class VerifyInfo implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "email_code", length = 10)
     private String emailCode;
 
+    @Column(name = "email_verify_status")
     private boolean emailVerified;
 
+    @Column(name = "mobile_code", length = 50)
     private String mobileCode;
 
+    @Column(name = "mobile_verify_status")
     private boolean mobileVerified;
 
     public Long getId() {

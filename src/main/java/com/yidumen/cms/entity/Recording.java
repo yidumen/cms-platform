@@ -1,11 +1,19 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
+
 /**
  * @author 蔡迪旻
  *         2015年11月27日
  */
+@Entity
+@Table(name = "cms_recording")
 public class Recording {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "file_name")
     private String file;
 
     public Long getId() {

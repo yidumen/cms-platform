@@ -13,9 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 蔡迪旻
@@ -60,7 +58,7 @@ public final class RecordingService {
             video.setShootTime(new java.sql.Date(System.currentTimeMillis()));
             video.setSort(0L);
             video.setStatus(VideoStatus.ARCHIVE);
-            final Set<Tag> tags = new HashSet<>();
+            final List<Tag> tags = new ArrayList<>();
             tags.add(tag);
             video.setTags(tags);
             LOG.info("不存在视频 {}，已创建视频", title);

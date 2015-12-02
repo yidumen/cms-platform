@@ -1,12 +1,20 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by cdm on 2015/10/15.
+ * @author 蔡迪旻
+ * 2015年12月02日
  */
+@Entity
+@Table(name = "wechat_fansgroup")
 public class FansGroup implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name", length = 20)
     private String name;
 
     public Long getId() {

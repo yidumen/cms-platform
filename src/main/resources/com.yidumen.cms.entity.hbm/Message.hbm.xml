@@ -7,6 +7,7 @@
         <id name="id" column="id">
             <generator class="identity"/>
         </id>
+        <discriminator column="table_name" type="string" not-null="true" />
         <property name="createTime" column="create_time" type="java.util.Date"/>
     </class>
     <joined-subclass name="ActionMessage" table="wechat_message_action" extends="Message">

@@ -1,11 +1,19 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * @author 蔡迪旻
- * 2015年11月29日
+ *         2015年11月29日
  */
+@Entity
+@Table(name = "wechat_message_voice")
 public class VoiceMessage extends Message {
+    @Column(name = "media_id", length = 64)
     private String mediaId;
+    @Column(name = "format", length = 10)
     private String format;
 
     public String getMediaId() {

@@ -1,36 +1,31 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 
 /**
- *
  * @author 蔡迪旻<yidumen.com>
  */
+@Entity
+@Table(name = "web_sutra")
 public class Sutra implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     /**
      * 章节标识
      */
+    @Column(name = "part_identifier", length = 16)
     private String partIdentifier;
 
     /**
      * 标题
      */
+    @Column(name = "title", length = 50)
     private String title;
 
     /**
@@ -38,6 +33,7 @@ public class Sutra implements Serializable {
      *
      * @see http://blog.csdn.net/MONKEY_D_MENG/article/details/6647488
      */
+    @Column(name = "left_value")
     private Long leftValue;
 
     /**
@@ -45,13 +41,18 @@ public class Sutra implements Serializable {
      *
      * @see http://blog.csdn.net/MONKEY_D_MENG/article/details/6647488
      */
+    @Column(name = "right_value")
     private Long rightValue;
-
+    @ManyToMany
+    @JoinTable(name = "related_sutra_tag", joinColumns = @JoinColumn(name = "sutra_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags;
 
     /**
      * 佛经内容
      */
+    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Column(name = "content", columnDefinition = "MEDIUMTEXT")
     private String content;
 
     public Long getId() {

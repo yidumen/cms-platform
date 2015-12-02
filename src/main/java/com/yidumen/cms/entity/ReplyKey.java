@@ -3,6 +3,7 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.KeyType;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -10,12 +11,23 @@ import java.io.Serializable;
  *
  * @author 蔡迪旻
  */
+@Entity
+@Table(name = "wechat_replykey")
 public class ReplyKey implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name",length = 20)
     private String name;
+    @Column(name = "keyword",length = 64)
     private String key;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "type")
     private KeyType type;
+    @OneToOne
+    @JoinColumn(name = "reply_message_id")
     private ReplyMessage message;
 
     public Long getId() {

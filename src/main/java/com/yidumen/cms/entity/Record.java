@@ -3,6 +3,7 @@ package com.yidumen.cms.entity;
 import com.yidumen.cms.MessageType;
 import com.yidumen.cms.RecordType;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,16 +12,31 @@ import java.util.Objects;
  *
  * @author 蔡迪旻
  */
+@Entity
+@Table(name = "wechat_record")
 public class Record implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "fans_id")
     private Fans owner;
     /**
      * 微信的发送的msgid号
      */
+    @OneToOne
+    @JoinColumn(name = "message_id")
     private Message message;
+    @Column(name = "msg_id",length = 64)
     private String msgId;
+    @Column(name = "is_readed")
     private boolean readed;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "message_type")
     private MessageType msgType;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "record_type")
     private RecordType recordType;
 
     public Long getId() {

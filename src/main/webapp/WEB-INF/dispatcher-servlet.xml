@@ -35,14 +35,7 @@
                 hibernate.show_sql=false
             </value>
         </property>
-        <property name="mappingResources">
-            <list>
-                <value>com.yidumen.cms.entity.hbm/Resource.hbm.xml</value>
-                <value>com.yidumen.cms.entity.hbm/Message.hbm.xml</value>
-                <value>com.yidumen.cms.entity.hbm/Platform.hgm.xml</value>
-                <value>com.yidumen.cms.entity.hbm/Site.hbm.xml</value>
-            </list>
-        </property>
+        <property name="packagesToScan" value="com.yidumen.cms.entity"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

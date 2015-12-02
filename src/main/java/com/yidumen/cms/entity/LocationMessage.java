@@ -1,10 +1,20 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "wechat_message_location")
 public class LocationMessage extends Message {
 
+    @Column(name = "locationX")
     private Double locationX;
+    @Column(name = "locationY")
     private Double locationY;
+    @Column(name = "scale")
     private Double scale;
+    @Column(name = "label")
     private String label;
 
     public Double getLocationX() {

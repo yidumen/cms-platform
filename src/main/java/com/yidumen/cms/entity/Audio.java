@@ -1,11 +1,19 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * 蔡迪旻
  * 2015年10月21日.
  */
+@Entity
+@Table(name = "resource_audio")
 public class Audio extends Resource {
+    @Column(name = "file", length = 64)
     private String file;
+    @Column(name = "hq_file", length = 64)
     private String HQFile;
 
     public String getHQFile() {

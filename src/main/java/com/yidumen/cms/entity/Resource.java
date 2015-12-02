@@ -3,24 +3,36 @@ package com.yidumen.cms.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * 蔡迪旻
  * 2015年10月21日.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "table_name")
+@Table(name = "resource")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Resource {
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+    @Column(name = "title", length = 50)
     private String title;
+    @Column(name = "create_date")
     private Date createDate;
+    @ManyToOne
+    @JoinColumn(name = "group_id")
     private ResourceGroup group;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

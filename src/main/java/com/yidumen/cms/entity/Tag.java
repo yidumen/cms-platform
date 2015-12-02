@@ -2,24 +2,36 @@ package com.yidumen.cms.entity;
 
 import com.yidumen.cms.TagType;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author 蔡迪旻 <yidumen.com>
  */
+@Entity
+@Table(name = "web_tag")
 public class Tag implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Basic(optional = false)
+    @Column(name = "tag_name", length = 30, nullable = false)
     private String tagname;
 
+    @Column(name = "hits")
     private Integer hits;
 
-    private Set<Video> videos;
+    @ManyToMany(mappedBy = "tags")
+    private List<Video> videos;
 
-    private Set<Sutra> sutras;
+    @ManyToMany(mappedBy = "tags")
+    private List<Sutra> sutras;
 
+    @Enumerated(EnumType.ORDINAL)
     private TagType type;
 
     public Long getId() {
@@ -46,19 +58,19 @@ public class Tag implements Serializable {
         this.hits = hits;
     }
 
-    public Set<Video> getVideos() {
+    public List<Video> getVideos() {
         return videos;
     }
 
-    public void setVideos(Set<Video> videos) {
+    public void setVideos(List<Video> videos) {
         this.videos = videos;
     }
 
-    public Set<Sutra> getSutras() {
+    public List<Sutra> getSutras() {
         return sutras;
     }
 
-    public void setSutras(Set<Sutra> sutras) {
+    public void setSutras(List<Sutra> sutras) {
         this.sutras = sutras;
     }
 

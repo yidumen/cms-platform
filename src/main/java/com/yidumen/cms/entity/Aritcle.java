@@ -1,20 +1,31 @@
 package com.yidumen.cms.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "wechat_message_news_aritcle")
 public class Aritcle implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private int seq;
+    @Column(name = "seq")
+    private Integer seq;
+    @Column(name = "title", length = 32)
     private String title;
+    @Column(name = "description", length = 100)
     private String description;
+    @Column(name = "pic_url", length = 100)
     private String picUrl;
+    @Column(name = "link_url", length = 100)
     private String url;
 
-    public int getSeq() {
+    public Integer getSeq() {
         return seq;
     }
 
-    public void setSeq(int seq) {
+    public void setSeq(Integer seq) {
         this.seq = seq;
     }
 
