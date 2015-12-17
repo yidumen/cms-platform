@@ -43,8 +43,8 @@ public final class JFinalTestConfig extends com.jfinal.config.JFinalConfig {
         me.add("/", LoginController.class);
         me.add("/video", VideoController.class);
         me.add("/goods", GoodsController.class);
-        me.add("/ajax/video", VideoAjaxCtrl.class);
         me.add("/ajax/tag", TagAjaxCtrl.class);
+        me.add("/ajax/video", VideoAjaxCtrl.class);
         me.add("/ajax/goods", GoodsAjaxCtrl.class);
         me.add("/ajax/recording", RecordingAjaxCtrl.class);
 
