@@ -11,6 +11,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ public final class RecordingAjaxCtrl{
     @Autowired
     private RecordingService recordingService;
 
+    @Transactional
     @RequestMapping(value = "parseXML", method = RequestMethod.POST)
     public DWZResponse parseXML(@RequestParam MultipartFile file) {
         try {

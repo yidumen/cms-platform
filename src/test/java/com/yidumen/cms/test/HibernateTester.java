@@ -49,7 +49,8 @@ public class HibernateTester extends TestCase {
         entity.setEmail("zhining@yidumen.com");
         entity.setRealname("邵宁");
         entity.setBuddhismname("智宁");
-        entity.setPassword(DigestUtils.md2Hex("666666"));
+        entity.setNickname("白开水");
+        entity.setPassword(DigestUtils.md5Hex("666666"));
         entity.setStatus(true);
         final Duty duty = new Duty();
         duty.setName("管理员");

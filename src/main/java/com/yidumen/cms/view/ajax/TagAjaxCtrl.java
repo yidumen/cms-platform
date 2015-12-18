@@ -5,6 +5,7 @@ import com.yidumen.cms.JacksonView;
 import com.yidumen.cms.entity.Tag;
 import com.yidumen.cms.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,12 +22,14 @@ public final class TagAjaxCtrl{
     @Autowired
     private TagService tagService;
 
+    @Transactional(readOnly = true)
     @RequestMapping(value = "columns")
     @JsonView(JacksonView.MostLess.class)
     public List<Tag> columns() {
         return tagService.findColumnTags();
     }
 
+    @Transactional(readOnly = true)
     @RequestMapping(value = "tags")
     @JsonView(JacksonView.MostLess.class)
     public List<Tag> tags() {

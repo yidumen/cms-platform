@@ -8,7 +8,7 @@ import java.util.List;
 public class NewsMessage extends Message {
 
     @ManyToMany
-    @JoinTable(name = "related_news_aritcle",joinColumns = @JoinColumn(name = "aritcle_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "news_id",referencedColumnName = "id"))
+    @JoinTable(name = "related_news_aritcle",joinColumns = @JoinColumn(name = "news_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "aritcle_id",referencedColumnName = "id"))
     private List<Aritcle> aritcles;
 
     public List<Aritcle> getAritcles() {
