@@ -1,8 +1,8 @@
 package com.yidumen.cms.view.wechat;
 
-import com.yidumen.cms.EventType;
-import com.yidumen.cms.MessageType;
-import com.yidumen.cms.RecordType;
+import com.yidumen.cms.constant.EventType;
+import com.yidumen.cms.constant.MessageType;
+import com.yidumen.cms.constant.RecordType;
 import com.yidumen.cms.entity.*;
 import com.yidumen.cms.service.WeChatService;
 import me.chanjar.weixin.common.exception.WxErrorException;

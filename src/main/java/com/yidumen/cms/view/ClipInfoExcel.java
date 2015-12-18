@@ -35,7 +35,6 @@ public class ClipInfoExcel extends AbstractXlsxStreamingView {
             for (final VideoClipInfo clipInfo : video.getClipInfos()) {
                 clips.append(clipInfo.getRecording().getFile()).append(", ");
             }
-            clips.delete(clips.length() - 2, clips.length() - 1);
             row.createCell(2).setCellValue(clips.toString());
         }
     }

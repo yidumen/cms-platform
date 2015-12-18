@@ -1,6 +1,8 @@
 package com.yidumen.cms.repository;
 
 import com.yidumen.cms.entity.ReplyKey;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class ReplyKeyHibernateRepository extends HibernateRepository<ReplyKey> {
-    public ReplyKeyHibernateRepository() {
-        super(ReplyKey.class);
+    @Autowired
+    public ReplyKeyHibernateRepository(SessionFactory sessionFactory) {
+        super(ReplyKey.class, sessionFactory);
     }
 }

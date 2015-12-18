@@ -1,11 +1,9 @@
 package com.yidumen.cms.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.yidumen.cms.VideoResolution;
-import com.yidumen.cms.VideoResolutionDeserializer;
-import com.yidumen.cms.VideoResolutionSerializer;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.yidumen.cms.JacksonView;
+import com.yidumen.cms.constant.VideoResolution;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,10 +22,9 @@ public class VideoInfo implements Serializable {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "video_id")
     private Video video;
 
-    @JsonSerialize(using = VideoResolutionSerializer.class)
-    @JsonDeserialize(using = VideoResolutionDeserializer.class)
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "resolution")
     private VideoResolution resolution;
@@ -57,6 +54,7 @@ public class VideoInfo implements Serializable {
         this.video = video;
     }
 
+    @JsonView(JacksonView.MostLess.class)
     public VideoResolution getResolution() {
         return resolution;
     }
@@ -81,6 +79,7 @@ public class VideoInfo implements Serializable {
         this.height = height;
     }
 
+    @JsonView(JacksonView.MostLess.class)
     public String getFileSize() {
         return fileSize;
     }
@@ -89,4 +88,14 @@ public class VideoInfo implements Serializable {
         this.fileSize = fileSize;
     }
 
+    @Override
+    public String toString() {
+        return "VideoInfo{" +
+                "id=" + id +
+                ", resolution=" + resolution +
+                ", width=" + width +
+                ", height=" + height +
+                ", fileSize='" + fileSize + '\'' +
+                '}';
+    }
 }

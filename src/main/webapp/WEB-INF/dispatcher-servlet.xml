@@ -5,9 +5,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
-    <mvc:resources mapping="/blocks/**" location="/blocks/"/>
-    <mvc:resources mapping="/oss/**" location="http://yuntaisi.oss-cn-hangzhou.aliyuncs.com"/>
+    <mvc:resources mapping="/oss/**" location="http://yuntaisi.oss-cn-qingdao-internal.aliyuncs.com/"/>
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/"/>
         <property name="defaultEncoding" value="utf-8"/>
@@ -30,9 +28,7 @@
         <!--<property name="configLocations" value="classpath:hibernate.cfg.xml"/>-->
         <property name="hibernateProperties">
             <value>
-                hibernate.dialect=org.hibernate.dialect.MySQLDialect
-                hibernate.hbm2ddl.auto=update
-                hibernate.show_sql=false
+                hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
             </value>
         </property>
         <property name="packagesToScan" value="com.yidumen.cms.entity"/>
@@ -43,9 +39,9 @@
     </bean>
     <!--define oss client -->
     <bean id="ossClient" class="com.aliyun.oss.OSSClient" scope="prototype" destroy-method="shutdown">
-        <constructor-arg index="0" type="java.lang.String" value="http://oss-cn-qingdao.aliyuncs.com"/>
-        <constructor-arg index="1" type="java.lang.String" value="eViYQQ3mqCSCaHW9"/>
-        <constructor-arg index="2" type="java.lang.String" value="Uv7aAIJS2SSeK9ZQlvsmmZ5fJPQV1J"/>
+        <constructor-arg index="0" type="java.lang.String" value="http://oss-cn-qingdao-internal.aliyuncs.com"/>
+        <constructor-arg index="1" type="java.lang.String" value=""/>
+        <constructor-arg index="2" type="java.lang.String" value=""/>
     </bean>
     <bean id="bucket" class="java.lang.String">
         <constructor-arg index="0" type="java.lang.String" value="ydmqd"/>
@@ -64,6 +60,6 @@
         <property name="wxMpConfigStorage" ref="wxConfig"/>
     </bean>
     <bean id="baseUrl" class="java.lang.String">
-        <constructor-arg index="0" type="java.lang.String" value="http://ydmqd.oss-cn-qingdao.aliyuncs.com/wechat/"/>
+        <constructor-arg index="0" type="java.lang.String" value="http://ydmqd.oss-cn-qingdao-internal.aliyuncs.com/wechat/"/>
     </bean>
 </beans>

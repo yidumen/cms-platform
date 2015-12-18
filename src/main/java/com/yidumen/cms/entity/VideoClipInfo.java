@@ -1,8 +1,10 @@
 package com.yidumen.cms.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.yidumen.cms.JacksonView;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author 蔡迪旻
@@ -30,6 +32,7 @@ public class VideoClipInfo implements Serializable {
     @Column(name = "end_time")
     private Long end;
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Long getId() {
         return id;
     }
@@ -38,6 +41,7 @@ public class VideoClipInfo implements Serializable {
         this.id = id;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class})
     public Video getVideo() {
         return video;
     }
@@ -46,6 +50,7 @@ public class VideoClipInfo implements Serializable {
         this.video = video;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Recording getRecording() {
         return recording;
     }
@@ -54,6 +59,7 @@ public class VideoClipInfo implements Serializable {
         this.recording = recording;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Long getIn() {
         return in;
     }
@@ -62,6 +68,7 @@ public class VideoClipInfo implements Serializable {
         this.in = in;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Long getOut() {
         return out;
     }
@@ -70,6 +77,7 @@ public class VideoClipInfo implements Serializable {
         this.out = out;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Long getStart() {
         return start;
     }
@@ -78,11 +86,23 @@ public class VideoClipInfo implements Serializable {
         this.start = start;
     }
 
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public Long getEnd() {
         return end;
     }
 
     public void setEnd(Long end) {
         this.end = end;
+    }
+
+    @Override
+    public String toString() {
+        return "VideoClipInfo{" +
+                "id=" + id +
+                ", in=" + in +
+                ", out=" + out +
+                ", start=" + start +
+                ", end=" + end +
+                '}';
     }
 }

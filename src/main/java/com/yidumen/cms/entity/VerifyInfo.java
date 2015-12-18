@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author 蔡迪旻 <yidumen.com>
  */
 @Entity
-@Table(name = "web_account_verify_info")
+@Table(name = "cms_account_verify_info")
 public class VerifyInfo implements Serializable {
 
     @Id

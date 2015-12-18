@@ -1,6 +1,6 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.cms.SiteAccess;
+import com.yidumen.cms.constant.SiteAccess;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.sql.Date;
  * @author 蔡迪旻 <yidumen.com>
  */
 @Entity
-@Table(name = "web_account_bind_info")
+@Table(name = "cms_account_bind_info")
 public class AccessInfo implements Serializable {
 
     @Id

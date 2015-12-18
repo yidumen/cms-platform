@@ -13,11 +13,13 @@
                 <vg-controls>
                     <button class="iconButton icon-control-start font-size-md m-r-sm" ng-click="play('pre')"></button>
                     <vg-play-pause-button></vg-play-pause-button>
-                    <button class="iconButton icon-control-end font-size-md m-l-sm m-r-sm" ng-click="play('next')"></button>
+                    <button class="iconButton icon-control-end font-size-md m-l-sm m-r-sm"
+                            ng-click="play('next')"></button>
                     <vg-scrub-bar>
                         <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
                     </vg-scrub-bar>
-                    <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}/{{ timeLeft | date:'mm:ss':'+0000' }}</vg-time-display>
+                    <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}/{{ timeLeft | date:'mm:ss':'+0000' }}
+                    </vg-time-display>
                     <vg-volume>
                         <vg-mute-button></vg-mute-button>
                         <vg-volume-bar></vg-volume-bar>

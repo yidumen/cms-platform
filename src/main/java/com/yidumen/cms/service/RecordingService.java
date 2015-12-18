@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.VideoStatus;
+import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.entity.*;
 import com.yidumen.cms.repository.RecordingHibernateRepository;
 import com.yidumen.cms.repository.TagHibernateRepository;
@@ -37,6 +37,7 @@ public final class RecordingService {
         return recordingDao.findUnique(model);
     }
 
+    @SuppressWarnings("unchecked")
     public Video parseXML(Document document) throws IllDataException {
         final Tag condition1 = new Tag();
         condition1.setTagname("聊天室");

@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.TagType;
+import com.yidumen.cms.constant.TagType;
 import com.yidumen.cms.entity.Tag;
 import com.yidumen.cms.repository.TagHibernateRepository;
 import org.springframework.beans.factory.annotation.Autowired;

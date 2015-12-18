@@ -1,10 +1,12 @@
 package com.yidumen.cms.repository;
 
-import com.yidumen.cms.MessageType;
-import com.yidumen.cms.RecordType;
+import com.yidumen.cms.constant.MessageType;
+import com.yidumen.cms.constant.RecordType;
 import com.yidumen.cms.entity.Record;
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +18,9 @@ import java.util.List;
  */
 @Repository
 public class RecordHibernateRepository extends HibernateRepository<Record> {
-    public RecordHibernateRepository() {
-        super(Record.class);
+    @Autowired
+    public RecordHibernateRepository(SessionFactory sessionFactory) {
+        super(Record.class, sessionFactory);
     }
 
     @SuppressWarnings("unchecked")

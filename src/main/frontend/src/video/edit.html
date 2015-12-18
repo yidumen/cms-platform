@@ -1,142 +1,152 @@
-<div class="am-container">
-    <form class="am-form am-form-horizontal">
-        <div class="toolbar am-btn-toolbar">
-            <div class="am-btn-group am-btn-group-sm">
-                <button class="am-btn am-btn-primary" ng-click="submit()">提交修改</button>
-                <button class="am-btn am-btn-warning" ng-if="model.status === 2" ng-click="submitAndVerify()">提交并审核</button>
-                <button class="am-btn am-btn-primary" ng-if="model.status < 2" ng-click="submitAndArchive()">提交并归档</button>
-            </div>
-            <div class="am-checkbox am-checkbox-inline am-margin-left"><label><input type="checkbox" ng-model="update">更新发布时间：{{::model.pubDate}}</label></div>
-        </div>
-        <hr>
-        <div class="am-form-group">
-            <strong class="am-u-sm-2 am-text-right">记录标识：</strong>
-
-            <div class="am-u-sm-1" ng-bind="::model.id"></div>
-            <strong class="am-u-sm-2 am-text-right">视频编号：</strong>
-
-            <div class="am-u-sm-1" ng-bind="::model.file"></div>
-            <strong class="am-u-sm-2 am-text-right">当前状态：</strong>
-
-            <div class="am-u-sm-1" ng-bind="::model.status | videoStatus"></div>
-            <strong class="am-u-sm-2 am-text-right">播放时长：</strong>
-
-            <div class="am-u-sm-1" ng-bind="model.duration | duration"></div>
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">视频标题：</label>
-
-            <div class="am-u-sm-10"><input type="text" ng-model="model.title"></div>
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">发布序号：</label>
-
-            <div class="am-u-sm-2"><input type="text" ng-model="model.sort"></div>
-            <label class="am-u-sm-2 am-form-label">分级信息：</label>
-
-            <div class="am-u-sm-2"><input type="text" ng-model="model.grade"></div>
-            <label class="am-u-sm-2 am-form-label">推荐度：</label>
-
-            <div class="am-u-sm-2"><input type="text" ng-model="model.recommend"></div>
-        </div>
-        <div class="am-form-group am-form-icon">
-            <label class="am-u-sm-2 am-form-label">拍摄日期：</label>
-
-            <div class="am-u-sm-3 am-u-end"><i class="am-icon-calendar am-margin-left"></i><input datepicker class="am-form-field" type="text" ng-model="model.shootTime"></div>
-
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">所属栏目：</label>
-
-            <div class="am-u-sm-6 am-form-icon am-u-end" data-am-modal="{target: '#amodal', closeViaDimmer: false, width: 300}">
-                <span class="am-icon-tag am-margin-left"></span>
-
-                <div class="am-form-field static-input">
-                    <span class="am-margin-right-xs" ng-repeat="col in model.tags" ng-if="col.type == 2" ng-bind="col.tagname"></span>
-                </div>
-            </div>
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">标签：</label>
-
-            <div class="am-u-sm-10 am-form-icon" data-am-modal="{target: '#bmodal', closeViaDimmer: false, width: 800}">
-                <span class="am-icon-tags am-margin-left"></span>
-
-                <div id="tag-container" class="am-form-field static-input">
-                    <span class="am-badge am-badge-primary am-margin-right-xs am-margin-bottom-xs am-text-sm" ng-repeat="col in model.tags" ng-if="col.type === 0" ng-bind="col.tagname"></span>
-                </div>
-            </div>
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">视频描述：</label>
-
-            <div class="am-u-sm-5"><textarea rows="4" ng-model="model.descrpition"></textarea></div>
-            <label class="am-u-sm-1">备注：</label>
-
-            <div class="am-u-sm-4"><textarea rows="4" ng-model="model.note"></textarea></div>
-        </div>
-        <div class="am-form-group">
-            <label class="am-u-sm-2 am-form-label">文件信息：</label>
-
-            <div class="am-u-sm-4">
-                <table class="am-table am-table-bordered">
-                    <thead>
-                    <tr>
-                        <td>清晰度</td>
-                        <td>文件大小</td>
-                    </tr>
-                    </thead>
-                    <tbody class="text-muted">
-                    <tr ng-repeat="info in ::model.extInfo">
-                        <td ng-bind="info.resolution|resolution"></td>
-                        <td ng-bind="info.fileSize"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="am-u-sm-6">
-                <div id="help">
-                    <div>填写提示：</div>
-                    <div class="col-sm-4">
-                        <p class="am-text-warning">推荐度为0即为不推荐，推荐度高的视频排列会更靠前。</p>
-
-                        <p class="am-text-warning">同理，发布序号为0即为不排序。</p>
-
-                        <p class="am-text-primary">您并不能任意修改所有信息。某些信息必须通过特定的<br>工作流程才会被更新。如：状态、更新时间等。</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-globe"></i>
+            <a ui-sref="site">站点管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>视频管理</span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="site.video-manager">视频信息维护</a>
+        </li>
+    </ul>
 </div>
-<div id="amodal" class="am-modal am-modal-confirm" tabindex="-1">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">栏目列表
-            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+<h3 class="page-title">视频信息编辑</h3>
+<form class="form form-horizontal">
+    <div class="toolbar btn-toolbar">
+        <a class="btn btn-default" ui-sref="site.video-manager">返回</a>
+        <div class="btn-group">
+            <button class="btn btn-primary" ng-click="submit()">提交修改</button>
+            <button class="btn btn-warning" ng-if="model.status === 2" ng-click="submitAndVerify()">提交并发布
+            </button>
+            <button class="btn btn-primary" ng-if="model.status < 2" ng-click="submitAndArchive()">提交并归档
+            </button>
         </div>
-        <div class="am-modal-bd">
-            <ul class="am-list am-text-left">
-                <li ng-class="{active:mTag.indexOf(col.id)>=0}" ng-repeat="col in cols" ng-click="addTag(col)"><a href="" class="am-margin-left" ng-bind="col.tagname"></a></li>
-            </ul>
-        </div>
-        <div class="am-modal-footer">
-            <span class="am-modal-btn" data-am-modal-cancel>确定</span>
+        <div class="btn-group">
+            <div class="checkbox margin-top-xs margin-left">
+                <label><input type="checkbox" ng-model="update">更新发布时间：{{::model.pubDate}}</label>
+            </div>
         </div>
     </div>
-</div>
-<div id="bmodal" class="am-modal am-modal-alert" tabindex="-1">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">标签列表
-            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    <hr>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">记录标识：</label>
+
+        <div class="col-sm-1">
+            <p class="form-control-static text-muted" ng-bind="::model.id"></p>
         </div>
-        <div class="am-modal-bd am-scrollable-vertical">
-            <ul class="am-avg-sm-8 list-tags">
-                <li ng-class="{active:mTag.indexOf(col.id)>=0}" ng-repeat="col in tags" ng-click="addTag(col)"><a href="" ng-bind="col.tagname"></a></li>
-            </ul>
+
+        <label class="col-sm-2 control-label">视频编号：</label>
+
+        <div class="col-sm-1">
+            <p class="form-control-static text-muted" ng-bind="::model.file"></p>
         </div>
-        <div class="am-modal-footer">
-            <span class="am-modal-btn" data-am-modal-cancel>确定</span>
+        <label class="col-sm-2 control-label">当前状态：</label>
+
+        <div class="col-sm-1">
+            <p class="form-control-static text-muted" ng-bind="::model.status | videoStatus"></p>
+        </div>
+        <label class="col-sm-2 control-label">播放时长：</label>
+
+        <div class="col-sm-1">
+            <p class="form-control-static text-muted" ng-bind="model.duration | duration"></p>
         </div>
     </div>
-</div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">视频标题：</label>
+
+        <div class="col-sm-10">
+            <input type="text" class="form-control" ng-model="model.title">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">发布序号：</label>
+
+        <div class="col-sm-2"><input type="text" class="form-control" ng-model="model.sort"></div>
+        <label class="col-sm-2 control-label">分级信息：</label>
+
+        <div class="col-sm-2"><input type="text" class="form-control" ng-model="model.grade"></div>
+        <label class="col-sm-2 control-label">推荐度：</label>
+
+        <div class="col-sm-2"><input type="text" class="form-control" ng-model="model.recommend"></div>
+    </div>
+    <div class="form-group form-icon">
+        <label class="col-sm-2 control-label">拍摄日期：</label>
+
+        <div class="col-sm-3 input-icon">
+            <i class="fa fa-calendar"></i>
+            <input uib-datepicker-popup show-button-bar="false" is-open="isOpen" ng-click="open()" class="form-control"
+                   type="text" ng-model="model.shootTime">
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">所属栏目：</label>
+
+        <div class="col-sm-6 input-icon" ng-click="showColumns()">
+            <i class="fa fa-tag"></i>
+
+            <div class="form-control static-input">
+                    <span class="margin-right-xs" ng-repeat="col in model.tags" ng-if="col.type == 2"
+                          ng-bind="col.tagname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">标签：</label>
+
+        <div class="col-sm-10 input-icon" ng-click="showTags()">
+            <i class="fa fa-tags"></i>
+
+            <div class="form-control static-input">
+                    <span class="badge badge-primary margin-right-xs margin-bottom-xs text-sm"
+                          ng-repeat="col in model.tags" ng-if="col.type === 0" ng-bind="col.tagname"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">视频描述：</label>
+
+        <div class="col-sm-5">
+            <textarea class="form-control" rows="4" ng-model="model.descrpition"></textarea>
+        </div>
+
+        <label class="col-sm-1">备注：</label>
+
+        <div class="col-sm-4">
+            <textarea class="form-control" rows="4" ng-model="model.note"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">文件大小：</label>
+
+        <div class="col-sm-4">
+            <table class="table table-bordered">
+                <tbody class="text-muted">
+                <tr ng-repeat="info in ::model.extInfo">
+                    <td ng-bind="info.resolution|resolution"></td>
+                    <td ng-bind="info.fileSize"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="dsf betsm-6">
+            <div id="help">
+                <div>填写提示：</div>
+                <div class="col-sm-4">
+                    <p class="text-warning">推荐度为0即为不推荐，推荐度高的视频排列会更靠前。</p>
+
+                    <p class="text-warning">同理，发布序号为0即为不排序。</p>
+
+                    <p class="text-primary">您并不能任意修改所有信息。某些信息必须通过特定的<br>工作流程才会被更新。如：状态、更新时间等。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
 

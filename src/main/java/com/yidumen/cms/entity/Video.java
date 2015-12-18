@@ -1,10 +1,10 @@
 package com.yidumen.cms.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yidumen.cms.*;
+import com.yidumen.cms.constant.VideoStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "resource_video")
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@NamedQuery(name = "video.chatroomSort", query = "select max(v.sort) from Video v join v.tags as tag where tag.tagname='聊天室'")
 public class Video extends Resource implements Serializable {
 
     @Column(name = "sort")
@@ -45,7 +45,6 @@ public class Video extends Resource implements Serializable {
     private String note;
     @Column(name = "grade", length = 5)
     private String grade;
-    @JsonSerialize(using = DurationSerializer.class)
     @JsonDeserialize(using = DurationDeserializer.class)
     @Column(name = "duration")
     private Long duration;
@@ -59,8 +58,6 @@ public class Video extends Resource implements Serializable {
     /**
      * 视频状态，可取的值：发布、审核、存档
      */
-    @JsonSerialize(using = VideoStatusSerializer.class)
-    @JsonDeserialize(using = VideoStatusDeSerializer.class)
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
     private VideoStatus status;
@@ -73,7 +70,7 @@ public class Video extends Resource implements Serializable {
     @Column(name = "pub_date")
     private Date pubDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "video")
     private List<VideoClipInfo> clipInfos;
 
     public void setSort(Long sort) {
@@ -85,16 +82,12 @@ public class Video extends Resource implements Serializable {
      *
      * @return 表示发布索引号的长整型数据
      */
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public Long getSort() {
         return sort;
     }
 
-    public void ListSort(Long sort) {
-        this.sort = sort;
-    }
-
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(value = {JacksonView.MostLess.class, JacksonView.Special.class})
     public String getFile() {
         return file;
     }
@@ -103,7 +96,7 @@ public class Video extends Resource implements Serializable {
         this.file = file;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public VideoStatus getStatus() {
         return status;
     }
@@ -112,7 +105,7 @@ public class Video extends Resource implements Serializable {
         this.status = status;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public Long getDuration() {
         return duration;
     }
@@ -121,7 +114,7 @@ public class Video extends Resource implements Serializable {
         this.duration = duration;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public java.sql.Date getShootTime() {
         return shootTime;
     }
@@ -130,7 +123,7 @@ public class Video extends Resource implements Serializable {
         this.shootTime = shootTime;
     }
 
-    @JsonView(JacksonView.WithAssociations.class)
+    @JsonView(JacksonView.More.class)
     public List<VideoInfo> getExtInfo() {
         return extInfo;
     }
@@ -139,7 +132,7 @@ public class Video extends Resource implements Serializable {
         this.extInfo = extInfo;
     }
 
-    @JsonView(JacksonView.WithAssociations.class)
+    @JsonView(JacksonView.Normal.class)
     public List<Tag> getTags() {
         return tags;
     }
@@ -157,7 +150,7 @@ public class Video extends Resource implements Serializable {
      *
      * @return 发布日期
      */
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public Date getPubDate() {
         return pubDate;
     }
@@ -166,7 +159,7 @@ public class Video extends Resource implements Serializable {
         this.pubDate = pubDate;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.More.class)
     public String getDescription() {
         return description;
     }
@@ -175,7 +168,7 @@ public class Video extends Resource implements Serializable {
         this.description = descrpition;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.Less.class)
     public Integer getRecommend() {
         return recommend;
     }
@@ -184,7 +177,7 @@ public class Video extends Resource implements Serializable {
         this.recommend = recommend;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.More.class)
     public String getNote() {
         return note;
     }
@@ -193,7 +186,7 @@ public class Video extends Resource implements Serializable {
         this.note = note;
     }
 
-    @JsonView(JacksonView.Normal.class)
+    @JsonView(JacksonView.More.class)
     public String getGrade() {
         return grade;
     }
@@ -202,6 +195,7 @@ public class Video extends Resource implements Serializable {
         this.grade = grade;
     }
 
+    @JsonView(value = {JacksonView.MuchMore.class, JacksonView.Special.class})
     public List<VideoClipInfo> getClipInfos() {
         return clipInfos;
     }

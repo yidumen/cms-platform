@@ -1,6 +1,6 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.cms.GoodsStatus;
+import com.yidumen.cms.constant.GoodsStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;

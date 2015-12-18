@@ -1,6 +1,6 @@
 package com.yidumen.cms.view.wechat;
 
-import com.yidumen.cms.MessageType;
+import com.yidumen.cms.constant.MessageType;
 import com.yidumen.cms.entity.*;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;

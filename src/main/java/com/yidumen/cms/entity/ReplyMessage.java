@@ -1,7 +1,7 @@
 package com.yidumen.cms.entity;
 
 
-import com.yidumen.cms.MessageType;
+import com.yidumen.cms.constant.MessageType;
 
 import javax.persistence.*;
 import java.io.Serializable;

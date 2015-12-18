@@ -1,7 +1,7 @@
 package com.yidumen.cms.entity;
 
 
-import com.yidumen.cms.EventType;
+import com.yidumen.cms.constant.EventType;
 
 import javax.persistence.*;
 

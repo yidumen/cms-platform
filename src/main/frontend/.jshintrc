@@ -7,13 +7,14 @@
   "expr": true,
   "immed": true,
   "indent": 2,
-  "maxlen": 120,
+//  "maxlen": 200,
   "newcap": true,
   "noarg": true,
   "quotmark": "single",
-  "undef": true,
-  "unused": "vars",
+  "undef": false,
+  "unused": true,
   "strict": true,
+  "trailing": true,
   "globals": {
     "define": true,
     "module": true

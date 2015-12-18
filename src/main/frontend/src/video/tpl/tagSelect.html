@@ -1,0 +1,14 @@
+<div class="modal-header">标签列表
+    <a class="close" ng-click="cancel()">&times;</a>
+</div>
+<div class="modal-body">
+    <div class="row list-tags">
+        <div class="col-xs-12 col-sm-3 col-md-2" ng-class="{'active':mTag.indexOf(col.id)>=0}" ng-repeat="col in tags"
+             ng-click="addTag(col)">
+            <a ng-bind="col.tagname"></a>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <span class="btn btn-primary" ng-click="cancel()">确定</span>
+</div>

@@ -2,6 +2,8 @@ package com.yidumen.cms.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.yidumen.cms.JacksonView;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,9 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "table_name")
 @Table(name = "resource")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,7 @@ public class Resource {
     @JoinColumn(name = "group_id")
     private ResourceGroup group;
 
+    @JsonView(JacksonView.MostLess.class)
     public Long getId() {
         return id;
     }
@@ -36,6 +37,7 @@ public class Resource {
         this.id = id;
     }
 
+    @JsonView(JacksonView.Less.class)
     public String getTitle() {
         return title;
     }

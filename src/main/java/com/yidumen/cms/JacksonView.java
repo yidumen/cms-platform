@@ -5,12 +5,21 @@ package com.yidumen.cms;
  *         2015年11月28日
  */
 public class JacksonView {
-    public interface Normal {
+    public interface MostLess {
     }
 
-    public interface WithAssociations extends Normal {
+    public interface Less extends MostLess {
     }
 
-    public interface WithSpecialAssociations extends WithAssociations {
+    public interface Normal extends Less {
+    }
+
+    public interface More extends Normal {
+    }
+
+    public interface MuchMore extends More {
+    }
+
+    public interface Special {
     }
 }

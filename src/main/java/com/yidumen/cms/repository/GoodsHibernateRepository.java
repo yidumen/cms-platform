@@ -1,7 +1,8 @@
 package com.yidumen.cms.repository;
 
-import com.yidumen.cms.GoodsStatus;
 import com.yidumen.cms.entity.Goods;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.List;
  */
 @Repository
 public class GoodsHibernateRepository extends HibernateRepository<Goods> {
-
-    public GoodsHibernateRepository() {
-        super(Goods.class);
+    @Autowired
+    public GoodsHibernateRepository(SessionFactory sessionFactory) {
+        super(Goods.class, sessionFactory);
     }
 
     @SuppressWarnings("unchecked")

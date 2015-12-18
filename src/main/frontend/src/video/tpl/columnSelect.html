@@ -1,0 +1,9 @@
+<div class="modal-header">栏目列表</div>
+<div class="modal-body">
+    <div class="list-group text-left">
+        <a class="list-group-item" ng-class="{active:mTag.indexOf(col.id)>=0}" ng-repeat="col in cols" ng-click="addTag(col)" ng-bind="col.tagname"></a>
+    </div>
+</div>
+<div class="modal-footer">
+    <span class="btn btn-primary" ng-click="cancel()">确定</span>
+</div>

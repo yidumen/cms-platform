@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.MessageType;
+import com.yidumen.cms.constant.MessageType;
 import com.yidumen.cms.entity.Fans;
 import com.yidumen.cms.entity.Message;
 import com.yidumen.cms.entity.ReplyKey;

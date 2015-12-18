@@ -1,0 +1,104 @@
+@import "global/_variables";
+
+.page-header, .page-sidebar {
+  font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", Arial, sans-serif;
+}
+
+.page-content-wrapper {
+  //margin-bottom: 33px;
+}
+
+.static-input {
+  min-height: 34px;
+  cursor: pointer;
+  &:hover {
+    border-color: #999;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 5px rgba(59, 180, 242, .3);
+  }
+}
+
+.list, .list-tags {
+  & > .active {
+    background-color: $brand-primary;
+    & > a {
+      color: #ffffff;
+    }
+  }
+}
+
+.list-tags {
+  & > * {
+    border: solid gainsboro 1px;
+    padding: 5px 0;
+    cursor: pointer;
+    text-align: center;
+  }
+}
+
+#tag-container {
+  min-height: 41px;
+  padding-bottom: 4px;
+}
+
+.toolbar {
+  margin-bottom: 1.6rem;
+}
+
+.help-info {
+  position: absolute;
+  top: 11px;
+  right: 20px;
+  .help-title, .help-body, .help-item {
+    display: inline;
+  }
+  .help-title {
+    padding-right: 10px;
+  }
+  .help-item {
+    margin-right: 5px;
+  }
+}
+
+.operation {
+  a {
+    text-outline: none;
+    &:hover, &:link, &:active {
+      text-decoration: none;
+    }
+  }
+}
+
+//通用样式
+.margin-left-xs {
+  margin-left: 5px;
+}
+
+.margin-left {
+  margin-left: 10px !important;
+}
+
+.margin-right-xs {
+  margin-right: 5px;
+}
+
+.margin-top-xs {
+  margin-top: 5px !important;
+}
+
+.margin-top-xl {
+  margin-top: 3.2rem;
+}
+
+.margin-top-10p {
+  margin-top: 10%;
+}
+
+.fr {
+  float: right;
+}
+
+.text-top {
+  vertical-align: top;
+}
+

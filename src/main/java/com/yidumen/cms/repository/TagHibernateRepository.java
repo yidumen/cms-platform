@@ -1,6 +1,8 @@
 package com.yidumen.cms.repository;
 
 import com.yidumen.cms.entity.Tag;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,7 +11,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TagHibernateRepository extends HibernateRepository<Tag> {
-    public TagHibernateRepository() {
-        super(Tag.class);
+    @Autowired
+    public TagHibernateRepository(SessionFactory sessionFactory) {
+        super(Tag.class, sessionFactory);
     }
 }

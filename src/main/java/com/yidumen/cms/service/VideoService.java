@@ -1,8 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.VideoStatus;
-import com.yidumen.cms.entity.Record;
-import com.yidumen.cms.entity.Recording;
+import com.yidumen.cms.constant.VideoStatus;
 import com.yidumen.cms.entity.Video;
 import com.yidumen.cms.entity.VideoClipInfo;
 import com.yidumen.cms.repository.VideoHibernateRepository;
@@ -82,6 +80,17 @@ public final class VideoService {
 
     public Video publish(final Long id, Integer sort) throws IOException, IllDataException {
         final Video video = videoDAO.find(id);
+        verifyFiles(video);
+        video.setPubDate(new Date());
+        video.setStatus(VideoStatus.PUBLISH);
+        if (sort != null) {
+            video.setSort(sort.longValue());
+        }
+        videoDAO.edit(video);
+        return video;
+    }
+
+    private void verifyFiles(Video video) throws IOException, IllDataException {
         boolean deployError = false;
         final StringBuilder errorMessage = new StringBuilder();
         for (String resolution : resolutions) {
@@ -89,7 +98,6 @@ public final class VideoService {
             final Response response = Request.Head(url).connectTimeout(5000).execute();
             final HttpResponse httpResponse = response.returnResponse();
             final int statusCode = httpResponse.getStatusLine().getStatusCode();
-            log.debug("v3 response code: {}", statusCode);
             if (statusCode != 200) {
                 if (!deployError) {
                     deployError = true;
@@ -101,13 +109,6 @@ public final class VideoService {
         if (deployError) {
             throw new IllDataException(errorMessage + "视频文件尚未部署，发布操作被拒绝！");
         }
-        video.setPubDate(new Date());
-        video.setStatus(VideoStatus.PUBLISH);
-        if (sort != null) {
-            video.setSort(sort.longValue());
-        }
-        videoDAO.edit(video);
-        return video;
     }
 
     public Object findMax(String property) {
@@ -127,7 +128,7 @@ public final class VideoService {
         return videoDAO.findUnique(video);
     }
 
-    public int getSort() {
+    public Long getSort() {
         return videoDAO.findSort();
     }
 
@@ -142,11 +143,12 @@ public final class VideoService {
         return video;
     }
 
-    public void updateAndVerify(Video video, boolean isUpdateDate) {
+    public void updateAndVerify(Video video, boolean isUpdateDate) throws IOException, IllDataException {
+        verifyFiles(video);
         if (isUpdateDate) {
             video.setPubDate(new Date());
         }
-        video.setStatus(VideoStatus.VERIFY);
+        video.setStatus(VideoStatus.PUBLISH);
         videoDAO.edit(video);
     }
 

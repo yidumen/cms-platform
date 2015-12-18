@@ -1,43 +1,43 @@
 package com.yidumen.cms.entity;
 
-import com.yidumen.cms.AccountGroup;
-import com.yidumen.cms.Sex;
+import com.yidumen.cms.constant.Sex;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author 蔡迪旻<yidumen.com>
  */
 @Entity
-@Table(name = "web_account")
+@Table(name = "cms_account")
 public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "user_name")
+    private String name;
 
-    @Column(name="email",length = 50)
+    @Column(name = "email", length = 50)
     private String email;
 
-    @Column(name="phone",length = 13)
+    @Column(name = "phone", length = 13)
     private String phone;
 
-    @Basic(optional = false)
-    @Column(name="password",length = 64)
+    @Column(name = "password", length = 64)
     private String password;
 
-    @Basic(optional = false)
-    @Column(name="nick_name",length = 16)
+    @Column(name = "nick_name", length = 16)
     private String nickname;
 
-    @Column(name="buddhism_name",length = 16)
+    @Column(name = "buddhism_name", length = 16)
     private String buddhismname;
 
-    @Column(name="real_name",length = 16)
+    @Column(name = "real_name", length = 16)
     private String realname;
 
     @Column(name = "sex")
@@ -49,42 +49,43 @@ public class Account implements Serializable {
     @Column(name = "head_pic")
     private String headpic;
 
-    @Column(name="province",length = 10)
+    @Column(name = "province", length = 10)
     private String province;
 
-    @Column(name="city",length = 20)
+    @Column(name = "city", length = 20)
     private String city;
 
-    @Column(name="area",length = 20)
+    @Column(name = "area", length = 20)
     private String area;
 
-    @Basic(optional = false)
-    @Column(name = "status")
-    private boolean status;
+    @Column(name = "is_enable")
+    private Boolean status;
 
-    @Basic(optional = false)
     @Column(name = "create_date")
     private java.util.Date createdate;
 
-    @Basic(optional = false)
     @Column(name = "last_login_time")
     private java.util.Date lastlogintime;
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<UserMessage> sendedMessages;
 
-    @OneToMany(mappedBy = "target")
+    @OneToMany(mappedBy = "target",cascade = CascadeType.ALL)
     private List<UserMessage> receivedMessages;
-
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<AccessInfo> accessInfo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "verify_id")
     private VerifyInfo verifyInfo;
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "account_group")
-    private AccountGroup userGroup;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "duty_id")
+    private Duty duty;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "related_account_permission",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
+    private List<Permission> permissions;
 
     public Account() {
         this.status = false;
@@ -96,6 +97,22 @@ public class Account implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public String getEmail() {
@@ -204,14 +221,6 @@ public class Account implements Serializable {
         this.area = area;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public java.util.Date getCreatedate() {
         return createdate;
     }
@@ -244,6 +253,7 @@ public class Account implements Serializable {
         this.receivedMessages = receivedMessages;
     }
 
+
     public List<AccessInfo> getAccessInfo() {
         return accessInfo;
     }
@@ -260,12 +270,55 @@ public class Account implements Serializable {
         this.verifyInfo = verifyInfo;
     }
 
-    public AccountGroup getUserGroup() {
-        return userGroup;
+    public Duty getDuty() {
+        return duty;
     }
 
-    public void setUserGroup(AccountGroup userGroup) {
-        this.userGroup = userGroup;
+    public void setDuty(Duty duty) {
+        this.duty = duty;
     }
 
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public void addPermission(Permission permission) {
+        if (this.permissions == null) {
+            this.permissions = new ArrayList<>();
+        }
+        this.permissions.add(permission);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", buddhismname='" + buddhismname + '\'' +
+                ", realname='" + realname + '\'' +
+                ", sex=" + sex +
+                ", born=" + born +
+                ", headpic='" + headpic + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", status=" + status +
+                ", createdate=" + createdate +
+                ", lastlogintime=" + lastlogintime +
+                ", sendedMessages=" + sendedMessages +
+                ", receivedMessages=" + receivedMessages +
+                ", accessInfo=" + accessInfo +
+                ", verifyInfo=" + verifyInfo +
+                ", duty=" + duty +
+                ", permissions=" + permissions +
+                '}';
+    }
 }

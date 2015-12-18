@@ -1,113 +1,49 @@
-<div class="toolbar am-btn-toolbar">
-    <div class="am-btn-group am-btn-group-xs">
-        <button type="button" class="am-btn am-btn-success am-round" ng-click="clearSearch()">全部视频</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '已发布', false)">已发布</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '已归档', false)">已归档</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(7, '待审核', false)">待审核</button>
-        <button type="button" class="am-btn am-btn-secondary" ng-click="search(6, 'am-icon-check-square-o', false)">推荐</button>
-        <button type="button" class="am-btn am-btn-secondary" ng-click="search(6, 'am-icon-square-o', false)">未推荐</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^[^-]\\d*$', true)">有序号</button>
-        <button type="button" class="am-btn am-btn-primary" ng-click="search(2, '^-$', true)">无序号</button>
-        <button type="button" class="am-btn am-btn-secondary am-radius" ng-click='search(5,"^$",true)'>新增信息</button>
-    </div>
-    <div class="am-btn-group am-btn-group-xs">
-        <a class="am-btn am-btn-primary am-radius" href="/ajax/video/exportExcel"><span class="am-icon-file-excel-o"> 导出EXCEL(beta)</span></a>
-    </div>
-    <div class="help-info">
-        <div class="help-title"><i class="am-icon-question-circle"></i></div>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-globe"></i>
+            <a ui-sref="site">站点管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>视频管理</li>
+    </ul>
+    <div class="help-info text-muted">
+        <div class="help-title"><i class="fa fa-question-circle"></i></div>
         <div class="help-body">
             <div class="help-item">
-                <span class="am-icon-info-circle"></span>
-                <span class="am-text-xs">详细信息</span>
+                <span class="fa fa-info-circle"></span>
+                <span class="text-xs">详细信息</span>
             </div>
             <div class="help-item">
-                <span class="am-icon-film"></span>
-                <span class="am-text-xs">来源信息</span>
+                <span class="fa fa-film"></span>
+                <span class="text-xs">来源信息</span>
             </div>
             <div class="help-item">
-                <span class="am-icon-external-link"></span>
-                <span class="am-text-xs">网站预览</span>
+                <span class="fa fa-external-link"></span>
+                <span class="text-xs">网站预览</span>
             </div>
         </div>
     </div>
 </div>
-<table id="video-info" class="am-table am-table-striped am-table-hover" frame="below" datatable=""
-       dt-options="dtOptions" dt-disable-deep-watchers="true"
+<h3 class="page-title">视频信息查询</h3>
+<div class="toolbar btn-toolbar">
+    <div class="btn-group">
+        <button type="button" class="btn btn-success" ng-click="clearSearch()">全部视频</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '已发布', false)">已发布</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '已归档', false)">已归档</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '待审核', false)">待审核</button>
+        <button type="button" class="btn btn-info" ng-click="search(6, 'fa-check-square-o', false)">推荐</button>
+        <button type="button" class="btn btn-info" ng-click="search(6, 'fa-square-o', false)">未推荐</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^[^-]\\d*$', true)">有序号</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^-$', true)">无序号</button>
+        <button type="button" class="btn btn-info" ng-click='search(5,"^$",true)'>新增信息</button>
+    </div>
+
+    <div class="btn-group">
+        <a class="btn btn-primary am-radius" href="/api/video/exportExcel"><span
+                class="fa fa-file-excel-o"> 导出EXCEL(beta)</span></a>
+    </div>
+</div>
+<table id="video-info" class="table table-striped table-hover" frame="below" datatable=""
+       dt-options="dtOptions" dt-disable-deep-watchers="true" dt-instance="dtInstance"
        dt-columns="dtColumns"></table>
-<div class="am-modal am-modal-no-btn" tabindex="-1" id="detail-dialog">
-    <div class="am-modal-dialog">
-        <div class="am-modal-hd">
-            {{video.title}}<a href="javascript: void(0)" class="am-close am-close-spin"
-                              data-am-modal-close>&times;</a>
-        </div>
-        <div class="am-modal-bd">
-            <table style="border-spacing: 10px;border-collapse: inherit;text-align: left">
-                <tr>
-                    <td>记录标识：</td>
-                    <td class="am-link-muted" ng-bind="video.id"></td>
-                    <td>视频编号：</td>
-                    <td class="am-link-muted" ng-bind="video.file"></td>
-                    <td>播放时长：</td>
-                    <td class="am-link-muted" ng-bind="video.duration|duration"></td>
-                </tr>
-                <tr>
-                    <td>发布序号：</td>
-                    <td class="am-link-muted" ng-bind="video.sort"></td>
-                    <td>分级信息：</td>
-                    <td class="am-link-muted" ng-bind="video.grade"></td>
-                    <td>拍摄日期：</td>
-                    <td class="am-link-muted" ng-bind="video.shootTime"></td>
-                </tr>
-                <tr>
-                    <td class="am-text-right">推荐度：</td>
-                    <td class="am-link-muted" ng-bind="video.recommend"></td>
-                    <td>当前状态：</td>
-                    <td class="am-link-muted" ng-bind="video.status|videoStatus"></td>
-                    <td>发布时间：</td>
-                    <td class="am-link-muted" ng-bind="video.pubDate"></td>
-                </tr>
-                <tr>
-                    <td class="am-text-right">所属栏目：</td>
-                    <td class="am-link-muted" colspan="5">
-                        <span class="am-margin-right-xs" ng-repeat="col in video.tags" ng-if="col.type == 2" ng-bind="col.tagname"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="am-text-right">标签：</td>
-                    <td colspan="5">
-                            <span class="am-margin-right am-badge am-badge-success am-radius"
-                                  ng-repeat="tag in video.tags" ng-if="tag.type == 0" ng-bind="tag.tagname"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top">视频描述：</td>
-                    <td class="am-link-muted" colspan="5" ng-bind="video.descrpition"></td>
-                </tr>
-                <tr>
-                    <td class="am-text-right" style="vertical-align: top">备注：</td>
-                    <td class="am-link-muted" colspan="5" ng-bind="video.note"></td>
-                </tr>
-                <tr>
-                    <td class="am-text-top">文件信息：</td>
-                    <td colspan="4">
-                        <table class="am-table am-table-bordered">
-                            <thead>
-                            <tr class="am-text-middle">
-                                <td>清晰度</td>
-                                <td>文件大小</td>
-                            </tr>
-                            </thead>
-                            <tbody class="am-link-muted">
-                            <tr class="am-text-middle" ng-repeat="info in video.extInfo">
-                                <td ng-bind="info.resolution|resolution"></td>
-                                <td class="am-text-right" ng-bind="info.fileSize"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    <td></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>

@@ -1,6 +1,6 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.GoodsStatus;
+import com.yidumen.cms.constant.GoodsStatus;
 import com.yidumen.cms.entity.Goods;
 import com.yidumen.cms.repository.GoodsHibernateRepository;
 import org.springframework.beans.factory.annotation.Autowired;

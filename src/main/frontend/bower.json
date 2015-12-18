@@ -18,12 +18,11 @@
   ],
   "dependencies": {
     "angular-xeditable": "~0.1.9",
-    "angular": "~1.4.7",
+    "angular": "~1.4.8",
     "angular-masonry": "~0.13.0",
     "cropper": "~1.0.0",
     "ng-flow": "~2.6.1",
-    "angular-animate": "~1.4.7",
-    "angular-mocks": "~1.4.7",
+    "angular-animate": "~1.4.8",
     "oclazyload": "~1.0.8",
     "videogular-controls": "~1.3.2",
     "videogular-buffering": "~1.3.2",
@@ -31,7 +30,8 @@
     "videogular-poster": "~1.3.2",
     "videogular-ima-ads": "~1.3.2",
     "videogular-angulartics": "~1.3.2",
-    "videogular-themes-default": "~1.3.2"
+    "videogular-themes-default": "~1.3.2",
+    "angular-datatables": "~0.5.1"
   },
   "private": true
 }

@@ -1,6 +1,8 @@
 package com.yidumen.cms.repository;
 
 import com.yidumen.cms.entity.TextMessage;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,7 +11,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TextMessageHibernateRepository extends HibernateRepository<TextMessage> {
-    public TextMessageHibernateRepository() {
-        super(TextMessage.class);
+    @Autowired
+    public TextMessageHibernateRepository(SessionFactory sessionFactory) {
+        super(TextMessage.class, sessionFactory);
     }
 }

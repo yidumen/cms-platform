@@ -6,15 +6,30 @@ angular.module('app')
      * key: function name of the jQuery plugin
      * value: array of the css js file located
      */
-    .constant('JQ_CONFIG', {
-    })
+    .constant('JQ_CONFIG', {})
     // oclazyload config
     .config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
         // We configure ocLazyLoad to use the lib script.js as the async loader
+        'use strict';
         $ocLazyLoadProvider.config({
             debug: true,
             events: true,
             modules: [
+                {
+                    name:'echarts',
+                    files:[
+                        'http://apps.bdimg.com/libs/echarts/2.1.9/source/echarts-all.js',
+                    ]
+                },
+                {
+                    name: 'angular-dataTables',
+                    files: [
+                        //'/library/jquery.dataTables.min.js',
+                        //'/library/angular-datatables.js',
+                        '/library/datatables.bootstrap.css',
+                        //'/library/angular-datatables.bootstrap.js'
+                    ]
+                },
                 {
                     name: 'ngSanitize',
                     files: [
@@ -49,57 +64,9 @@ angular.module('app')
                     ]
                 },
                 {
-                    name: 'ngGrid',
-                    files: [
-                        '../bower_components/ng-grid/build/ng-grid.min.js',
-                        '../bower_components/ng-grid/ng-grid.min.css',
-                        '../bower_components/ng-grid/ng-grid.bootstrap.css'
-                    ]
-                },
-                {
-                    name: 'ui.grid',
-                    files: [
-                        '../bower_components/angular-ui-grid/ui-grid.min.js',
-                        '../bower_components/angular-ui-grid/ui-grid.min.css',
-                        '../bower_components/angular-ui-grid/ui-grid.bootstrap.css'
-                    ]
-                },
-                {
-                    name: 'ui.select',
-                    files: [
-                        '../bower_components/angular-ui-select/dist/select.min.js',
-                        '../bower_components/angular-ui-select/dist/select.min.css'
-                    ]
-                },
-                {
                     name: 'angularFileUpload',
                     files: [
                         'http://cdn.bootcss.com/angular-file-upload/1.1.6/angular-file-upload.min.js'
-                    ]
-                },
-                {
-                    name: 'ui.calendar',
-                    files: ['../bower_components/angular-ui-calendar/src/calendar.js']
-                },
-                {
-                    name: 'angularBootstrapNavTree',
-                    files: [
-                        '../bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
-                        '../bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css'
-                    ]
-                },
-                {
-                    name: 'textAngular',
-                    files: [
-                        '../bower_components/textAngular/dist/textAngular-sanitize.min.js',
-                        '../bower_components/textAngular/dist/textAngular.min.js'
-                    ]
-                },
-                {
-                    name: 'vr.directives.slider',
-                    files: [
-                        '../bower_components/venturocket-angular-slider/build/angular-slider.min.js',
-                        '../bower_components/venturocket-angular-slider/build/angular-slider.css'
                     ]
                 },
                 {
@@ -143,12 +110,6 @@ angular.module('app')
                     files: [
                         'http://cdn.bootcss.com/angular-xeditable/0.1.9/js/xeditable.min.js',
                         'http://cdn.bootcss.com/angular-xeditable/0.1.9/css/xeditable.css'
-                    ]
-                },
-                {
-                    name: 'smart-table',
-                    files: [
-                        '../bower_components/angular-smart-table/dist/smart-table.min.js'
                     ]
                 }
             ]

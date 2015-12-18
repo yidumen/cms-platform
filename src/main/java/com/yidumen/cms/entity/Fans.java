@@ -1,7 +1,7 @@
 package com.yidumen.cms.entity;
 
 
-import com.yidumen.cms.Sex;
+import com.yidumen.cms.constant.Sex;
 
 import javax.persistence.*;
 import java.io.Serializable;

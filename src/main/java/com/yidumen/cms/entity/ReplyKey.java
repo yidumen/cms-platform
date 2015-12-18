@@ -1,7 +1,7 @@
 package com.yidumen.cms.entity;
 
 
-import com.yidumen.cms.KeyType;
+import com.yidumen.cms.constant.KeyType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,14 +19,14 @@ public class ReplyKey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name",length = 20)
+    @Column(name = "name", length = 20)
     private String name;
-    @Column(name = "keyword",length = 64)
+    @Column(name = "keyword", length = 64)
     private String key;
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "type")
     private KeyType type;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reply_message_id")
     private ReplyMessage message;
 
