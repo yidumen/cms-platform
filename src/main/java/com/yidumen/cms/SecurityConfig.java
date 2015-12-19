@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/css/**","/script/**").permitAll()
+                .antMatchers("/","/index.html","/css/**","/script/**","/oss/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -32,8 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/platform", true)
                 .permitAll()
                 .and()
+                .rememberMe().rememberMeParameter("remember").userDetailsService(authenticationService).key("ydmcms").tokenValiditySeconds(2592000)
+                .and()
                 .logout()
-                .logoutUrl("/loginout.do")
+                .logoutUrl("/logout.do")
                 .logoutSuccessUrl("/index.html")
                 .permitAll();
     }

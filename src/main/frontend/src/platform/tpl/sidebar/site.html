@@ -8,7 +8,8 @@
         <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
         <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
         <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-        <ul class="page-sidebar-menu page-sidebar-menu-light" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200"
+        <ul class="page-sidebar-menu page-sidebar-menu-light" data-keep-expanded="false" data-auto-scroll="true"
+            data-slide-speed="200"
             ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
             <li class="heading">
@@ -42,6 +43,16 @@
                     <span class="selected"></span>
                 </a>
             </li>
+            <li class="heading">
+                <h3>结缘管理</h3>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.goods-info">
+                    <span class="icon-wallet"></span>
+                    <span class="title margin-left-xs">结缘信息查看</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>
@@ -50,7 +61,7 @@
 
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
-    <div id="container" class="page-content" ng-controller="PageController">
+    <div ui-container class="page-content">
 
         <!-- BEGIN ACTUAL CONTENT -->
         <div ui-view>

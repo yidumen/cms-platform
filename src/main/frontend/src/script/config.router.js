@@ -96,6 +96,42 @@ angular.module('app')
                     },
                     controller: 'publishController'
                 })
+                .state('site.goods-info', {
+                    url: '/goods/info',
+                    templateUrl: '/goods/info.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load('angular-dataTables').then(function () {
+                                return $ocLazyLoad.load('/script/controllers/goods/info.js');
+                            });
+                        }]
+                    },
+                    controller: 'infoController'
+                })
+                .state('site.goods-process', {
+                    url: '/goods/process',
+                    templateUrl: '/goods/process.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load('angular-dataTables').then(function () {
+                                return $ocLazyLoad.load('/script/controllers/goods/process.js');
+                            });
+                        }]
+                    },
+                    controller: 'processController'
+                })
+                .state('site.goods-trash', {
+                    url: '/goods/trash',
+                    templateUrl: '/goods/trash.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                            return $ocLazyLoad.load('angular-dataTables').then(function () {
+                                return $ocLazyLoad.load('/script/controllers/goods/trash.js');
+                            });
+                        }]
+                    },
+                    controller: 'trashController'
+                })
                 .state('material', {
                     abstract: true,
                     url: '/material',

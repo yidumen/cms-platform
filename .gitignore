@@ -18,6 +18,7 @@ src/main/frontend/lib
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 src/main/frontend/bower_components
+/src/main/frontend/src/css
 src/main/webapp/*
 !src/main/webapp/WEB-INF
 !src/main/webapp/META-INF

@@ -61,7 +61,7 @@ public class AuthenticationService implements UserDetailsService {
         final List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         account.getPermissions().forEach(permission -> grantedAuthorities.add(new SimpleGrantedAuthority(permission.getRole())));
         account.getDuty().getPermissions().forEach(permission -> grantedAuthorities.add(new SimpleGrantedAuthority(permission.getRole())));
-        result = new User(account.getRealname(), account.getPassword(), grantedAuthorities);
+        result = new User(account.getName(), account.getPassword(), grantedAuthorities);
         return result;
     }
 }

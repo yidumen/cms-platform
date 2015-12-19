@@ -17,7 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("tag")
-public final class TagAjaxCtrl{
+public class TagAjaxCtrl{
 
     @Autowired
     private TagService tagService;

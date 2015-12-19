@@ -102,8 +102,10 @@ gulp.task('dev:css', function () {
         'src/sass/admin/layout/layout.scss',
         'src/sass/global/plugins.scss',
         'src/sass/admin/layout/themes/darkblue.scss',
-        'src/sass/custom.scss'
+        'src/sass/custom.scss',
+        'src/sass/admin/pages/login.scss'
     ]).pipe(sass())
+        .pipe(gulp.dest('src/css'))
         .pipe(gulp.dest(path.web + 'css'));
 });
 
@@ -119,6 +121,7 @@ gulp.task('dev:html', function () {
 // 洗刷刷
 gulp.task('clean', function (cb) {
     return del([
+        'src/css',
         path.web + '/*',
         '!' + path.web + 'WEB-INF',
         '!' + path.web + 'META-INF',

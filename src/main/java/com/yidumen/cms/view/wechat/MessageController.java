@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("wechat")
-public final class MessageController {
+public class MessageController {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private WxMpConfigStorage wxMpConfigStorage;

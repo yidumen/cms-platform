@@ -17,7 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("goods")
-public final class GoodsAjaxCtrl {
+public class GoodsAjaxCtrl {
     @Autowired
     private GoodsService service;
 

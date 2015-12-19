@@ -10,10 +10,10 @@
     <meta name="renderer" content="webkit">
     <!-- No Baidu Siteapp-->
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="http://www.yidumen.com/resources/web/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://www.yidumen.com/resources/web/images/favicon.ico">
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="app-icon72x72@2x.png">
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -22,57 +22,79 @@
     <!-- Tile icon for Win8 (144x144 + tile color) -->
     <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
     <meta name="msapplication-TileColor" content="#0e90d2">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/components-rounded.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="login">
 <!-- BEGIN LOGO -->
 <div class="logo">
-    易度门管理平台
+   <img src="/oss/images/logo_cover.png" alt="logo" height="144">
 </div>
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
 <div class="content">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" action="/login.do" method="post">
+    <form id="form" class="login-form" action="/login.do" method="post">
         <div class="form-title">
             <span class="form-title">欢迎使用</span>
             <span class="form-subtitle">请登录</span>
         </div>
         <div class="form-group">
             <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label">用户名</label>
             <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off"
                    placeholder="用户名/手机号码/邮箱地址" name="username"/>
         </div>
         <div class="form-group">
-            <label class="control-label">密码</label>
             <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off"
                    placeholder="登录密码" id="password" name="password"/>
         </div>
         <div class="form-actions">
-            <div class="pull-left">
-                <label class="rememberme check">
-                    <input type="checkbox" name="remember" value="1"/>记住我</label>
-            </div>
-        </div>
-        <div class="form-actions">
             <button type="submit" class="btn btn-primary btn-block">登录</button>
         </div>
+        <div class="form-actions">
+            <div class="pull-left">
+                <label class="rememberme check">
+                    <input type="checkbox" name="remember" value="1" style="margin-right: 15px"/>一个月内免登录</label>
+            </div>
+        </div>
     </form>
+    <div id="logined" class="login-form hide">
+        <div class="form-title">
+            <span class="form-title">检测到已登录用户</span>
+        </div>
+        <div class="form-group">
+            <p class="form-control-static" id="login_user"></p>
+        </div>
+        <div class="form-group">
+            <p class="form-control-static">要使用其它帐户登录 请<a href="/logout.do">注销</a></p>
+        </div>
+        <div class="form-actions">
+            <a href="/platform" class="btn btn-primary btn-block">进入控制台</a>
+        </div>
+    </div>
+    <div class="login-options">
+        <h4>
+            <a href="https://github.com/yidumen/cms-platform" target="_blank"><i
+                    class="fa fa-github fa-lg"></i> 项目地址</a>
+            <a href="https://github.com/yidumen/cms-platform/issues" target="_blank"><i
+                    class="fa fa-comments-o fa-lg"></i> 反馈意见/建议</a>
+            <a href="https://github.com/yidumen/cms-platform/wiki" target="_blank"><i
+                    class="fa fa-server fa-lg"></i> 帮助/博客</a>
+        </h4>
+    </div>
     <!-- END LOGIN FORM -->
 </div>
-<div class="copyright hide">
-    2015 © 珠海玛雅文化传播有限公司 管理平台
+<div class="copyright">
+    2015 © 珠海玛雅文化传播有限公司
 </div>
 <!-- END LOGIN -->
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/blueimp-md5/1.1.1/js/md5.min.js"></script>
-<script>
-    document.getElementById('form').addEventListener('submit', function () {
-        var passwordEl = document.getElementById('password');
-        passwordEl.value = md5(passwordEl.value);
-    }, false);
-</script>
+<script src="script/login.js"></script>
 </body>
 <!-- END BODY -->
 </html>

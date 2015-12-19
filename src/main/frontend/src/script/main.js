@@ -78,7 +78,7 @@ angular.module('app')
             return result;
         };
     })
-    .value('videoStatusEnum', ['已发布', '待审核', '已归档'])
+    .value('videoStatusEnum', ['已发布', '待审核', '已归档', '已发布'])
     .filter('videoStatus', ['videoStatusEnum', function (videoStatusEnum) {
         'use strict';
         return function (input) {
@@ -116,7 +116,7 @@ angular.module('app')
             return keyTypeEnum[input];
         };
     }])
-    .value('goodsStatusEnum',['已处理', '待处理', '已作废'])
+    .value('goodsStatusEnum', ['已处理', '待处理', '已作废'])
     .filter('goodsStatus', function (goodsStatusEnum) {
         'use strict';
         return function (input) {
@@ -149,10 +149,6 @@ angular.module('app')
                     $location.url(response.forwardUrl).replace();
                 }
                 toaster.pop(toasterType[type], message, response.message, timeout);
-            });
-            $scope.$on('$stateChangeSuccess', function () {
-                //Metronic.initComponents(); // init core components
-                //Layout.init();
             });
         }
     ])

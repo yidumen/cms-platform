@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("recording")
-public final class RecordingAjaxCtrl{
+public class RecordingAjaxCtrl{
 
     @Autowired
     private RecordingService recordingService;
