@@ -3,7 +3,7 @@
  * 2015年12月13日
  */
 angular.module('app')
-    .controller('processController', function ($scope, $resource, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller('processController', function ($scope, $http, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder) {
         'use strict';
         $scope.dtInstance = {};
         $scope.dtOptions = dtOptions.withSource('/api/goods/unprocess').withOption('pageLength', 12).withOption('createdRow', function (row) {
@@ -15,19 +15,19 @@ angular.module('app')
             DTColumnBuilder.newColumn('address', '地址'),
             DTColumnBuilder.newColumn('createdate', '提交时间').withOption('width', 180),
             DTColumnBuilder.newColumn(null).withTitle('操作').withOption('width', 100).renderWith(function (data) {
-                return '<div class="operation"><a class="am-icon-truck am-margin-right" href="" ng-click="process(' + data.id + ')"></a><a class="am-icon-trash-o am-fr" href="" ng-click="trash(' + data.id + ')"></a></div>';
+                return '<div class="operation"><a class="fa fa-truck margin-right" ng-click="process(' + data.id + ')"></a><a class="fa fa-trash-o fr" href="" ng-click="trash(' + data.id + ')"></a></div>';
             }).notSortable()
             //DTColumnBuilder.newColumn("postNumber", "快递单号").withOption("width", 160)
         ];
         $scope.process = function (id) {
-            $resource('/api/goods/process/:id', {id: id}).get().$promise.then(function (data) {
-                $scope.$root.$broadcast('serverResponsed', data);
+            $http.put('/api/goods/process/' + id).then(function (data) {
+                $scope.$root.$broadcast('serverResponsed', data.data);
                 $scope.dtInstance.reloadData();
             });
         };
         $scope.trash = function (id) {
-            $resource("/api/goods/trash/:id", {id: id}).get().$promise.then(function (data) {
-                $scope.$parent.$broadcast('serverResponsed', data);
+            $http.put('/api/goods/trash/' + id).then(function (data) {
+                $scope.$parent.$broadcast('serverResponsed', data.data);
                 $scope.dtInstance.reloadData();
             });
         };

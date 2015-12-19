@@ -3,6 +3,10 @@ package com.yidumen.cms.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yidumen.cms.DateDeserializer;
+import com.yidumen.cms.DateSerializer;
 import com.yidumen.cms.JacksonView;
 
 import javax.persistence.*;
@@ -46,6 +50,8 @@ public class Resource {
         this.title = title;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
     public Date getCreateDate() {
         return createDate;
     }

@@ -1,5 +1,9 @@
 package com.yidumen.cms.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.yidumen.cms.DateDeserializer;
+import com.yidumen.cms.DateSerializer;
 import com.yidumen.cms.constant.GoodsStatus;
 
 import javax.persistence.*;
@@ -11,6 +15,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "web_goods")
+@NamedQueries({
+        @NamedQuery(name = "Goods.findValidate",query = "from Goods goods where goods.status=0 or goods.status=1")
+})
 public class Goods implements Serializable {
 
     @Id
@@ -65,6 +72,8 @@ public class Goods implements Serializable {
         this.address = address;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
     public Date getCreatedate() {
         return createdate;
     }

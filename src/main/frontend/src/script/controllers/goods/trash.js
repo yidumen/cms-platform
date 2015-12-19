@@ -3,7 +3,7 @@
  * 2015年12月13日
  */
 angular.module('app')
-    .controller('trashController', function ($scope, $resource, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder, DTInstances) {
+    .controller('trashController', function ($scope, $http, $compile, goodsStatusFilter, dtOptions, DTColumnBuilder) {
         'use strict';
         $scope.dtInstance = {};
         $scope.dtOptions = dtOptions.withSource('/api/goods/trashed').withOption('pageLength', 12).withOption('createdRow', function (row) {
@@ -20,8 +20,8 @@ angular.module('app')
             //DTColumnBuilder.newColumn("postNumber", "快递单号").withOption("width", 160)
         ];
         $scope.recover = function (id) {
-            $resource('/api/goods/recover/:id', {id: id}).get().$promise.then(function (data) {
-                $scope.$root.$broadcast('serverResponsed', data);
+            $http.put('/api/goods/recover/'+ id).then(function (data) {
+                $scope.$root.$broadcast('serverResponsed', data.data);
                 $scope.dtInstance.reloadData();
             });
         };

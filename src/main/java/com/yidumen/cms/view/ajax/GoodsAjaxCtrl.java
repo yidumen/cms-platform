@@ -40,19 +40,19 @@ public class GoodsAjaxCtrl {
     }
 
     @Transactional
-    @RequestMapping(value = "process/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "process/{id}", method = RequestMethod.PUT)
     public void process(@PathVariable Long id) {
         service.process(id);
     }
 
     @Transactional
-    @RequestMapping(value = "trash/{id}")
+    @RequestMapping(value = "trash/{id}", method = RequestMethod.PUT)
     public void trash(@PathVariable Long id) {
         service.trash(id);
     }
 
     @Transactional
-    @RequestMapping(value = "recover/{id}")
+    @RequestMapping(value = "recover/{id}", method = RequestMethod.PUT)
     public void recover(@PathVariable Long id) {
         service.recover(id);
     }

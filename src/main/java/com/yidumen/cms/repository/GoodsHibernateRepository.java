@@ -19,7 +19,7 @@ public class GoodsHibernateRepository extends HibernateRepository<Goods> {
 
     @SuppressWarnings("unchecked")
     public List<Goods> findValidate() {
-        return getSessionFactory().getCurrentSession().getNamedQuery("com.yidumen.cms.entity.Goods.findValidate").list();
+        return getSessionFactory().getCurrentSession().getNamedQuery("Goods.findValidate").list();
     }
 
 }
