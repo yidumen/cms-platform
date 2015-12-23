@@ -99,6 +99,6 @@ public class DefaultMessageHandler implements WxMpMessageHandler {
         if (defaultReply == null) {
             return null;
         }
-        return WechatUtil.parseMessage(beanFactory, wxMessage, context, wxMpService, sessionManager, defaultReply.getMessage(), baseUrl);
+        return service.parseMessage(beanFactory, wxMessage, context, wxMpService, sessionManager, defaultReply.getMessage(), baseUrl);
     }
 }

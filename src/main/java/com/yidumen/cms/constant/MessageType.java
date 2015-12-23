@@ -15,9 +15,9 @@ public enum MessageType {
     link("链接消息"),
     event("事件推送"),
     music("音乐消息"),
-    voice("语音消息"),
     news("图文消息"),
-    action("行为消息");
+    action("行为消息"),
+    voice("语音消息");
 
     private final String descript;
 

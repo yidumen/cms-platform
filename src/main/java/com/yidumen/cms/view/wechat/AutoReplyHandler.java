@@ -1,6 +1,7 @@
 package com.yidumen.cms.view.wechat;
 
 import com.yidumen.cms.entity.ReplyMessage;
+import com.yidumen.cms.service.WeChatService;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
@@ -18,6 +19,8 @@ import java.util.Map;
  */
 public class AutoReplyHandler implements WxMpMessageHandler {
     @Autowired
+    private WeChatService service;
+    @Autowired
     private String baseUrl;
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
@@ -32,6 +35,6 @@ public class AutoReplyHandler implements WxMpMessageHandler {
                                     Map<String, Object> context,
                                     WxMpService wxMpService,
                                     WxSessionManager sessionManager) throws WxErrorException {
-        return WechatUtil.parseMessage(beanFactory, wxMessage, context, wxMpService, sessionManager, this.platformMessage, this.baseUrl);
+        return service.parseMessage(beanFactory, wxMessage, context, wxMpService, sessionManager, this.platformMessage, this.baseUrl);
     }
 }

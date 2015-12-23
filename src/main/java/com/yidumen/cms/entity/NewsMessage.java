@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "wechat_message_news")
 public class NewsMessage extends Message {
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "related_news_aritcle",joinColumns = @JoinColumn(name = "news_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "aritcle_id",referencedColumnName = "id"))
     private List<Aritcle> aritcles;
 

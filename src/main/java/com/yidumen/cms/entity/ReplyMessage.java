@@ -57,4 +57,14 @@ public class ReplyMessage implements Serializable {
     public void setMessage(Message message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "ReplyMessage{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type=" + type +
+                ", message=" + message +
+                '}';
+    }
 }

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -47,6 +46,7 @@ public class MessageRouterBean {
                         case WxConsts.EVT_UNSUBSCRIBE:
                         case WxConsts.EVT_LOCATION:
                             router.rule()
+                                    .async(false)
                                     .msgType(WxConsts.XML_MSG_EVENT)
                                     .event(key.getKey())
                                     .handler(autoReplyhandler)
@@ -54,6 +54,7 @@ public class MessageRouterBean {
                             break;
                         case WxConsts.BUTTON_CLICK:
                             router.rule()
+                                    .async(false)
                                     .msgType(WxConsts.XML_MSG_EVENT)
                                     .eventKey(key.getKey())
                                     .handler(autoReplyhandler)
@@ -63,19 +64,27 @@ public class MessageRouterBean {
                 default:
                     switch (key.getType()) {
                         case CONTAINS:
-                            router.rule().msgType(WxConsts.XML_MSG_TEXT).rContent(".*" + key.getKey() + ".*").handler(autoReplyhandler).end();
+                            router.rule()
+                                    .async(false)
+                                    .msgType(WxConsts.XML_MSG_TEXT).rContent(".*" + key.getKey() + ".*").handler(autoReplyhandler).end();
                             break;
                         case MATCHING:
-                            router.rule().msgType(WxConsts.XML_MSG_TEXT).content(key.getKey()).handler(autoReplyhandler).end();
+                            router.rule()
+                                    .async(false)
+                                    .msgType(WxConsts.XML_MSG_TEXT).content(key.getKey()).handler(autoReplyhandler).end();
                             break;
                         case PATTEN:
-                            router.rule().msgType(WxConsts.XML_MSG_TEXT).rContent(key.getKey()).handler(autoReplyhandler).end();
+                            router.rule()
+                                    .async(false)
+                                    .msgType(WxConsts.XML_MSG_TEXT).rContent(key.getKey()).handler(autoReplyhandler).end();
                     }
             }
         }
         final WxMpMessageHandler defaultHandler = new DefaultMessageHandler();
         beanFactory.autowireBean(defaultHandler);
-        router.rule().handler(defaultHandler).end();
+        router.rule()
+                .async(false)
+                .handler(defaultHandler).end();
 
         return router;
     }
