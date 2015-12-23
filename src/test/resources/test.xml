@@ -18,7 +18,7 @@
         <property name="hibernateProperties">
             <value>
                 hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
-                hibernate.hbm2ddl.auto=Ignoring
+                hibernate.hbm2ddl.auto=create
                 hibernate.show_sql=true
             </value>
         </property>
@@ -56,7 +56,7 @@
     <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="databaseSchemaUpdate" value="true" />
+        <property name="databaseSchemaUpdate" value="create" />
         <property name="jobExecutorActivate" value="false" />
     </bean>
     <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
