@@ -1,0 +1,24 @@
+<div class="panel panel-default message-editor m-t-md">
+    <div class="panel-heading editor-tabs">
+        <ul class="list-inline">
+            <li ng-class="{'bg-light dker': type == 0}" ng-click="type = 0">
+                <i class="glyphicon glyphicon-comment text-primary-dk"></i>文本
+            </li>
+            <li ng-class="{'bg-light dker': type === 1}" ng-click="type = 1"><i
+                    class="glyphicon glyphicon-picture text-info-dker"></i>图片
+            </li>
+            <li ng-class="{'bg-light dker': type === 2}" ng-click="type = 2"><i
+                    class="glyphicon glyphicon-volume-up text-info-lter"></i>音频
+            </li>
+            <li ng-class="{'bg-light dker': type === 3}" ng-click="type = 3"><i
+                    class="glyphicon glyphicon-tasks text-success"></i>图文
+            </li>
+        </ul>
+    </div>
+    <div class="panel-body" ng-switch="type">
+        <div text-editor ng-switch-default></div>
+        <div picture-editor ng-switch-when="1"></div>
+        <div audio-editor ng-switch-when="2">video</div>
+        <div ng-switch-when="3">news</div>
+    </div>
+</div>

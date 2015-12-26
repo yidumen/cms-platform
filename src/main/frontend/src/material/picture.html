@@ -1,0 +1,64 @@
+<div class="bg-light lter b-b wrapper-sm">
+    <h4>图片素材管理</h4>
+    <ol class="breadcrumb">
+        <li>素材管理</li>
+        <li class="active">图片素材管理</li>
+    </ol>
+</div>
+
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col wrapper-lg">
+        <div class="row">
+            <div class="col-xs-12 col-sm-5">
+                <div class="btn-group font-thin m-t-n-xs m-b">
+                    <button class="btn btn-success" ng-class="{active:currentGroupIndex===-1}"
+                            ng-click="displayGroup(-1)">
+                        所有图片
+                    </button>
+                    <button class="btn btn-primary" ng-class="{active:currentGroupIndex===$index}"
+                            ng-repeat="group in groups"
+                            ng-bind="group.name" ng-click="displayGroup($index)"></button>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-sm-offset-5">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="page-size">每页显示</label>
+                        <input id="page-size" type="number" min="1" max="99" class="form-control" ng-model="pageSize"
+                               style="width: 60px;">
+                        <label for="page-size">项</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-sm" masonry="{percentPosition: true}" preserve-order reload-on-resize>
+            <div class="masonry-brick col-xs-6 col-sm-4 col-md-3 col-lg-2-4"
+                 ng-repeat="picture in currentGroup|limitTo:pageSize:(currentPage-1)*pageSize">
+                <div class="item">
+                    <div class="pos-rlt">
+                        <div class="item-overlay bg-black-opacity r r-2x">
+                            <div class="center text-center m-t-n w-full">
+                                <a><i class="fa fa-2x fa-search text-white"></i></a>
+                            </div>
+                        </div>
+                        <a href><img ng-src="{{picture.file}}" alt="{{picture.title}}" class="w-full r r-2x"></a>
+                    </div>
+                    <div class="padder-v">
+                        <a class="text-ellipsis" href ng-bind="picture.title"></a>
+                        <a class="text-ellipsis text-xs text-muted" href ng-bind="picture.createDate"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-8">
+                <uib-pagination boundary-links="true" total-items="currentGroup.length" ng-model="currentPage"
+                                class="pagination-sm m-n" max-size="5"
+                                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                                items-per-page="pageSize"
+                                rotate="false"
+                                last-text="&raquo;"></uib-pagination>
+            </div>
+        </div>
+    </div>
+</div>

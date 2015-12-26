@@ -1,5 +1,8 @@
 package com.yidumen.cms.constant;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  *
  * @author 蔡迪旻<yidumen.com>
@@ -44,6 +47,15 @@ public enum VideoResolution {
 
     public String getDescript() {
         return descript;
+    }
+    @JsonCreator
+    public static VideoResolution forValue(int value) {
+        return VideoResolution.values()[value];
+    }
+
+    @JsonValue
+    public int toValue() {
+        return this.ordinal();
     }
 
 }

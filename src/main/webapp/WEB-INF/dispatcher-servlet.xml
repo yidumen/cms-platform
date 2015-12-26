@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+    <mvc:resources mapping="/images/**" location="http://ydmqd.oss-cn-qingdao-internal.aliyuncs.com/cms/images/"/>
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/"/>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <!--<property name="cache" value="false"/>-->
+        <property name="cache" value="true"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".html"/>
+    </bean>
+    <bean id="excelViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver"/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5242880000"/>
+    </bean>
+    <jee:jndi-lookup jndi-name="jdbc/yidumen" id="dataSource"/>
+    <!--hibernate configure and dao-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--<property name="configLocations" value="classpath:hibernate.cfg.xml"/>-->
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+            </value>
+        </property>
+        <property name="packagesToScan" value="com.yidumen.cms.entity"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!--define oss client -->
+    <bean id="ossClient" class="com.aliyun.oss.OSSClient" scope="prototype" destroy-method="shutdown">
+        <constructor-arg index="0" type="java.lang.String" value="http://oss-cn-qingdao-internal.aliyuncs.com"/>
+        <constructor-arg index="1" type="java.lang.String" value=""/>
+        <constructor-arg index="2" type="java.lang.String" value=""/>
+    </bean>
+    <bean id="bucket" class="java.lang.String">
+        <constructor-arg index="0" type="java.lang.String" value="ydmqd"/>
+    </bean>
+    <!--oss end-->
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="com.yidumen.cms"/>
+    <!--define wechat framework-->
+    <bean id="wxConfig" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
+        <property name="appId" value=""/>
+        <property name="token" value=""/>
+        <property name="secret" value=""/>
+        <property name="aesKey" value=""/>
+    </bean>
+    <bean id="wxService" class="me.chanjar.weixin.mp.api.WxMpServiceImpl">
+        <property name="wxMpConfigStorage" ref="wxConfig"/>
+    </bean>
+    <bean id="baseUrl" class="java.lang.String">
+        <constructor-arg index="0" type="java.lang.String" value="http://ydmqd.oss-cn-qingdao-internal.aliyuncs.com/wechat/"/>
+    </bean>
+    <!-- activiti begin -->
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="databaseSchemaUpdate" value="false" />
+        <property name="jobExecutorActivate" value="false" />
+    </bean>
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration" />
+    </bean>
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" />
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
+    <!-- activiti end -->
+</beans>

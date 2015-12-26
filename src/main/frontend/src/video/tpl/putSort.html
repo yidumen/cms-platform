@@ -1,0 +1,15 @@
+<div class="modal-header">设置序号</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label>
+            发布序号
+            <a class="btn btn-xs btn-success" ng-click="setSortMax()">最大</a>
+            <a class="btn btn-xs btn-success margin-right-xs" ng-click="setSortNew()">最新</a>
+        </label>
+        <input type="text" class="form-control" ng-model="sort.current">
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">取消</button>
+    <button class="btn btn-primary" ng-click="submit()">提交</button>
+</div>

@@ -1,0 +1,86 @@
+<!-- BEGIN SIDEBAR -->
+<div data-ng-controller="SidebarController" class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu page-sidebar-menu-light" data-keep-expanded="false" data-auto-scroll="true"
+            data-slide-speed="200"
+            ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
+            <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+            <li class="heading">
+                <h3>视频管理</h3>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.video-list">
+                    <span class="icon-magnifier"></span>
+                    <span class="title margin-left-xs">视频信息查询</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.video-create">
+                    <span class="icon-note"></span>
+                    <span class="title margin-left-xs">创建视频信息</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.video-manager">
+                    <span class="icon-notebook"></span>
+                    <span class="title margin-left-xs">视频信息维护</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.video-publish">
+                    <span class="icon-globe-alt"></span>
+                    <span class="title margin-left-xs">视频审核发布</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li class="heading">
+                <h3>结缘管理</h3>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.goods-info">
+                    <span class="icon-wallet"></span>
+                    <span class="title margin-left-xs">结缘信息查看</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.goods-process">
+                    <span class="icon-plane"></span>
+                    <span class="title margin-left-xs">结缘信息处理</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="site.goods-trash">
+                    <span class="icon-trash"></span>
+                    <span class="title margin-left-xs">回收信息查看</span>
+                    <span class="selected"></span>
+                </a>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+</div>
+<!-- END SIDEBAR -->
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+    <div ui-container class="page-content">
+
+        <!-- BEGIN ACTUAL CONTENT -->
+        <div ui-view>
+        </div>
+        <!-- END ACTUAL CONTENT -->
+    </div>
+</div>
+<!-- END CONTENT -->

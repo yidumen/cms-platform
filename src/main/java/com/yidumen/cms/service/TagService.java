@@ -1,16 +1,28 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.model.Tag;
+import com.yidumen.cms.constant.TagType;
+import com.yidumen.cms.entity.Tag;
+import com.yidumen.cms.repository.TagHibernateRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- *
- * @author 蔡迪旻
- */
-public interface TagService {
+@Service
+public final class TagService {
 
-    List<Tag> findColumnTags();
-    
-    List<Tag> findAll();
+    @Autowired
+    private TagHibernateRepository tagDao;
+
+    @SuppressWarnings("unchecked")
+    public List<Tag> findColumnTags() {
+        final Tag model = new Tag();
+        model.setType(TagType.COLUMN);
+        return tagDao.find(model);
+    }
+
+    public List<Tag> findAll() {
+        return tagDao.findAll();
+    }
+
 }

@@ -1,0 +1,49 @@
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-globe"></i>
+            <a ui-sref="site">站点管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>视频管理</li>
+    </ul>
+    <div class="help-info text-muted">
+        <div class="help-title"><i class="fa fa-question-circle"></i></div>
+        <div class="help-body">
+            <div class="help-item">
+                <span class="fa fa-info-circle"></span>
+                <span class="text-xs">详细信息</span>
+            </div>
+            <div class="help-item">
+                <span class="fa fa-film"></span>
+                <span class="text-xs">来源信息</span>
+            </div>
+            <div class="help-item">
+                <span class="fa fa-external-link"></span>
+                <span class="text-xs">网站预览</span>
+            </div>
+        </div>
+    </div>
+</div>
+<h3 class="page-title">视频信息查询</h3>
+<div class="toolbar btn-toolbar">
+    <div class="btn-group">
+        <button type="button" class="btn btn-success" ng-click="clearSearch()">全部视频</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '已发布', false)">已发布</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '已归档', false)">已归档</button>
+        <button type="button" class="btn btn-primary" ng-click="search(7, '待审核', false)">待审核</button>
+        <button type="button" class="btn btn-info" ng-click="search(6, 'fa-check-square-o', false)">推荐</button>
+        <button type="button" class="btn btn-info" ng-click="search(6, 'fa-square-o', false)">未推荐</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^[^-]\\d*$', true)">有序号</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^-$', true)">无序号</button>
+        <button type="button" class="btn btn-info" ng-click='search(5,"^$",true)'>新增信息</button>
+    </div>
+
+    <div class="btn-group">
+        <a class="btn btn-primary am-radius" href="/api/video/exportExcel"><span
+                class="fa fa-file-excel-o"> 导出EXCEL(beta)</span></a>
+    </div>
+</div>
+<table id="video-info" class="table table-striped table-hover" frame="below" datatable=""
+       dt-options="dtOptions" dt-disable-deep-watchers="true" dt-instance="dtInstance"
+       dt-columns="dtColumns"></table>

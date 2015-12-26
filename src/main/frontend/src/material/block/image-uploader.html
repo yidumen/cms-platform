@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-xs-1">
+        <a ng-click="toView(0)" class="fa fa-mail-reply"></a>
+    </div>
+    <div class="col-xs-11" oc-lazy-load="ngFlow">
+        <div flow-init="{singleFile:true}">
+            <ul class="list-inline padder">
+                <li ng-show="!$flow.files.length">
+                    <span class="btn btn-primary" flow-btn flow-attrs="{accept:'image/*'}">选择图片</span>
+                </li>
+                <li ng-show="$flow.files.length">
+                    <span class="btn btn-info" flow-btn flow-attrs="{accept:'image/*'}">更换图片</span>
+                </li>
+                <li ng-show="$flow.files.length">
+                    <span class="btn btn-danger" ng-click="$flow.cancel()">删除图片</span>
+                </li>
+            </ul>
+            <div class="row padder" ng-show="$flow.files.length">
+                <div class="col-xs-12 col-sm-6">
+                    <img id="preview" class="img-rounded img-full" flow-img="$flow.files[0]" alt="上传图片">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
