@@ -78,7 +78,7 @@ angular.module('app')
             return result;
         };
     })
-    .value('videoStatusEnum', ['已发布', '待审核', '已归档', '已发布'])
+    .value('videoStatusEnum', ['已发布', '待审核', '已归档', '待发布'])
     .filter('videoStatus', ['videoStatusEnum', function (videoStatusEnum) {
         'use strict';
         return function (input) {

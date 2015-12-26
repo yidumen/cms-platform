@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+
 /**
  * @author 蔡迪旻
  *         2015年11月30日
@@ -28,24 +31,35 @@ public class MessageController {
     @Autowired
     private WxMpMessageRouter router;
 
-    @Transactional(readOnly = true)
-    @RequestMapping(value = "message", method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_XML_VALUE)
-    public String processMessage(@RequestBody(required = false) String message,
-                                 @RequestParam(required = false) String signature,
-                                 @RequestParam(required = false) String nonce,
-                                 @RequestParam(required = false) String timestamp,
-                                 @RequestParam(required = false) String echostr,
-                                 @RequestParam(required = false, name = "encrypt_type") String encryptType,
-                                 @RequestParam(required = false, name = "msg_signature") String msgSignature) {
+    @RequestMapping(value = "message", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public String plug(@RequestParam(required = false) String signature,
+                       @RequestParam(required = false) String nonce,
+                       @RequestParam(required = false) String timestamp,
+                       @RequestParam(required = false) String echostr) {
         if (!wxMpService.checkSignature(timestamp, nonce, signature)) {
             LOG.info("收到非公众平台消息.忽略");
             // 消息签名不正确，说明不是公众平台发过来的消息
             return "";
         }
-        if (StringUtils.isNotBlank(echostr)) {
-            // 说明是一个仅仅用来验证的请求，回显echostr
-            LOG.info("收到公众平台消息验证信息 {}", echostr);
-            return echostr;
+        LOG.info("收到公众平台消息验证信息 {}", echostr);
+        return echostr;
+    }
+
+    @Transactional(readOnly = true)
+    @RequestMapping(value = "message", method = RequestMethod.POST, consumes = "text/xml",produces = "text/xml;charset=utf-8")
+    public String processMessage(@RequestBody(required = false) String message,
+                                 HttpServletRequest request,
+                                 @RequestParam(required = false) String signature,
+                                 @RequestParam(required = false) String nonce,
+                                 @RequestParam(required = false) String timestamp,
+                                 @RequestParam(required = false, name = "encrypt_type") String encryptType,
+                                 @RequestParam(required = false, name = "msg_signature") String msgSignature) throws UnsupportedEncodingException {
+        LOG.debug("收到消息: {}", message);
+        LOG.debug("编码为 {}", request.getCharacterEncoding());
+        if (!wxMpService.checkSignature(timestamp, nonce, signature)) {
+            LOG.info("收到非公众平台消息.忽略");
+            // 消息签名不正确，说明不是公众平台发过来的消息
+            return "";
         }
         encryptType = StringUtils.isBlank(encryptType) ? "raw" : encryptType;
         WxMpXmlMessage inMessage;

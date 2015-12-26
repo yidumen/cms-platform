@@ -2,6 +2,7 @@ package com.yidumen.cms.entity;
 
 
 import com.yidumen.cms.constant.KeyType;
+import com.yidumen.cms.constant.MessageType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +27,9 @@ public class ReplyKey implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "type")
     private KeyType type;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "reply_type")
+    private MessageType replyType;
     @ManyToOne
     @JoinColumn(name = "reply_message_id")
     private ReplyMessage message;
@@ -68,6 +72,14 @@ public class ReplyKey implements Serializable {
 
     public void setMessage(ReplyMessage message) {
         this.message = message;
+    }
+
+    public MessageType getReplyType() {
+        return replyType;
+    }
+
+    public void setReplyType(MessageType replyType) {
+        this.replyType = replyType;
     }
 
     @Override

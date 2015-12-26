@@ -29,7 +29,7 @@ public class VideoHibernateRepository extends HibernateRepository<Video> {
 
     @SuppressWarnings("unchecked")
     public List<Video> getNew(int limit) {
-        return getSessionFactory().getCurrentSession().getNamedQuery("com.yidumen.cms.entity.Video.newVideos").setMaxResults(limit).list();
+        return getSessionFactory().getCurrentSession().getNamedQuery("video.newVideos").setMaxResults(limit).list();
     }
 
     public Long findSort() {

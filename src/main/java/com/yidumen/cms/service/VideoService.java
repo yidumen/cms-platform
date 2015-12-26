@@ -27,7 +27,7 @@ public final class VideoService {
     private final Logger log = LoggerFactory.getLogger(VideoService.class);
     @Autowired
     private VideoHibernateRepository videoDAO;
-    private final String[] resolutions = {"180", "360", "480", "720"};
+    private final String[] resolutions = {"180", "360", "480", "720" };
 
     public List<Video> getVideos() {
         return videoDAO.findAll();
@@ -54,8 +54,12 @@ public final class VideoService {
         videoDAO.remove(video);
     }
 
-    public List<Video> find(final Map<String, Object[]> condition) {
+    public List<Video> findRange(final Map<String, Object[]> condition) {
         return videoDAO.findBetween(condition);
+    }
+
+    public List<Video> findOR(final Map<String, Object[]> condition) {
+        return videoDAO.findOR(condition);
     }
 
     public long getVideoCount() {

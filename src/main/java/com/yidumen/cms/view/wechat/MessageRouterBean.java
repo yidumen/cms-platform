@@ -7,6 +7,8 @@ import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.mp.api.WxMpMessageHandler;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,7 @@ public class MessageRouterBean {
     private WeChatService service;
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Bean(name = "wxRouter")
     @Autowired
@@ -39,53 +42,57 @@ public class MessageRouterBean {
             final WxMpMessageHandler autoReplyhandler = new AutoReplyHandler(replyMessage);
             beanFactory.autowireBean(autoReplyhandler);
             //2.根据规则设置router
-            switch (replyMessage.getType()) {
+            switch (key.getReplyType()) {
                 case event:
-                    switch (key.getKey()) {
-                        case WxConsts.EVT_SUBSCRIBE:
-                        case WxConsts.EVT_UNSUBSCRIBE:
-                        case WxConsts.EVT_LOCATION:
-                            router.rule()
-                                    .async(false)
-                                    .msgType(WxConsts.XML_MSG_EVENT)
-                                    .event(key.getKey())
-                                    .handler(autoReplyhandler)
-                                    .end();
-                            break;
-                        case WxConsts.BUTTON_CLICK:
-                            router.rule()
-                                    .async(false)
-                                    .msgType(WxConsts.XML_MSG_EVENT)
-                                    .eventKey(key.getKey())
-                                    .handler(autoReplyhandler)
-                                    .end();
-                    }
+                    logger.debug("匹配事件: {}", key.getKey());
+                    router.rule()
+                            .async(false)
+                            .msgType(WxConsts.XML_MSG_EVENT)
+                            .event(key.getKey())
+                            .handler(autoReplyhandler)
+                            .end();
                     break;
-                default:
+                case click:
+                    logger.debug("匹配点击: {}", key.getKey());
+                    router.rule()
+                            .async(false)
+                            .msgType(WxConsts.XML_MSG_EVENT)
+                            .eventKey(key.getKey())
+                            .handler(autoReplyhandler)
+                            .end();
+                    break;
+                case text:
                     switch (key.getType()) {
                         case CONTAINS:
+                            logger.debug("包含关键字 {}", key.getKey());
                             router.rule()
                                     .async(false)
                                     .msgType(WxConsts.XML_MSG_TEXT).rContent(".*" + key.getKey() + ".*").handler(autoReplyhandler).end();
                             break;
                         case MATCHING:
+                            logger.debug("完全匹配关键字 {}", key.getKey());
                             router.rule()
                                     .async(false)
                                     .msgType(WxConsts.XML_MSG_TEXT).content(key.getKey()).handler(autoReplyhandler).end();
                             break;
                         case PATTEN:
+                            logger.debug("正则匹配关键字 {}", key.getKey());
                             router.rule()
                                     .async(false)
                                     .msgType(WxConsts.XML_MSG_TEXT).rContent(key.getKey()).handler(autoReplyhandler).end();
                     }
+                    break;
+                case DEFAULT:
+                    break;
             }
         }
+
         final WxMpMessageHandler defaultHandler = new DefaultMessageHandler();
         beanFactory.autowireBean(defaultHandler);
         router.rule()
                 .async(false)
-                .handler(defaultHandler).end();
-
+                .handler(defaultHandler)
+                .end();
         return router;
     }
 }

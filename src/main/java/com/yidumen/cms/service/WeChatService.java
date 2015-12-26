@@ -15,6 +15,7 @@ import me.chanjar.weixin.mp.bean.outxmlbuilder.NewsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,11 @@ public class WeChatService {
     private ReplyKeyHibernateRepository replyDao;
     @Autowired
     private FansHibernateRepository fansDao;
+
     private final Logger logger;
+    @Qualifier("baseUrl")
+    @Autowired
+    private String baseUrl;
 
     public WeChatService() {
         logger = LoggerFactory.getLogger(getClass());
@@ -54,7 +59,7 @@ public class WeChatService {
 
     public ReplyKey findDefaultReply() {
         final ReplyKey model = new ReplyKey();
-        model.setKey("default");
+        model.setReplyType(MessageType.DEFAULT);
         return replyDao.findUnique(model);
     }
 
@@ -125,9 +130,9 @@ public class WeChatService {
                         .toUser(wxMessage.getFromUserName());
                 for (Aritcle aritcle : message.getAritcles()) {
                     final WxMpXmlOutNewsMessage.Item item = new WxMpXmlOutNewsMessage.Item();
+                    item.setTitle(aritcle.getTitle());
                     item.setDescription(aritcle.getDescription());
-                    item.setPicUrl(aritcle.getPicUrl());
-                    item.setUrl(aritcle.getTitle());
+                    item.setPicUrl(aritcle.getPicUrl().startsWith("http://") ? aritcle.getPicUrl() : baseUrl+"images/"+aritcle.getPicUrl());
                     item.setUrl(aritcle.getUrl());
                     builder.addArticle(item);
                 }
@@ -146,7 +151,6 @@ public class WeChatService {
             }
             break;
         }
-        logger.debug("回复消息:{}", result);
         return result;
     }
 }

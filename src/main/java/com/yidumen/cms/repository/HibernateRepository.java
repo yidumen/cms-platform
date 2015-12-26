@@ -92,6 +92,20 @@ public class HibernateRepository<T> extends HibernateDaoSupport {
         return criteria.list();
     }
 
+    @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
+    public List<T> findOR(Map<String, Object[]> condition) {
+        final Criteria criteria = currentSession().createCriteria(entityClass);
+        for (String property : condition.keySet()) {
+            final Object[] values = condition.get(property);
+            criteria.add(Restrictions.or(
+                    Restrictions.eq(property, values[0]),
+                    Restrictions.eq(property, values[1])
+            ));
+        }
+        return criteria.list();
+    }
+
     @Transactional(readOnly = true)
     public Long max(String property) {
         return Long.valueOf(currentSession().createCriteria(entityClass).setProjection(Projections.max(property)).uniqueResult().toString());

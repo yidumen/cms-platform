@@ -17,7 +17,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "resource_video")
-@NamedQuery(name = "video.chatroomSort", query = "select max(v.sort) from Video v join v.tags as tag where tag.tagname='聊天室'")
+@NamedQueries({
+        @NamedQuery(name = "video.chatroomSort", query = "select max(v.sort) from Video v join v.tags as tag where tag.tagname='聊天室'"),
+        @NamedQuery(name = "video.newVideos", query = "from Video v where v.status=com.yidumen.cms.constant.VideoStatus.PUBLISH order by v.pubDate desc")
+
+})
 public class Video extends Resource implements Serializable {
 
     @Column(name = "sort")

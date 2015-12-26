@@ -37,7 +37,6 @@ public final class GetNewestVideo implements WxMpMessageHandler {
                     .append("</a>\n");
         }
         restr.append("\n更多视频请点击：<a href=\"http://m.yidumen.com/video\">聊天室频道</a>");
-
         return WxMpXmlOutMessage
                 .TEXT()
                 .fromUser(wxMessage.getToUserName())

@@ -17,7 +17,9 @@ public enum MessageType {
     music("音乐消息"),
     news("图文消息"),
     action("行为消息"),
-    voice("语音消息");
+    voice("语音消息"),
+    click("菜单点击"),
+    DEFAULT("默认消息");
 
     private final String descript;
 
