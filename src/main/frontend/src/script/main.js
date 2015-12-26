@@ -129,6 +129,7 @@ angular.module('app')
             var toasterType = ['success', 'info', 'wait', 'warning', 'error'];
             $scope.$on('serverResponsed', function (event, response) {
                 var type, message, timeout = 5000;
+                //noinspection JSUnresolvedVariable
                 switch (response.statusCode) {
                     case 200:
                         type = 0;
@@ -148,6 +149,7 @@ angular.module('app')
                     //noinspection JSUnresolvedVariable
                     $location.url(response.forwardUrl).replace();
                 }
+                //noinspection JSUnresolvedVariable
                 toaster.pop(toasterType[type], message, response.message, timeout);
             });
         }

@@ -101,7 +101,7 @@ public class VideoAjaxCtrl {
     }
 
     @Transactional
-    @RequestMapping(value = "updataAndArchive/{isUpdateDate}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "updateAndArchive/{isUpdateDate}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public DWZResponse updateAndArchive(@PathVariable boolean isUpdateDate, @RequestBody Video video) {
         service.updateAndArchive(video, isUpdateDate);
         return DWZResponseBuilder.initiate().success("视频 " + video.getFile() + " 信息已更新并归档").forwardUrl("/site/video/manager").builder();

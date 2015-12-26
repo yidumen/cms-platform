@@ -47,7 +47,7 @@
 <body ng-controller="AppCtrl"
       class="page-header-fixed page-sidebar-fixed page-sidebar-closed-hide-logo page-quick-sidebar-over-content page-on-load page-container-bg-solid"
       ng-class="{'page-container-bg-solid': settings.layout.pageBodySolid, 'page-sidebar-closed': settings.layout.pageSidebarClosed}">
-
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 <!-- BEGIN PAGE SPINNER -->
 <div ng-spinner-bar class="page-spinner-bar">
     <div class="bounce1"></div>

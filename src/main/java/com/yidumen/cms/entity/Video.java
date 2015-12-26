@@ -49,7 +49,6 @@ public class Video extends Resource implements Serializable {
     private String note;
     @Column(name = "grade", length = 5)
     private String grade;
-    @JsonDeserialize(using = DurationDeserializer.class)
     @Column(name = "duration")
     private Long duration;
 
