@@ -18,9 +18,10 @@
 <form class="form form-horizontal">
     <div class="toolbar btn-toolbar">
         <a class="btn btn-default" ui-sref="site.video-manager">返回</a>
+
         <div class="btn-group">
             <button class="btn btn-primary" ng-click="submit()">提交修改</button>
-            <button class="btn btn-warning" ng-if="model.status === 2" ng-click="submitAndVerify()">提交并发布
+            <button class="btn btn-warning" ng-if="model.status>1" ng-click="submitAndVerify()">提交并发布
             </button>
             <button class="btn btn-primary" ng-if="model.status < 2" ng-click="submitAndArchive()">提交并归档
             </button>
