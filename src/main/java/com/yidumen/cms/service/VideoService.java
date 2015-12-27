@@ -1,42 +1,170 @@
 package com.yidumen.cms.service;
 
-import com.yidumen.cms.model.Video;
+import com.yidumen.cms.constant.VideoStatus;
+import com.yidumen.cms.entity.Video;
+import com.yidumen.cms.entity.VideoClipInfo;
+import com.yidumen.cms.repository.VideoHibernateRepository;
 import com.yidumen.cms.service.exception.IllDataException;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.client.fluent.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author 蔡迪旻 <yidumen.com>
  */
-public interface VideoService {
+@Service
+public final class VideoService {
 
-    Video find(Long id);
+    private final Logger log = LoggerFactory.getLogger(VideoService.class);
+    @Autowired
+    private VideoHibernateRepository videoDAO;
+    private final String[] resolutions = {"180", "360", "480", "720" };
 
-    Video find(String file);
+    public List<Video> getVideos() {
+        return videoDAO.findAll();
+    }
 
-    List<Video> getVideos();
+    public void updateVideo(final Video video, boolean updateDate) {
+        if (updateDate) {
+            video.setPubDate(new Date());
+        }
+        videoDAO.edit(video);
+    }
 
-    void removeVideo(Video video);
+    public Video find(final Long id) {
+        return videoDAO.find(id);
+    }
 
-    void updateVideo(Video video, boolean updateDate) throws IllDataException;
+    public Video find(final String file) {
+        final Video video = new Video();
+        video.setFile(file);
+        return videoDAO.findUnique(video);
+    }
 
-    List<Video> find(Map<String, Object[]> condition);
+    public void removeVideo(final Video video) {
+        videoDAO.remove(video);
+    }
 
-    List<Video> find(Video video);
+    public List<Video> findRange(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition);
+    }
 
-    long getVideoCount();
+    public List<Video> findOR(final Map<String, Object[]> condition) {
+        return videoDAO.findOR(condition);
+    }
 
-    int getVideoCount(Map<String, Object[]> condition);
+    public long getVideoCount() {
+        return videoDAO.count();
+    }
 
-    void addVideo(Video video) throws IllDataException;
+    public int getVideoCount(final Map<String, Object[]> condition) {
+        return videoDAO.findBetween(condition).size();
+    }
 
-    Video publish(Long id) throws IOException, IllDataException, ParseException;
+    public void addVideo(final Video video) throws IllDataException {
+        video.setDuration(0L);
+        if (video.getSort() == null) {
+            video.setSort(0L);
+        }
+        if (video.getRecommend() == null) {
+            video.setRecommend(0);
+        }
+        video.setStatus(VideoStatus.VERIFY);
+        videoDAO.edit(video);
+    }
 
-    Object findMax(String property);
-    
-    List<Video> getNewVideos(int limit);
+    public Video publish(final Long id, Integer sort) throws IOException, IllDataException {
+        final Video video = videoDAO.find(id);
+        verifyFiles(video);
+        video.setPubDate(new Date());
+        video.setStatus(VideoStatus.PUBLISH);
+        if (sort != null) {
+            video.setSort(sort.longValue());
+        }
+        videoDAO.edit(video);
+        return video;
+    }
+
+    private void verifyFiles(Video video) throws IOException, IllDataException {
+        boolean deployError = false;
+        final StringBuilder errorMessage = new StringBuilder();
+        for (String resolution : resolutions) {
+            final String url = "http://v3.yidumen.com/video/" + resolution + "/" + video.getFile() + "_" + resolution + ".mp4";
+            final Response response = Request.Head(url).connectTimeout(5000).execute();
+            final HttpResponse httpResponse = response.returnResponse();
+            final int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                if (!deployError) {
+                    deployError = true;
+                }
+                errorMessage.append(resolution).append("p ");
+            }
+            response.discardContent();
+        }
+        if (deployError) {
+            throw new IllDataException(errorMessage + "视频文件尚未部署，发布操作被拒绝！");
+        }
+    }
+
+    public Object findMax(String property) {
+        return videoDAO.max(property);
+    }
+
+    public List<Video> getNewVideos(int limit) {
+        return videoDAO.getNew(limit);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Video> find(Video video) {
+        return videoDAO.find(video);
+    }
+
+    public Video findVideo(Video video) {
+        return videoDAO.findUnique(video);
+    }
+
+    public Long getSort() {
+        return videoDAO.findSort();
+    }
+
+    public List<VideoClipInfo> findClip(Long videoId) {
+        return videoDAO.find(videoId).getClipInfos();
+    }
+
+    public Video archive(Long videoId) {
+        final Video video = videoDAO.find(videoId);
+        video.setStatus(VideoStatus.ARCHIVE);
+        videoDAO.edit(video);
+        return video;
+    }
+
+    public void updateAndVerify(Video video, boolean isUpdateDate) throws IOException, IllDataException {
+        verifyFiles(video);
+        if (isUpdateDate) {
+            video.setPubDate(new Date());
+        }
+        video.setStatus(VideoStatus.PUBLISH);
+        videoDAO.edit(video);
+    }
+
+    public void updateAndArchive(Video video, boolean isUpdateDate) {
+        if (isUpdateDate) {
+            video.setPubDate(new Date());
+        }
+        video.setStatus(VideoStatus.ARCHIVE);
+        videoDAO.edit(video);
+    }
+
+    public void delete(Long videoid) {
+        videoDAO.remove(videoid);
+    }
 }

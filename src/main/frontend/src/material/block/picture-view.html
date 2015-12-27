@@ -1,0 +1,53 @@
+<div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-5">
+            <ul class="list-inline">
+                <li><a ng-click="toView(0)" class="fa fa-mail-reply m-r-md"></a></li>
+                <li ng-class="{'active':currentGroupIndex===-1}" ng-click="displayGroup(-1)"><a>全部</a></li>
+                <li>|</li>
+                <li ng-repeat="group in groups" ng-class="{'active':currentGroupIndex==$index}"
+                    ng-click="displayGroup($index)">
+                    <a>{{group.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-2 col-sm-offset-5 m-t-n-sm">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="page-size">每页显示</label>
+                    <input id="page-size" type="number" min="1" max="99" class="form-control" ng-model="pageSize"
+                           style="width: 60px;">
+                    <label for="page-size">项</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="m-t-none">
+    <ul class="list-inline">
+        <li ng-repeat="picture in currentGroup|limitTo:pageSize:(currentPage-1)*pageSize">
+            <div class="item" ng-click="selectImage($index)">
+                <a>
+                    <div class="item-overlay bg-black-opacity r r-2x" ng-class="{'active':selected==$index}">
+                    </div>
+                    <img class="box-sm r r-2x" ng-src="{{picture.file}}" alt="{{picture.title}}">
+                </a>
+
+                <p class="text-ellipsis w-sm" title="{{picture.title}}">{{picture.title}}</p>
+            </div>
+        </li>
+    </ul>
+    <hr>
+    <div class="row">
+        <div class="col-xs-1">
+            <button class="btn btn-primary" ng-class="{'disabled':selected==-1}" ng-click="">提交选定</button>
+        </div>
+        <div class="col-xs-11 col-sm-5 col-sm-offset-6">
+            <uib-pagination boundary-links="true" total-items="currentGroup.length" ng-model="currentPage"
+                            class="pagination-sm m-n" max-size="5"
+                            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                            items-per-page="pageSize"
+                            rotate="false" ng-change="selectImage(-1)"
+                            last-text="&raquo;"></uib-pagination>
+        </div>
+    </div>
+</div>

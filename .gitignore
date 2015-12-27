@@ -1,5 +1,5 @@
 *.class
-
+.DS_Store
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -11,5 +11,21 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /target/
-.idea/
-cms-platform.iml
+node_modules
+#webapp目录由gulp生成但项目配置需要管理
+/src/main/webapp/resources
+src/main/frontend/lib
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+src/main/frontend/bower_components
+/src/main/frontend/src/css
+src/main/webapp/*
+!src/main/webapp/WEB-INF
+!src/main/webapp/META-INF
+*.iml
+/src/main/frontend/src/resources
+/src/main/frontend/src/library
+.temp
+target
+
+src/main/webapp/WEB-INF/.DS_Store

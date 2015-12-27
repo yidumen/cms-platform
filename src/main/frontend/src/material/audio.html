@@ -1,0 +1,45 @@
+<div class="bg-light lter b-b wrapper-sm">
+    <div class="row">
+        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
+            <h4>音频素材管理</h4>
+            <ol class="breadcrumb">
+                <li>素材管理</li>
+                <li class="active">音频素材管理</li>
+            </ol>
+        </div>
+        <div class="col-xs-12 col-sm-7 col-md-6 col-lg-4 col-lg-offset-5">
+            <videogular vg-player-ready="onPlayerReady($API)">
+                <vg-media vg-src="currentSource" vg-type="audio"></vg-media>
+                <vg-controls>
+                    <button class="iconButton icon-control-start font-size-md m-r-sm" ng-click="play('pre')"></button>
+                    <vg-play-pause-button></vg-play-pause-button>
+                    <button class="iconButton icon-control-end font-size-md m-l-sm m-r-sm"
+                            ng-click="play('next')"></button>
+                    <vg-scrub-bar>
+                        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                    </vg-scrub-bar>
+                    <vg-time-display>{{ currentTime | date:'mm:ss':'+0000' }}/{{ timeLeft | date:'mm:ss':'+0000' }}
+                    </vg-time-display>
+                    <vg-volume>
+                        <vg-mute-button></vg-mute-button>
+                        <vg-volume-bar></vg-volume-bar>
+                    </vg-volume>
+                </vg-controls>
+            </videogular>
+        </div>
+    </div>
+</div>
+<div class="wrapper-md">
+    <div class="text-muted" ng-show="audios.length===0">还没有音频</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="audio in ::audios">
+            <div class="media bg-white b-a r r-2x wrapper-sm m-xs">
+                <div class="media-body">
+                    <h4 class="media-heading" ng-bind="audio.title"></h4>
+                    <small class="text-muted">{{audio.createDate}}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

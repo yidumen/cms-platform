@@ -1,0 +1,106 @@
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-globe"></i>
+            <a ui-sref="site">站点管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>视频管理</li>
+    </ul>
+</div>
+<h3 class="page-title">创建视频信息</h3>
+<form ng-submit="submit()">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="panel panel-danger text-top">
+                <div class="panel-heading">重要必填</div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label for="file">文件编号</label>
+                        <input id="file" class="form-control" type="text" ng-model="model.file" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">视频标题</label>
+                        <input id="title" class="form-control" type="text" ng-model="model.title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>拍摄日期</label>
+
+                        <div class="input-icon">
+                            <i class="fa fa-calendar"></i>
+                            <input uib-datepicker-popup show-button-bar="false" is-open="isOpen" ng-click="open()" class="form-control" type="text" ng-model="model.shootTime"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>所属栏目</label>
+
+                        <div class="input-icon" ng-click="showColumns()">
+                            <i class="fa fa-tag"></i>
+
+                            <div class="form-control static-input">
+                                <span class="margin-right-xs" ng-repeat="col in model.tags" ng-if="col.type == 2"
+                                      ng-bind="col.tagname"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">一般选填</div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label for="sort">发布序号</label>
+                        <a class="btn btn-xs btn-success fr" ng-click="setSortMax()">最大</a>
+                        <a class="btn btn-xs btn-success fr margin-right-xs" ng-click="setSortNew()">最新</a>
+                        <input id="sort" class="form-control" ng-model="model.sort">
+                    </div>
+
+                    <div class="form-group">
+                        <label>推荐度</label><a class="btn btn-xs btn-success fr"
+                                             ng-click="setRecommend()">最大</a>
+                        <input class="form-control" ng-model="model.recommend">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>分级信息</label>
+                        <input class="form-control" ng-model="model.grade">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="panel panel-default text-top">
+                <header class="panel-heading">其它</header>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>视频描述
+                            <small>（简短内容摘要）</small>
+                        </label>
+                        <textarea class="form-control" ng-model="model.descrpition" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea class="form-control" ng-model="model.note" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-1 col-xs-offset-11">
+            <button type="submit" class="btn btn-primary">
+                <i class="icon-check"></i>
+                提交
+            </button>
+        </div>
+    </div>
+</form>
+

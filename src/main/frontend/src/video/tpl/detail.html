@@ -1,0 +1,109 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()">
+        <span>&times;</span></button>
+    <h4 class="modal-title" ng-bind="video.title"></h4>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-xs-2 control-label">记录标识：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.id"></p>
+            </div>
+            <label class="col-xs-2 control-label">视频编号：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.file"></p>
+            </div>
+            <label class="col-xs-2 control-label">播放时长：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.duration|duration"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">发布序号：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.sort"></p>
+            </div>
+            <label class="col-xs-2 control-label">分级信息：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.grade"></p>
+            </div>
+            <label class="col-xs-2 control-label">拍摄日期：</label>
+
+            <div class="col-xs-10 col-sm-2">
+                <p class="form-control-static text-muted" ng-bind="video.shootTime"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">推荐度：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.recommend"></p>
+            </div>
+            <label class="col-xs-2 control-label">当前状态：</label>
+
+            <div class="col-xs-10 col-sm-1">
+                <p class="form-control-static text-muted" ng-bind="video.status|videoStatus"></p>
+            </div>
+            <label class="col-xs-2 control-label">发布时间：</label>
+
+            <div class="col-xs-10 col-sm-3">
+                <p class="form-control-static text-muted" ng-bind="video.pubDate"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">所属栏目：</label>
+
+            <div class="col-xs-10">
+                <span class="form-control-static text-muted margin-right-xs" ng-repeat="col in video.tags"
+                      ng-if="col.type == 2"
+                      ng-bind="col.tagname"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">标签：</label>
+
+            <div class="col-xs-10">
+                <span class="margin-right badge badge-success"
+                      ng-repeat="tag in video.tags" ng-if="tag.type == 0" ng-bind="tag.tagname"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">视频描述：</label>
+
+            <div class="col-xs-10">
+                <p class="form-control-static text-muted" ng-bind="video.descrpition"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">备注：</label>
+
+            <div class="col-xs-10">
+                <p class="form-control-static text-muted" ng-bind="video.note"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">文件大小：</label>
+
+            <div class="col-xs-10 col-sm-3">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr ng-repeat="info in video.extInfo">
+                        <td ng-bind="info.resolution|resolution"></td>
+                        <td class="text-right" ng-bind="info.fileSize"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a ng-href="/api/video/bat/{{video.id}}" class="btn btn-info"><i class="fa fa-file-text-o margin-right"></i>BAT 下载</a>
+    <button type="button" class="btn btn-default" ng-click="cancel()">关闭</button>
+</div>

@@ -1,0 +1,57 @@
+<div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-5">
+            <ul class="list-inline">
+                <li><a ng-click="toView(0)" class="fa fa-mail-reply m-r-md"></a></li>
+                <li ng-class="{'active':currentGroupIndex===-1}" ng-click="displayGroup(-1)"><a>全部</a></li>
+                <li>|</li>
+                <li ng-repeat="group in groups" ng-class="{'active':currentGroupIndex==$index}"
+                    ng-click="displayGroup($index)">
+                    <a>{{group.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-2 col-sm-offset-5 m-t-n-sm">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="page-size">每页显示</label>
+                    <input id="page-size" type="number" min="1" max="99" class="form-control" ng-model="pageSize"
+                           style="width: 60px;">
+                    <label for="page-size">项</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="m-t-none">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
+             ng-repeat="audio in currentGroup|limitTo:pageSize:(currentPage-1)*pageSize">
+            <div class="item" ng-click="selectAudio($index)">
+                <a>
+                    <div class="item-overlay bg-black-opacity r r-2x" ng-class="{'active':selected==$index}"></div>
+                    <div class="media bg-white b-a r r-2x wrapper-sm m-xs">
+                        <div class="media-body">
+                            <h4 class="media-heading" ng-bind="audio.title"></h4>
+                            <small class="text-muted">{{audio.createDate}}</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-1">
+            <button class="btn btn-primary" ng-class="{'disabled':selected==-1}" ng-click="submitSelected()">提交选定
+            </button>
+        </div>
+        <div class="col-xs-11 col-sm-5 col-sm-offset-6">
+            <uib-pagination boundary-links="true" total-items="currentGroup.length" ng-model="currentPage"
+                            class="pagination-sm m-n" max-size="5"
+                            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                            items-per-page="pageSize"
+                            rotate="false" ng-change="selectAudio(-1)"
+                            last-text="&raquo;"></uib-pagination>
+        </div>
+    </div>
+</div>

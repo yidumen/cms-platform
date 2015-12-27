@@ -1,0 +1,46 @@
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-globe"></i>
+            <a ui-sref="site">站点管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>视频管理</li>
+    </ul>
+    <div class="help-info text-muted">
+        <div class="help-title"><i class="fa fa-question-circle"></i></div>
+        <div class="help-body">
+            <div class="help-item">
+                <span class="fa fa-edit"></span>
+                <span class="text-xs">编辑</span>
+            </div>
+            <div class="help-item">
+                <span class="fa fa-archive"></span>
+                <span class="text-xs">归档</span>
+            </div>
+        </div>
+    </div>
+</div>
+<h3 class="page-title">视频信息维护</h3>
+<div class="toolbar btn-toolbar">
+    <div class="btn-group">
+        <button type="button" class="btn btn-success" ng-click="clearSearch()">全部视频</button>
+        <button type="button" class="btn btn-primary" ng-click="search(8, '已发布', false)">已发布</button>
+        <button type="button" class="btn btn-primary" ng-click="search(8, '已归档', false)">已归档</button>
+        <button type="button" class="btn btn-primary" ng-click="search(8, '待审核', false)">待审核</button>
+        <button type="button" class="btn btn-info" ng-click="search(7, '^[^0]\\d*$', true)">推荐</button>
+        <button type="button" class="btn btn-info" ng-click="search(7, '^0$', true)">未推荐</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^[^0]\\d*$', true)">有序号</button>
+        <button type="button" class="btn btn-primary" ng-click="search(2, '^0$', true)">无序号</button>
+        <button type="button" class="btn btn-info" ng-click="search(4, '聊天室', false)">聊天室</button>
+        <button type="button" class="btn btn-info" ng-click="search(4, '[^(聊天室)]', true)">其它栏目</button>
+        <button type="button" class="btn btn-primary" ng-click='search(6,"^$",true)'>新增信息</button>
+    </div>
+    <div class="btn-group" flow-init="{singleFile:true}">
+        <button class="btn btn-primary" flow-btn flow-attrs="{accept:'text/xml'}"><span
+                class="fa fa-cloud-upload"> 上传剪辑信息</span></button>
+    </div>
+</div>
+<table id="video-manager" class="table table-striped table-hover" frame="below" datatable=""
+       dt-options="dtOptions" dt-instance="dtInstance"
+       dt-columns="dtColumns"></table>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <mvc:annotation-driven/>
+   <!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <constructor-arg index="0" value="UTF-8"/>
+                    <property name="writeAcceptCharset" value="true"/>
+                </bean>
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/yidumen?useUnicode=true&amp;characterEncoding=utf-8"/>
+        <property name="username" value="yidumen"/>
+        <property name="password" value="yidumen"/>
+    </bean>
+    <!--hibernate configure and dao-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--<property name="configLocations" value="classpath:hibernate.cfg.xml"/>-->
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+                hibernate.hbm2ddl.auto=update
+                hibernate.show_sql=true
+            </value>
+        </property>
+        <property name="packagesToScan" value="com.yidumen.cms.entity"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!--define oss client -->
+    <bean id="ossClient" class="com.aliyun.oss.OSSClient" scope="prototype" destroy-method="shutdown">
+        <constructor-arg index="0" type="java.lang.String" value="http://oss-cn-qingdao.aliyuncs.com"/>
+        <constructor-arg index="1" type="java.lang.String" value=""/>
+        <constructor-arg index="2" type="java.lang.String" value=""/>
+    </bean>
+    <bean id="bucket" class="java.lang.String">
+        <constructor-arg index="0" type="java.lang.String" value="ydmqd"/>
+    </bean>
+    <!--oss end-->
+    <context:component-scan
+            base-package="com.yidumen.cms.repository,com.yidumen.cms.view,com.yidumen.cms.service,com.yidumen.cms.test"/>
+    <!--define wechat framework-->
+    <bean id="wxConfig" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
+        <property name="appId" value="abcde"/>
+        <property name="token" value="spring_test"/>
+        <property name="secret" value="abcdefg12345678"/>
+        <property name="aesKey" value="opqrst12345"/>
+    </bean>
+    <bean id="wxService" class="me.chanjar.weixin.mp.api.WxMpServiceImpl">
+        <property name="wxMpConfigStorage" ref="wxConfig"/>
+    </bean>
+    <bean id="baseUrl" class="java.lang.String">
+        <constructor-arg index="0" type="java.lang.String" value="http://ydmqd.oss-cn-qingdao.aliyuncs.com/wechat/"/>
+    </bean>
+    <!-- activiti begin -->
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="jobExecutorActivate" value="false"/>
+    </bean>
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+    <!-- activiti end -->
+</beans>
